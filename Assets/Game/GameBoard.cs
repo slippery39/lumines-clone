@@ -30,7 +30,7 @@ namespace Assets.Game
                     var x2 = (x * cellSize) + cellSize;
                     var y1 = y * cellSize;
                     var y2 = (y * cellSize + cellSize);
-                    DrawCell(x1, x2, y1, y2, Color.red);
+                    DrawCell(x1, x2, y1, y2, Color.green);
                 }            
             }
         }
