@@ -39,12 +39,23 @@ public class GameGrid : MonoBehaviour {
         var cell = new GameObject();
         cell.name = $"Cell {x},{y}";
         cell.transform.parent = this.transform;
-        DrawLine(new Vector3(x1, y1, 0), new Vector3(x2, y1, 0), color).transform.parent = cell.transform;
+
+        var topLine = DrawLine(new Vector3(x1, y1, 0), new Vector3(x2, y1, 0), color);
+        topLine.transform.parent = cell.transform;
+        topLine.name = "Top Horizontal Line";
         //Horizonal Line Bottom
-        DrawLine(new Vector3(x1, y2, 0), new Vector3(x2, y2, 0), color).transform.parent = cell.transform;
-        DrawLine(new Vector3(x1, y1, 0), new Vector3(x1, y2, 0), color).transform.parent = cell.transform;
+        var bottomLine = DrawLine(new Vector3(x1, y2, 0), new Vector3(x2, y2, 0), color);
+        bottomLine.transform.parent = cell.transform;
+        bottomLine.name = "Bottom Horizontal Line";
+
+        var leftLine = DrawLine(new Vector3(x1, y1, 0), new Vector3(x1, y2, 0), color);
+        leftLine.transform.parent = cell.transform;
+        leftLine.name = "Left Vertical Line";
+
         //Vertical Line Bottom
-        DrawLine(new Vector3(x2, y1, 0), new Vector3(x2, y2, 0), color).transform.parent = cell.transform;
+        var rightLine = DrawLine(new Vector3(x2, y1, 0), new Vector3(x2, y2, 0), color);
+        rightLine.transform.parent = cell.transform;
+        rightLine.name = "Right Vertical Line";
     }
 
 
