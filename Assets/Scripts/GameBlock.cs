@@ -6,7 +6,7 @@ public class GameBlock : MonoBehaviour
 {
 
     [SerializeField]
-    int blockType = 0;
+    int blockType = 1;
 
     [SerializeField]
     Material material1;
@@ -37,11 +37,20 @@ public class GameBlock : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+
         if (blockType == 0)
+        {
+            this.GetComponent<MeshRenderer>().enabled = false;
+        }
+        else
+        {
+            this.GetComponent<MeshRenderer>().enabled = true;
+        }
+        if (blockType == 1)
         {
             this.GetComponent<Renderer>().material = material1;
         }
-        else if (blockType == 1)
+        else if (blockType == 2)
         {
             this.GetComponent<Renderer>().material = material2;
         }

@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 
@@ -11,37 +9,79 @@ public class GameGrid : MonoBehaviour {
     [SerializeField]
     private GameBlock blockPrefab;
 
+    [SerializeField]
+    private GameBlock[,] createdBlocks;
+
+    [SerializeField]
+    private GameObject[,] createdCells;
+
+    [SerializeField]
+    private Game.Game luminesGame;
+
     // Start is called before the first frame update
     void Awake()
     {
+
+        luminesGame = new Game.Game();
+
         if (blockPrefab == null)
         {
             throw new System.Exception("Remember to set the block prefab in the GameGrid");
         }
 
-        int width = 16;
-        int height = 10;
+        int width = luminesGame.Width;
+        int height = luminesGame.Height;
+
+        createdCells = new GameObject[width, height];
+        createdBlocks = new GameBlock[width, height];
   
         for (int x = 0; x < width; x++)
         {
             for (int y = 0; y < height; y++)
             {
-                var x1 = x * cellSize;
-                var x2 = (x * cellSize) + cellSize;
-                var y1 = y * cellSize;
-                var y2 = (y * cellSize + cellSize);
-                var cell = DrawCell(x,y, Color.green);
-
-                var block = Instantiate(blockPrefab);
-                block.transform.parent = cell.transform;
-                block.transform.localPosition= new Vector3(cellSize/2, cellSize/2, 0);
-                block.GetComponent<GameBlock>().BlockType = UnityEngine.Random.Range(0, 2);
-                block.name = "Game Block";
+                var cell = CreateCell(x,y, Color.green);
+                createdCells[x, y] = cell;
+                createdBlocks[x,y]=CreateBlock(x, y, cell,luminesGame.Board[x,y]);                
             }
         }
     }
 
-    GameObject DrawCell(int x, int y, Color color)
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.A))
+        {
+            luminesGame.Tick();
+        }
+
+        UpdateBoard();
+    }
+
+    private void UpdateBoard()
+    {
+        int width = luminesGame.Width;
+        int height = luminesGame.Height;
+
+        for (int x = 0; x < width; x++)
+        {
+            for (int y = 0; y < height; y++)
+            {
+                createdBlocks[x, y].BlockType = luminesGame.Board[x, y];
+            }
+        }
+    }
+
+    private GameBlock CreateBlock(int x, int y, GameObject cell,int value)
+    {
+        var block = Instantiate(blockPrefab.gameObject);
+        block.transform.parent = cell.transform;
+        block.transform.localPosition = new Vector3(cellSize / 2, cellSize / 2, 0);
+        block.GetComponent<GameBlock>().BlockType = luminesGame.Board[x, y];
+        block.name = "Game Block";
+
+        return block.GetComponent<GameBlock>();
+    }
+
+    GameObject CreateCell(int x, int y, Color color)
     {
 
         var x1 = 0;
