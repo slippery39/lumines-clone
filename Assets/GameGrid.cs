@@ -9,7 +9,7 @@ public class GameGrid : MonoBehaviour {
     private float cellSize = 1.5f;
 
     [SerializeField]
-    private GameObject blockPrefab;
+    private GameBlock blockPrefab;
 
     // Start is called before the first frame update
     void Awake()
@@ -21,7 +21,6 @@ public class GameGrid : MonoBehaviour {
 
         int width = 16;
         int height = 10;
-
   
         for (int x = 0; x < width; x++)
         {
@@ -36,6 +35,7 @@ public class GameGrid : MonoBehaviour {
                 var block = Instantiate(blockPrefab);
                 block.transform.parent = cell.transform;
                 block.transform.localPosition= new Vector3(cellSize/2, cellSize/2, 0);
+                block.GetComponent<GameBlock>().BlockType = UnityEngine.Random.Range(0, 2);
                 block.name = "Game Block";
             }
         }
