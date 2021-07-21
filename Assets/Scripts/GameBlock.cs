@@ -48,6 +48,10 @@ public class GameBlock : MonoBehaviour
 
     public void SetColors(int[] colorCodes)
     {
+        if (colorCodes == null)
+        {
+            throw new System.Exception("Null color codes found in call to SetColors for the GameBlock");
+        }
         topLeftPiece.GetComponent<GameBlockPiece>().BlockType = colorCodes[0];
         topRightPiece.GetComponent<GameBlockPiece>().BlockType = colorCodes[1];
         bottomLeftPiece.GetComponent<GameBlockPiece>().BlockType = colorCodes[2];

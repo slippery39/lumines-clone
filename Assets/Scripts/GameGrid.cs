@@ -20,7 +20,7 @@ public class GameGrid : MonoBehaviour {
     private GameObject[,] createdCells;
 
     [SerializeField]
-    private Game.Game luminesGame;
+    private GameLogic.Game luminesGame;
 
     [SerializeField]
     private Color gridLineColors = Color.gray;
@@ -28,7 +28,7 @@ public class GameGrid : MonoBehaviour {
     // Start is called before the first frame update
     void Awake()
     {
-        luminesGame = new Game.Game();
+        luminesGame = new GameLogic.Game();
 
         if (blockPiecePrefab == null)
         {
@@ -60,8 +60,8 @@ public class GameGrid : MonoBehaviour {
         currentBlock = Instantiate(gameBlockPrefab);
         currentBlock.name = "Current Block";
         currentBlock.transform.parent = this.transform;
-        currentBlock.transform.localPosition = new Vector3( 0.5f + luminesGame.CurrentBlockPosition[0]*cellSize , luminesGame.CurrentBlockPosition[1]*cellSize, 0);
-        currentBlock.GetComponent<GameBlock>().SetColors(luminesGame.CurrentBlock);
+        currentBlock.transform.localPosition = new Vector3( 0.5f + luminesGame.CurrentBlock.X*cellSize , luminesGame.CurrentBlock.Y*cellSize, 0);
+        currentBlock.GetComponent<GameBlock>().SetColors(luminesGame.CurrentBlock.Data);
     }
 
     private void Update()

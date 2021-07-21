@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 using UnityEngine;
 
-namespace Game
+namespace GameLogic
 {
     public class Game
     {
@@ -19,12 +19,9 @@ namespace Game
         public int Height { get { return height; } }
         int height = 10;
 
-        private int[] currentBlock;
-        
-        public int[] CurrentBlock { get { return currentBlock; } }
+        private MoveableBlock currentBlock;        
+        public MoveableBlock CurrentBlock { get { return currentBlock; } }
 
-        private int[] currentBlockPosition = new int[2];
-        public int[] CurrentBlockPosition { get { return currentBlockPosition; } }
         public Game()
         {
             board = new int[width, height];
@@ -38,8 +35,7 @@ namespace Game
                 }
             }
 
-            currentBlock = CreateRandomBlock();
-            currentBlockPosition = new int[] { (int)Math.Floor(width / 2.0), Height+2};
+            currentBlock = CreateMoveableBlock();
         }
 
 
@@ -61,16 +57,15 @@ namespace Game
             MarkDeletions();
         }
 
-        public int[] CreateRandomBlock()
+        private MoveableBlock CreateMoveableBlock()
         {
-            int blockSize = 4;
-            int[] block = new int[4];
 
-            for (int i = 0; i < blockSize; i++)
-            {
-                block[i] = UnityEngine.Random.Range(1, 3); 
-            }
+            var block = MoveableBlock.CreateRandom();
+            block.X = (int)Math.Floor(width / 2.0);
+            block.Y = Height + 2;
+
             return block;
+
         }
 
         public void MarkDeletions()
