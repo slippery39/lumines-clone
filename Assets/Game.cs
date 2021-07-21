@@ -10,16 +10,17 @@ namespace Game
 {
     public class Game
     {
-        int[,] board;
-        bool[,] markedForDeletion;
-
+        private int[,] board;      
         public int[,] Board { get { return board; } }
+        private bool[,] markedForDeletion;
         public bool[,] Deletions { get { return markedForDeletion; } }
-
         public int Width { get { return width; } }
         int width = 16;
         public int Height { get { return height; } }
         int height = 10;
+
+        private int[] currentBlock;
+        public int[] GetCurrentBlock { get { return currentBlock; } }
         public Game()
         {
             board = new int[width, height];
@@ -32,6 +33,8 @@ namespace Game
                     markedForDeletion[i, j] = false;
                 }
             }
+
+            currentBlock = CreateRandomBlock();
         }
 
 
@@ -53,6 +56,18 @@ namespace Game
             MarkDeletions();
         }
 
+        public int[] CreateRandomBlock()
+        {
+            int blockSize = 4;
+            int[] block = new int[4];
+
+            for (int i = 0; i < blockSize; i++)
+            {
+                block[i] = UnityEngine.Random.Range(1, 3); 
+            }
+            return block;
+        }
+
         public void MarkDeletions()
         {
             //Remove all blocks that are "squares"
@@ -65,8 +80,6 @@ namespace Game
                     markedForDeletion[x, y] = false;
                 }
             }
-
-
 
             for (var x = 0; x < Width-1; x++)
             {

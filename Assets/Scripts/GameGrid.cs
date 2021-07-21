@@ -4,13 +4,17 @@ using UnityEngine;
 public class GameGrid : MonoBehaviour {
 
     [SerializeField]
-    private float cellSize = 1.5f;
+    private float cellSize = 1.0f;
 
     [SerializeField]
-    private GameBlock blockPrefab;
+    private GameBlockPiece blockPiecePrefab;
+    [SerializeField]
+    private GameBlockPiece[,] createdBlockPieces;
+    [SerializeField]
+    private GameBlock gameBlockPrefab;
 
     [SerializeField]
-    private GameBlock[,] createdBlocks;
+    private GameBlock currentBlock;
 
     [SerializeField]
     private GameObject[,] createdCells;
@@ -23,16 +27,21 @@ public class GameGrid : MonoBehaviour {
     {
         luminesGame = new Game.Game();
 
-        if (blockPrefab == null)
+        if (blockPiecePrefab == null)
         {
-            throw new System.Exception("Remember to set the block prefab in the GameGrid");
+            throw new System.Exception("Remember to set the block piece prefab in the GameGrid");
+        }
+
+        if (gameBlockPrefab == null)
+        {
+            throw new System.Exception("Remember to set the block prefab in the game grid");
         }
 
         int width = luminesGame.Width;
         int height = luminesGame.Height;
 
         createdCells = new GameObject[width, height];
-        createdBlocks = new GameBlock[width, height];
+        createdBlockPieces = new GameBlockPiece[width, height];
   
         for (int x = 0; x < width; x++)
         {
@@ -40,9 +49,15 @@ public class GameGrid : MonoBehaviour {
             {
                 var cell = CreateCell(x,y, Color.green);
                 createdCells[x, y] = cell;
-                createdBlocks[x,y]=CreateBlock(x, y, cell,luminesGame.Board[x,y]);                
+                createdBlockPieces[x,y]=CreateBlock(x, y, cell,luminesGame.Board[x,y]);                
             }
         }
+
+        //instantiate the game block 
+        currentBlock = Instantiate(gameBlockPrefab);
+        currentBlock.name = "Current Block";
+        currentBlock.transform.parent = this.transform;
+        currentBlock.transform.localPosition = new Vector3( 0.5f + (width*cellSize)/2 , (cellSize* height) + 1.5f, 0);
     }
 
     private void Update()
@@ -68,20 +83,20 @@ public class GameGrid : MonoBehaviour {
         {
             for (int y = 0; y < height; y++)
             {
-                createdBlocks[x, y].BlockType = luminesGame.Deletions[x, y] ? luminesGame.Board[x, y] + 2 : luminesGame.Board[x, y];
+                createdBlockPieces[x, y].BlockType = luminesGame.Deletions[x, y] ? luminesGame.Board[x, y] + 2 : luminesGame.Board[x, y];
             }
         }
     }
 
-    private GameBlock CreateBlock(int x, int y, GameObject cell,int value)
+    private GameBlockPiece CreateBlock(int x, int y, GameObject cell,int value)
     {
-        var block = Instantiate(blockPrefab.gameObject);
+        var block = Instantiate(blockPiecePrefab.gameObject);
         block.transform.parent = cell.transform;
         block.transform.localPosition = new Vector3(cellSize / 2, cellSize / 2, 0);
-        block.GetComponent<GameBlock>().BlockType = luminesGame.Board[x, y];
+        block.GetComponent<GameBlockPiece>().BlockType = luminesGame.Board[x, y];
         block.name = "Game Block";
 
-        return block.GetComponent<GameBlock>();
+        return block.GetComponent<GameBlockPiece>();
     }
 
     GameObject CreateCell(int x, int y, Color color)
