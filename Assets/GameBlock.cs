@@ -46,4 +46,12 @@ public class GameBlock : MonoBehaviour
         bottomRightPiece.GetComponent<GameBlockPiece>().BlockType = 2;
     }
 
+    public void SetColors(int[] colorCodes)
+    {
+        topLeftPiece.GetComponent<GameBlockPiece>().BlockType = colorCodes[0];
+        topRightPiece.GetComponent<GameBlockPiece>().BlockType = colorCodes[1];
+        bottomLeftPiece.GetComponent<GameBlockPiece>().BlockType = colorCodes[2];
+        bottomRightPiece.GetComponent<GameBlockPiece>().BlockType = colorCodes[3];
+    }
+
 }

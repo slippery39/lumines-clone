@@ -22,6 +22,9 @@ public class GameGrid : MonoBehaviour {
     [SerializeField]
     private Game.Game luminesGame;
 
+    [SerializeField]
+    private Color gridLineColors = Color.gray;
+
     // Start is called before the first frame update
     void Awake()
     {
@@ -47,7 +50,7 @@ public class GameGrid : MonoBehaviour {
         {
             for (int y = 0; y < height; y++)
             {
-                var cell = CreateCell(x,y, Color.green);
+                var cell = CreateCell(x,y, gridLineColors);
                 createdCells[x, y] = cell;
                 createdBlockPieces[x,y]=CreateBlock(x, y, cell,luminesGame.Board[x,y]);                
             }
@@ -58,6 +61,7 @@ public class GameGrid : MonoBehaviour {
         currentBlock.name = "Current Block";
         currentBlock.transform.parent = this.transform;
         currentBlock.transform.localPosition = new Vector3( 0.5f + (width*cellSize)/2 , (cellSize* height) + 1.5f, 0);
+        currentBlock.GetComponent<GameBlock>().SetColors(luminesGame.CurrentBlock);
     }
 
     private void Update()

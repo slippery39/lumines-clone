@@ -20,7 +20,7 @@ namespace Game
         int height = 10;
 
         private int[] currentBlock;
-        public int[] GetCurrentBlock { get { return currentBlock; } }
+        public int[] CurrentBlock { get { return currentBlock; } }
         public Game()
         {
             board = new int[width, height];
