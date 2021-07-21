@@ -20,7 +20,11 @@ namespace Game
         int height = 10;
 
         private int[] currentBlock;
+        
         public int[] CurrentBlock { get { return currentBlock; } }
+
+        private int[] currentBlockPosition = new int[2];
+        public int[] CurrentBlockPosition { get { return currentBlockPosition; } }
         public Game()
         {
             board = new int[width, height];
@@ -35,6 +39,7 @@ namespace Game
             }
 
             currentBlock = CreateRandomBlock();
+            currentBlockPosition = new int[] { (int)Math.Floor(width / 2.0), Height+2};
         }
 
 

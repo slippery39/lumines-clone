@@ -60,7 +60,7 @@ public class GameGrid : MonoBehaviour {
         currentBlock = Instantiate(gameBlockPrefab);
         currentBlock.name = "Current Block";
         currentBlock.transform.parent = this.transform;
-        currentBlock.transform.localPosition = new Vector3( 0.5f + (width*cellSize)/2 , (cellSize* height) + 1.5f, 0);
+        currentBlock.transform.localPosition = new Vector3( 0.5f + luminesGame.CurrentBlockPosition[0]*cellSize , luminesGame.CurrentBlockPosition[1]*cellSize, 0);
         currentBlock.GetComponent<GameBlock>().SetColors(luminesGame.CurrentBlock);
     }
 
