@@ -36,28 +36,29 @@ namespace GameLogic
             return block;
         }
 
-        public void RotateRight()
-        {
-            var newData = new int[4];
-
-            newData[0] = data[3];
-            newData[1] = data[0];
-            newData[2] = data[1];
-            newData[3] = data[2];
-
-            data = newData;
- 
-        }
         public void RotateLeft()
         {
             var newData = new int[4];
 
-            newData[0] = data[1];
-            newData[1] = data[2];
+            newData[0] = data[2];
+            newData[1] = data[0];
             newData[2] = data[3];
-            newData[3] = data[0];
+            newData[3] = data[1];
 
             data = newData;
+ 
+        }
+        public void RotateRight()
+        {
+            var newData = new int[4];
+
+            newData[0] = data[1];
+            newData[1] = data[3];
+            newData[2] = data[0];
+            newData[3] = data[2];
+
+
+            data = newData; 
         }
 
     }

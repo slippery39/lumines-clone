@@ -59,9 +59,7 @@ public class GameGrid : MonoBehaviour {
         //instantiate the game block 
         currentBlock = Instantiate(gameBlockPrefab);
         currentBlock.name = "Current Block";
-        currentBlock.transform.parent = this.transform;
-        currentBlock.transform.localPosition = new Vector3( 0.5f + luminesGame.CurrentBlock.X*cellSize , luminesGame.CurrentBlock.Y*cellSize, 0);
-        currentBlock.GetComponent<GameBlock>().SetColors(luminesGame.CurrentBlock.Data);
+        currentBlock.transform.parent = this.transform;     
     }
 
     private void Update()
@@ -73,6 +71,15 @@ public class GameGrid : MonoBehaviour {
         if (Input.GetKeyDown(KeyCode.A))
         {
             luminesGame.Tick();
+        }
+
+        if (Input.GetKeyDown(KeyCode.Q))
+        {
+            luminesGame.CurrentBlock.RotateLeft();
+        }
+        if (Input.GetKeyDown(KeyCode.W))
+        {
+            luminesGame.CurrentBlock.RotateRight();
         }
 
         UpdateBoard();
@@ -90,6 +97,14 @@ public class GameGrid : MonoBehaviour {
                 createdBlockPieces[x, y].BlockType = luminesGame.Deletions[x, y] ? luminesGame.Board[x, y] + 2 : luminesGame.Board[x, y];
             }
         }
+
+        UpdateCurrentBlock();
+    }
+
+    private void UpdateCurrentBlock()
+    {
+        currentBlock.transform.localPosition = new Vector3(0.5f + luminesGame.CurrentBlock.X * cellSize, luminesGame.CurrentBlock.Y * cellSize, 0);
+        currentBlock.GetComponent<GameBlock>().SetColors(luminesGame.CurrentBlock.Data);
     }
 
     private GameBlockPiece CreateBlock(int x, int y, GameObject cell,int value)
