@@ -11,8 +11,10 @@ namespace Game
     public class Game
     {
         int[,] board;
+        bool[,] markedForDeletion;
 
         public int[,] Board { get { return board; } }
+        public bool[,] Deletions { get { return markedForDeletion; } }
 
         public int Width { get { return width; } }
         int width = 16;
@@ -21,11 +23,13 @@ namespace Game
         public Game()
         {
             board = new int[width, height];
+            markedForDeletion = new bool[width, height];
             for (var i = 0; i < width; i++)
             {
                 for (var j = 0; j < height; j++)
                 {
                     board[i, j] = UnityEngine.Random.RandomRange(0, 3);
+                    markedForDeletion[i, j] = false;
                 }
             }
         }
@@ -46,6 +50,68 @@ namespace Game
                 }
             }
 
+            MarkDeletions();
+        }
+
+        public void MarkDeletions()
+        {
+            //Remove all blocks that are "squares"
+            //A block can be a part of multiple squares
+
+            for (var x = 0; x < Width - 1; x++)
+            {
+                for (var y = 0; y < Height - 1; y++)
+                {
+                    markedForDeletion[x, y] = false;
+                }
+            }
+
+
+
+            for (var x = 0; x < Width-1; x++)
+            {
+                for (var y = 0; y < Height-1; y++)
+                {
+                    if (CheckSquare(x, y))
+                    {
+                        markedForDeletion[x, y] = true;
+                        markedForDeletion[x, y + 1] = true;
+                        markedForDeletion[x + 1, y] = true;
+                        markedForDeletion[x+1 , y + 1] = true;
+                    }
+                  }
+            }
+        }
+
+        public void DeleteMarkedSquares()
+        {
+            for (var x= 0; x < Width; x++)
+            {
+                for (var y = 0; y < Height; y++)
+                {
+                    if (markedForDeletion[x, y])
+                    {
+                        DeleteSquare(x, y);
+                    }
+                }
+            }
+        }
+
+        private void DeleteSquare(int x, int y)
+        {
+            markedForDeletion[x, y] = false;
+            board[x, y] = 0;
+        }
+
+
+        private bool CheckSquare(int x,int y)
+        {
+
+            bool checkColor1 = board[x, y] == 1 && board[x, y + 1] == 1 && board[x + 1, y] == 1 && board[x + 1, y + 1] == 1;
+            bool checkColor2 = board[x, y] == 2 && board[x, y + 1] == 2 && board[x + 1, y] == 2 && board[x + 1, y + 1] == 2;
+
+            return checkColor1 || checkColor2;           
+            
         }
 
 

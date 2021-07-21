@@ -21,7 +21,6 @@ public class GameGrid : MonoBehaviour {
     // Start is called before the first frame update
     void Awake()
     {
-
         luminesGame = new Game.Game();
 
         if (blockPrefab == null)
@@ -48,6 +47,10 @@ public class GameGrid : MonoBehaviour {
 
     private void Update()
     {
+        if (Input.GetKeyDown(KeyCode.S))
+        {
+            luminesGame.DeleteMarkedSquares();
+        }
         if (Input.GetKeyDown(KeyCode.A))
         {
             luminesGame.Tick();
@@ -65,7 +68,7 @@ public class GameGrid : MonoBehaviour {
         {
             for (int y = 0; y < height; y++)
             {
-                createdBlocks[x, y].BlockType = luminesGame.Board[x, y];
+                createdBlocks[x, y].BlockType = luminesGame.Deletions[x, y] ? luminesGame.Board[x, y] + 2 : luminesGame.Board[x, y];
             }
         }
     }

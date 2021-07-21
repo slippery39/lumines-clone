@@ -54,7 +54,16 @@ public class GameBlock : MonoBehaviour
         {
             this.GetComponent<Renderer>().material = material2;
         }
+        else if (blockType == 3)
+        {
+            this.GetComponent<Renderer>().material.color = Color.cyan;
+        }
+        else if (blockType == 4)
+        {
+            this.GetComponent<Renderer>().material.color = Color.grey;
+        }
     }
+
 }
 
 
