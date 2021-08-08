@@ -8,10 +8,10 @@ public class GameBlock : MonoBehaviour
     [SerializeField]
     private GameBlockPiece blockPiecePrefab;
 
-    GameBlockPiece topLeftPiece;
-    GameBlockPiece topRightPiece;
     GameBlockPiece bottomLeftPiece;
     GameBlockPiece bottomRightPiece;
+    GameBlockPiece topLeftPiece;
+    GameBlockPiece topRightPiece;
 
 
     private void Awake()
@@ -21,29 +21,29 @@ public class GameBlock : MonoBehaviour
             Debug.LogError("Could not find Block Piece Prefab for the GameBlock object");
         }
 
-        topLeftPiece = Instantiate(blockPiecePrefab);
-        topLeftPiece.transform.parent = this.transform;
-        topLeftPiece.transform.localPosition = new Vector3(0, 0, 0);
-        topLeftPiece.GetComponent<GameBlockPiece>().BlockType = 1;
-
-        //use the first one as the width to use.
-        var pieceSize = topLeftPiece.GetComponent<Collider>().bounds.size;
-
-
-        topRightPiece = Instantiate(blockPiecePrefab);
-        topRightPiece.transform.parent = this.transform;
-        topRightPiece.transform.localPosition = new Vector3(pieceSize.x, 0, 0);
-        topRightPiece.GetComponent<GameBlockPiece>().BlockType = 2;
-
         bottomLeftPiece = Instantiate(blockPiecePrefab);
         bottomLeftPiece.transform.parent = this.transform;
-        bottomLeftPiece.transform.localPosition = new Vector3(0, pieceSize.y, 0);
+        bottomLeftPiece.transform.localPosition = new Vector3(0, 0, 0);
         bottomLeftPiece.GetComponent<GameBlockPiece>().BlockType = 1;
+
+        //use the first one as the width to use.
+        var pieceSize = bottomLeftPiece.GetComponent<Collider>().bounds.size;
+
 
         bottomRightPiece = Instantiate(blockPiecePrefab);
         bottomRightPiece.transform.parent = this.transform;
-        bottomRightPiece.transform.localPosition = new Vector3(pieceSize.x, pieceSize.y, 0);
+        bottomRightPiece.transform.localPosition = new Vector3(pieceSize.x, 0, 0);
         bottomRightPiece.GetComponent<GameBlockPiece>().BlockType = 2;
+
+        topLeftPiece = Instantiate(blockPiecePrefab);
+        topLeftPiece.transform.parent = this.transform;
+        topLeftPiece.transform.localPosition = new Vector3(0, pieceSize.y, 0);
+        topLeftPiece.GetComponent<GameBlockPiece>().BlockType = 1;
+
+        topRightPiece = Instantiate(blockPiecePrefab);
+        topRightPiece.transform.parent = this.transform;
+        topRightPiece.transform.localPosition = new Vector3(pieceSize.x, pieceSize.y, 0);
+        topRightPiece.GetComponent<GameBlockPiece>().BlockType = 2;
     }
 
     public void SetColors(int[] colorCodes)
@@ -52,10 +52,12 @@ public class GameBlock : MonoBehaviour
         {
             throw new System.Exception("Null color codes found in call to SetColors for the GameBlock");
         }
+
         topLeftPiece.GetComponent<GameBlockPiece>().BlockType = colorCodes[0];
         topRightPiece.GetComponent<GameBlockPiece>().BlockType = colorCodes[1];
         bottomLeftPiece.GetComponent<GameBlockPiece>().BlockType = colorCodes[2];
         bottomRightPiece.GetComponent<GameBlockPiece>().BlockType = colorCodes[3];
+        
     }
 
 }

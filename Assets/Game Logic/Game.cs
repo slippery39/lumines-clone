@@ -117,13 +117,25 @@ namespace GameLogic
             //Check to see if it would collide with any blocks.
             if (board[currentBlock.X, currentBlock.Y - 2]>0 || board[currentBlock.X+1,currentBlock.Y-2]>0) //TODO - what does this mean?
             {
-                Debug.LogWarning("Block cannot move down any further");
+                SetToBoard();
                 return;
                 //TODO - collision detected, block should be baked into the board and gravity should start being applied.
             }
 
             currentBlock.Y--;
             
+        }
+
+        private void SetToBoard()
+        {
+            /*
+             * //order is top left, top right, bottom left, bottom right
+             */
+            board[CurrentBlock.X, CurrentBlock.Y] = CurrentBlock.Data[0];
+            board[CurrentBlock.X + 1, CurrentBlock.Y] = CurrentBlock.Data[1];
+            board[CurrentBlock.X, CurrentBlock.Y - 1] = CurrentBlock.Data[2];
+            board[CurrentBlock.X+1, CurrentBlock.Y - 1] = CurrentBlock.Data[3];
+            currentBlock = CreateMoveableBlock();
         }
 
         private MoveableBlock CreateMoveableBlock()
