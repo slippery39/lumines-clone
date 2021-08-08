@@ -8,6 +8,7 @@ using UnityEngine;
 
 namespace GameLogic
 {
+    
     public class Game
     {
         private int[,] board;      
@@ -57,8 +58,43 @@ namespace GameLogic
             MarkDeletions();
         }
 
+        private void AutoFill2dArr(int[,] arr,int value)
+        {
+            for (var i = 0; i < arr.GetUpperBound(0); i++)
+            {
+                for (var j = 0; j < arr.GetUpperBound(1); j++)
+                {
+                   arr[i, j] = value;
+                }
+            }
+        }
+
         public void MoveLeft()
         {
+
+            //TODO - think about automatically having the buffered board in this class but only exposing the non buffered board to the UI for simplicity.
+            int[,] bufferedBoard = new int[width, height + 3];
+            AutoFill2dArr(bufferedBoard, 0);
+
+            //not sure if there is a better way here or not.
+            for (var i = 0; i <= board.GetUpperBound(0); i++)
+            {
+                for (var j = 0; j <= board.GetUpperBound(1); j++)
+                {
+                    bufferedBoard[i, j] = board[i,j];
+                }
+            }
+
+            if (currentBlock.X == 0)
+            {
+                return;
+            }
+
+            if (bufferedBoard[CurrentBlock.X-1,CurrentBlock.Y]>0 || bufferedBoard[CurrentBlock.X-1, CurrentBlock.Y - 1] > 0)
+            {
+                return;
+            }
+
             currentBlock.X = Math.Max(currentBlock.X - 1, 0);
 
             //TODO - Need to check for collisions right;
@@ -66,6 +102,34 @@ namespace GameLogic
 
         public void MoveRight()
         {
+
+            //TODO - think about automatically having the buffered board in this class but only exposing the non buffered board to the UI for simplicity.
+            int[,] bufferedBoard = new int[width, height + 3];
+            AutoFill2dArr(bufferedBoard, 0);
+
+            //not sure if there is a better way here or not.
+            for (var i = 0; i <= board.GetUpperBound(0); i++)
+            {
+                for (var j = 0; j <= board.GetUpperBound(1); j++)
+                {
+                    bufferedBoard[i, j] = board[i, j];
+                }
+            }
+
+            if (currentBlock.X == Width - 2)
+            {
+                return;
+            }
+
+
+            Debug.LogWarning(bufferedBoard[CurrentBlock.X + 2, CurrentBlock.Y]);
+            Debug.LogWarning(bufferedBoard[CurrentBlock.X + 2, CurrentBlock.Y-1]);
+
+            if (bufferedBoard[CurrentBlock.X+2, CurrentBlock.Y] > 0 || bufferedBoard[CurrentBlock.X+2, CurrentBlock.Y - 1] > 0)
+            {
+                return;
+            }
+
             currentBlock.X = Math.Min(Width - 2, currentBlock.X + 1);
 
             //TODO - Need to check for collisions right;

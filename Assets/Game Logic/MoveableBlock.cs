@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 using UnityEngine;
 
 namespace GameLogic
-{   public  class MoveableBlock
+{ 
+   
+    public  class MoveableBlock
     {
-        private int x = 0;
-        private int y = 0;
         public int X { get; set; }
         public int Y { get; set; }
 
