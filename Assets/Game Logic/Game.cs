@@ -23,10 +23,16 @@ namespace GameLogic
         private MoveableBlock currentBlock;        
         public MoveableBlock CurrentBlock { get { return currentBlock; } }
 
+        private int bufferedHeight = 3; //height at the top of the game grid where the movable blocks will spawn.
+
         public Game()
         {
-            board = new int[width, height];
+            board = new int[width, height+bufferedHeight];
             markedForDeletion = new bool[width, height];
+
+            AutoFill2dArr(board, 0); 
+
+            //Below is temporary just for testing.
             for (var i = 0; i < width; i++)
             {
                 for (var j = 0; j < height; j++)
@@ -72,25 +78,13 @@ namespace GameLogic
         public void MoveLeft()
         {
 
-            //TODO - think about automatically having the buffered board in this class but only exposing the non buffered board to the UI for simplicity.
-            int[,] bufferedBoard = new int[width, height + 3];
-            AutoFill2dArr(bufferedBoard, 0);
-
-            //not sure if there is a better way here or not.
-            for (var i = 0; i <= board.GetUpperBound(0); i++)
-            {
-                for (var j = 0; j <= board.GetUpperBound(1); j++)
-                {
-                    bufferedBoard[i, j] = board[i,j];
-                }
-            }
-
+            Debug.Log(CurrentBlock.Y);
             if (currentBlock.X == 0)
             {
                 return;
             }
 
-            if (bufferedBoard[CurrentBlock.X-1,CurrentBlock.Y]>0 || bufferedBoard[CurrentBlock.X-1, CurrentBlock.Y - 1] > 0)
+            if (board[CurrentBlock.X-1,CurrentBlock.Y]>0 || board[CurrentBlock.X-1, CurrentBlock.Y - 1] > 0)
             {
                 return;
             }
@@ -103,29 +97,12 @@ namespace GameLogic
         public void MoveRight()
         {
 
-            //TODO - think about automatically having the buffered board in this class but only exposing the non buffered board to the UI for simplicity.
-            int[,] bufferedBoard = new int[width, height + 3];
-            AutoFill2dArr(bufferedBoard, 0);
-
-            //not sure if there is a better way here or not.
-            for (var i = 0; i <= board.GetUpperBound(0); i++)
-            {
-                for (var j = 0; j <= board.GetUpperBound(1); j++)
-                {
-                    bufferedBoard[i, j] = board[i, j];
-                }
-            }
-
             if (currentBlock.X == Width - 2)
             {
                 return;
             }
 
-
-            Debug.LogWarning(bufferedBoard[CurrentBlock.X + 2, CurrentBlock.Y]);
-            Debug.LogWarning(bufferedBoard[CurrentBlock.X + 2, CurrentBlock.Y-1]);
-
-            if (bufferedBoard[CurrentBlock.X+2, CurrentBlock.Y] > 0 || bufferedBoard[CurrentBlock.X+2, CurrentBlock.Y - 1] > 0)
+            if (board[CurrentBlock.X+2, CurrentBlock.Y] > 0 || board[CurrentBlock.X+2, CurrentBlock.Y - 1] > 0)
             {
                 return;
             }
@@ -137,14 +114,6 @@ namespace GameLogic
 
         public void MoveDown()
         {
-
-            Debug.Log(CurrentBlock.Y);
-            //It is currently outside the grid, so we should just move it down automatically without checks.
-            if (currentBlock.Y-2 > Height-1)
-            {
-                currentBlock.Y--;
-                return;
-            }
             //Check to see if it would collide with any blocks.
             if (board[currentBlock.X, currentBlock.Y - 2]>0 || board[currentBlock.X+1,currentBlock.Y-2]>0) //TODO - what does this mean?
             {
@@ -162,7 +131,7 @@ namespace GameLogic
 
             var block = MoveableBlock.CreateRandom();
             block.X = (int)Math.Floor(width / 2.0);
-            block.Y = Height + 2;
+            block.Y = Height + bufferedHeight - 1;
 
             return block;
 
