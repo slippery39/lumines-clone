@@ -57,6 +57,16 @@ namespace GameLogic
             MarkDeletions();
         }
 
+        public void MoveLeft()
+        {
+            currentBlock.X = Math.Max(currentBlock.X - 1, 0);
+        }
+
+        public void MoveRight()
+        {
+            currentBlock.X = Math.Min(Width - 2, currentBlock.X + 1);
+        }
+
         private MoveableBlock CreateMoveableBlock()
         {
 

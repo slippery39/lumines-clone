@@ -82,6 +82,16 @@ public class GameGrid : MonoBehaviour {
             luminesGame.CurrentBlock.RotateRight();
         }
 
+        if (Input.GetKeyDown(KeyCode.LeftArrow))
+        {
+            luminesGame.MoveLeft();
+        }
+
+        if (Input.GetKeyDown(KeyCode.RightArrow))
+        {
+            luminesGame.MoveRight();
+        }
+
         UpdateBoard();
     }
 
