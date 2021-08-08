@@ -60,11 +60,37 @@ namespace GameLogic
         public void MoveLeft()
         {
             currentBlock.X = Math.Max(currentBlock.X - 1, 0);
+
+            //TODO - Need to check for collisions right;
         }
 
         public void MoveRight()
         {
             currentBlock.X = Math.Min(Width - 2, currentBlock.X + 1);
+
+            //TODO - Need to check for collisions right;
+        }
+
+        public void MoveDown()
+        {
+
+            Debug.Log(CurrentBlock.Y);
+            //It is currently outside the grid, so we should just move it down automatically without checks.
+            if (currentBlock.Y-2 > Height-1)
+            {
+                currentBlock.Y--;
+                return;
+            }
+            //Check to see if it would collide with any blocks.
+            if (board[currentBlock.X, currentBlock.Y - 2]>0 || board[currentBlock.X+1,currentBlock.Y-2]>0) //TODO - what does this mean?
+            {
+                Debug.LogWarning("Block cannot move down any further");
+                return;
+                //TODO - collision detected, block should be baked into the board and gravity should start being applied.
+            }
+
+            currentBlock.Y--;
+            
         }
 
         private MoveableBlock CreateMoveableBlock()

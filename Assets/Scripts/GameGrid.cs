@@ -92,6 +92,11 @@ public class GameGrid : MonoBehaviour {
             luminesGame.MoveRight();
         }
 
+        if (Input.GetKeyDown(KeyCode.DownArrow))
+        {
+            luminesGame.MoveDown();
+        }
+
         UpdateBoard();
     }
 
@@ -113,7 +118,7 @@ public class GameGrid : MonoBehaviour {
 
     private void UpdateCurrentBlock()
     {
-        currentBlock.transform.localPosition = new Vector3(0.5f + luminesGame.CurrentBlock.X * cellSize, luminesGame.CurrentBlock.Y * cellSize, 0);
+        currentBlock.transform.localPosition = new Vector3(0.5f + luminesGame.CurrentBlock.X * cellSize, -0.5f + luminesGame.CurrentBlock.Y * cellSize, 0);
         currentBlock.GetComponent<GameBlock>().SetColors(luminesGame.CurrentBlock.Data);
     }
 
