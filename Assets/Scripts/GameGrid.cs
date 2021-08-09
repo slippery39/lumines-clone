@@ -70,7 +70,7 @@ public class GameGrid : MonoBehaviour {
         }
         if (Input.GetKeyDown(KeyCode.A))
         {
-            luminesGame.Tick();
+            luminesGame.BoardGravity();
         }
 
         if (Input.GetKeyDown(KeyCode.Q))
@@ -95,6 +95,14 @@ public class GameGrid : MonoBehaviour {
         if (Input.GetKeyDown(KeyCode.DownArrow))
         {
             luminesGame.MoveDown();
+        }
+
+        //Our Loop Is Here
+        luminesGame.MarkDeletions();
+        //Gravity Tick
+        if (Time.frameCount % 16 ==0)
+        {
+            luminesGame.BoardGravity();
         }
 
         UpdateBoard();

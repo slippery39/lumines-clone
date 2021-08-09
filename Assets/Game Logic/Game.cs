@@ -46,7 +46,7 @@ namespace GameLogic
         }
 
 
-        public void Tick()
+        public void BoardGravity()
         {
             //more all blocks down one unit.
             for (var x = 0; x < Width; x++)
@@ -60,8 +60,6 @@ namespace GameLogic
                     }
                 }
             }
-
-            MarkDeletions();
         }
 
         private void AutoFill2dArr(int[,] arr,int value)
