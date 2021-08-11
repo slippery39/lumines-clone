@@ -1,5 +1,7 @@
 using UnityEngine;
 
+using GameLogic;
+
 
 public class GameGrid : MonoBehaviour {
 
@@ -20,7 +22,7 @@ public class GameGrid : MonoBehaviour {
     private GameObject[,] createdCells;
 
     [SerializeField]
-    private GameLogic.Game luminesGame;
+    private Game luminesGame;
 
     [SerializeField]
     private Color gridLineColors = Color.gray;

@@ -8,10 +8,10 @@ using UnityEngine;
 
 namespace GameLogic
 {
-    
+
     public class Game
     {
-        private int[,] board;      
+        private int[,] board;
         public int[,] Board { get { return board; } }
         private bool[,] markedForDeletion;
         public bool[,] Deletions { get { return markedForDeletion; } }
@@ -20,24 +20,24 @@ namespace GameLogic
         public int Height { get { return height; } }
         int height = 10;
 
-        private MoveableBlock currentBlock;        
+        private MoveableBlock currentBlock;
         public MoveableBlock CurrentBlock { get { return currentBlock; } }
 
         private int bufferedHeight = 3; //height at the top of the game grid where the movable blocks will spawn.
 
         public Game()
         {
-            board = new int[width, height+bufferedHeight];
+            board = new int[width, height + bufferedHeight];
             markedForDeletion = new bool[width, height];
 
-            AutoFill2dArr(board, 0); 
+            AutoFill2dArr(board, 0);
 
             //Below is temporary just for testing.
             for (var i = 0; i < width; i++)
             {
                 for (var j = 0; j < height; j++)
                 {
-                    board[i, j] = UnityEngine.Random.RandomRange(0, 3);
+                    board[i, j] = 0;
                     markedForDeletion[i, j] = false;
                 }
             }
@@ -53,7 +53,7 @@ namespace GameLogic
             {
                 for (var y = 1; y < Height; y++)
                 {
-                    if (board[x,y-1] == 0)
+                    if (board[x, y - 1] == 0)
                     {
                         board[x, y - 1] = board[x, y];
                         board[x, y] = 0;
@@ -62,13 +62,13 @@ namespace GameLogic
             }
         }
 
-        private void AutoFill2dArr(int[,] arr,int value)
+        private void AutoFill2dArr(int[,] arr, int value)
         {
             for (var i = 0; i < arr.GetUpperBound(0); i++)
             {
                 for (var j = 0; j < arr.GetUpperBound(1); j++)
                 {
-                   arr[i, j] = value;
+                    arr[i, j] = value;
                 }
             }
         }
@@ -82,7 +82,7 @@ namespace GameLogic
                 return;
             }
 
-            if (board[CurrentBlock.X-1,CurrentBlock.Y]>0 || board[CurrentBlock.X-1, CurrentBlock.Y - 1] > 0)
+            if (board[CurrentBlock.X - 1, CurrentBlock.Y] > 0 || board[CurrentBlock.X - 1, CurrentBlock.Y - 1] > 0)
             {
                 return;
             }
@@ -100,7 +100,7 @@ namespace GameLogic
                 return;
             }
 
-            if (board[CurrentBlock.X+2, CurrentBlock.Y] > 0 || board[CurrentBlock.X+2, CurrentBlock.Y - 1] > 0)
+            if (board[CurrentBlock.X + 2, CurrentBlock.Y] > 0 || board[CurrentBlock.X + 2, CurrentBlock.Y - 1] > 0)
             {
                 return;
             }
@@ -114,14 +114,14 @@ namespace GameLogic
         {
             //Check to see if it would collide with any blocks.
 
-            if (currentBlock.Y-2 < 0)
+            if (currentBlock.Y - 2 < 0)
             {
                 SetToBoard();
                 return;
             }
 
             //Need to have a check in here in case it goes past the board.
-            if (board[currentBlock.X, currentBlock.Y - 2]>0 || board[currentBlock.X+1,currentBlock.Y-2]>0) //TODO - what does this mean?
+            if (board[currentBlock.X, currentBlock.Y - 2] > 0 || board[currentBlock.X + 1, currentBlock.Y - 2] > 0) //TODO - what does this mean?
             {
                 SetToBoard();
                 return;
@@ -129,7 +129,7 @@ namespace GameLogic
             }
 
             currentBlock.Y--;
-            
+
         }
 
         private void SetToBoard()
@@ -140,7 +140,7 @@ namespace GameLogic
             board[CurrentBlock.X, CurrentBlock.Y] = CurrentBlock.Data[0];
             board[CurrentBlock.X + 1, CurrentBlock.Y] = CurrentBlock.Data[1];
             board[CurrentBlock.X, CurrentBlock.Y - 1] = CurrentBlock.Data[2];
-            board[CurrentBlock.X+1, CurrentBlock.Y - 1] = CurrentBlock.Data[3];
+            board[CurrentBlock.X + 1, CurrentBlock.Y - 1] = CurrentBlock.Data[3];
             currentBlock = CreateMoveableBlock();
         }
 
@@ -153,6 +153,27 @@ namespace GameLogic
 
             return block;
 
+        }
+
+        public bool IsInFreeFall(int x, int y)
+        {
+
+            if (y == 0)
+            {
+                return false;
+            }
+
+            if (board[x,y] > 0)
+            {
+                for (var yy = 0; yy >= 0; yy--)
+                {
+                    if (board[x,yy] == 0)
+                    {
+                        return true; //will return true if any block underneath is 0;
+                    }
+                }
+            }
+            return false;
         }
 
         public void MarkDeletions()
@@ -168,25 +189,45 @@ namespace GameLogic
                 }
             }
 
-            for (var x = 0; x < Width-1; x++)
+            for (var x = 0; x < Width - 1; x++)
             {
                 for (var y = 0; y < Height - 1; y++)
                 {
                     //TODO check if the block is in free fall (i.e. nothing underneath)
-                    if (board[x, y+1]!=0 && CheckSquare(x, y))
+
+                    var isInFreeFall = IsInFreeFall(x, y);
+                    if ( y> 0 && x < 3 && y < 3)
+                    {
+
+                        //We determine free fall if a column has 0 
+
+                        Debug.Log("Checking coordinates " + x + "," + y);
+                        Debug.Log("y > 0 ");
+                        Debug.Log(y > 0);
+                        Debug.Log("board[x,y]");
+                        Debug.Log(board[x, y]);
+                        Debug.Log("board[x,y-1]");
+                        Debug.Log(board[x, y - 1]);
+                        Debug.Log("Is in free fall");                        
+                        Debug.Log(isInFreeFall);
+                        Debug.Log("Square Check");
+                        Debug.Log(CheckSquare(x, y));
+                    }
+
+                    if (!isInFreeFall && CheckSquare(x, y))
                     {
                         markedForDeletion[x, y] = true;
                         markedForDeletion[x, y + 1] = true;
                         markedForDeletion[x + 1, y] = true;
-                        markedForDeletion[x+1 , y + 1] = true;
+                        markedForDeletion[x + 1, y + 1] = true;
                     }
-                  }
+                }
             }
         }
 
         public void DeleteMarkedSquares()
         {
-            for (var x= 0; x < Width; x++)
+            for (var x = 0; x < Width; x++)
             {
                 for (var y = 0; y < Height; y++)
                 {
@@ -205,14 +246,14 @@ namespace GameLogic
         }
 
 
-        private bool CheckSquare(int x,int y)
+        private bool CheckSquare(int x, int y)
         {
 
             bool checkColor1 = board[x, y] == 1 && board[x, y + 1] == 1 && board[x + 1, y] == 1 && board[x + 1, y + 1] == 1;
             bool checkColor2 = board[x, y] == 2 && board[x, y + 1] == 2 && board[x + 1, y] == 2 && board[x + 1, y + 1] == 2;
 
-            return checkColor1 || checkColor2;           
-            
+            return checkColor1 || checkColor2;
+
         }
 
 
