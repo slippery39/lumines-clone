@@ -170,9 +170,10 @@ namespace GameLogic
 
             for (var x = 0; x < Width-1; x++)
             {
-                for (var y = 0; y < Height-1; y++)
+                for (var y = 0; y < Height - 1; y++)
                 {
-                    if (CheckSquare(x, y))
+                    //TODO check if the block is in free fall (i.e. nothing underneath)
+                    if (board[x, y+1]!=0 && CheckSquare(x, y))
                     {
                         markedForDeletion[x, y] = true;
                         markedForDeletion[x, y + 1] = true;
