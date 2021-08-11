@@ -25,6 +25,11 @@ namespace GameLogic
 
         private int bufferedHeight = 3; //height at the top of the game grid where the movable blocks will spawn.
 
+
+
+        private float _timeLinePosition = 0.0f;
+        public float  TimeLinePosition { get { return _timeLinePosition; } }
+
         public Game()
         {
             board = new int[width, height + bufferedHeight];
@@ -43,6 +48,16 @@ namespace GameLogic
             }
 
             currentBlock = CreateMoveableBlock();
+        }
+
+        public void MoveTimeLine()
+        {
+            _timeLinePosition += 0.05f;
+            if (_timeLinePosition > 1)
+            {
+                _timeLinePosition = 0;
+            }
+            
         }
 
 
