@@ -25,6 +25,11 @@ public class GameGrid : MonoBehaviour {
     [SerializeField]
     private Color gridLineColors = Color.gray;
 
+
+    private float currentTime = 0.0f;
+    private float moveDownTime = 1.0f;
+    private float nextMoveDownTime = 1.0f;
+
     // Start is called before the first frame update
     void Awake()
     {
@@ -99,11 +104,23 @@ public class GameGrid : MonoBehaviour {
 
         //Our Loop Is Here
         luminesGame.MarkDeletions();
-        //Gravity Tick
-        if (Time.frameCount % 16 ==0)
+
+        //Automatic Current Block Movement
+        currentTime += Time.deltaTime;
+
+        if (currentTime > nextMoveDownTime)
+        {
+            luminesGame.MoveDown();
+            nextMoveDownTime += moveDownTime;
+        }
+
+        //Gravity Tick - frame count is temporary.
+        if (Time.frameCount % 4 ==0)
         {
             luminesGame.BoardGravity();
         }
+
+
 
         UpdateBoard();
     }
