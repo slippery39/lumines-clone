@@ -114,6 +114,12 @@ namespace GameLogic
         {
             //Check to see if it would collide with any blocks.
 
+            if (currentBlock.Y-2 < 0)
+            {
+                SetToBoard();
+                return;
+            }
+
             //Need to have a check in here in case it goes past the board.
             if (board[currentBlock.X, currentBlock.Y - 2]>0 || board[currentBlock.X+1,currentBlock.Y-2]>0) //TODO - what does this mean?
             {

@@ -121,7 +121,6 @@ public class GameGrid : MonoBehaviour {
         }
 
 
-
         UpdateBoard();
     }
 
