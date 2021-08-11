@@ -22,21 +22,18 @@ public class GameGrid : MonoBehaviour {
     private GameObject[,] createdCells;
 
     [SerializeField]
+    private GameController gameController;
     private Game luminesGame;
 
     [SerializeField]
     private Color gridLineColors = Color.gray;
 
 
-    private float currentTime = 0.0f;
-    private float moveDownTime = 1.0f;
-    private float nextMoveDownTime = 1.0f;
 
     // Start is called before the first frame update
     void Awake()
     {
-        luminesGame = new GameLogic.Game();
-
+      
         if (blockPiecePrefab == null)
         {
             throw new System.Exception("Remember to set the block piece prefab in the GameGrid");
@@ -45,6 +42,18 @@ public class GameGrid : MonoBehaviour {
         if (gameBlockPrefab == null)
         {
             throw new System.Exception("Remember to set the block prefab in the game grid");
+        }
+
+        if (gameController == null)
+        {
+            throw new System.Exception("Remember to set the game controller for the game grid");
+        }
+
+        luminesGame = gameController.luminesGame;
+
+        if (luminesGame == null)
+        {
+            throw new System.Exception("The Lumines game is undefined in the grid, make sure it is programmed so that the grid is built after the game is created.");
         }
 
         int width = luminesGame.Width;
@@ -71,57 +80,7 @@ public class GameGrid : MonoBehaviour {
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.S))
-        {
-            luminesGame.DeleteMarkedSquares();
-        }
-        if (Input.GetKeyDown(KeyCode.A))
-        {
-            luminesGame.BoardGravity();
-        }
-
-        if (Input.GetKeyDown(KeyCode.Q))
-        {
-            luminesGame.CurrentBlock.RotateLeft();
-        }
-        if (Input.GetKeyDown(KeyCode.W))
-        {
-            luminesGame.CurrentBlock.RotateRight();
-        }
-
-        if (Input.GetKeyDown(KeyCode.LeftArrow))
-        {
-            luminesGame.MoveLeft();
-        }
-
-        if (Input.GetKeyDown(KeyCode.RightArrow))
-        {
-            luminesGame.MoveRight();
-        }
-
-        if (Input.GetKeyDown(KeyCode.DownArrow))
-        {
-            luminesGame.MoveDown();
-        }
-
-        //Our Loop Is Here
-        luminesGame.MarkDeletions();
-
-        //Automatic Current Block Movement
-        currentTime += Time.deltaTime;
-
-        if (currentTime > nextMoveDownTime)
-        {
-            luminesGame.MoveDown();
-            nextMoveDownTime += moveDownTime;
-        }
-
-        //Gravity Tick - frame count is temporary.
-        if (Time.frameCount % 4 ==0)
-        {
-            luminesGame.BoardGravity();
-        }
-
+ 
 
         UpdateBoard();
     }
