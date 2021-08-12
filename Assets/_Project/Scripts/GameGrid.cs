@@ -80,8 +80,6 @@ public class GameGrid : MonoBehaviour {
 
     private void Update()
     {
- 
-
         UpdateBoard();
     }
 

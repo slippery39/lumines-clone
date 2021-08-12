@@ -180,7 +180,7 @@ namespace GameLogic
 
             if (board[x,y] > 0)
             {
-                for (var yy = 0; yy >= 0; yy--)
+                for (var yy = y; yy >= 0; yy--)
                 {
                     if (board[x,yy] == 0)
                     {
@@ -208,28 +208,7 @@ namespace GameLogic
             {
                 for (var y = 0; y < Height - 1; y++)
                 {
-                    //TODO check if the block is in free fall (i.e. nothing underneath)
-
-                    var isInFreeFall = IsInFreeFall(x, y);
-                    if ( y> 0 && x < 3 && y < 3)
-                    {
-
-                        //We determine free fall if a column has 0 
-
-                        Debug.Log("Checking coordinates " + x + "," + y);
-                        Debug.Log("y > 0 ");
-                        Debug.Log(y > 0);
-                        Debug.Log("board[x,y]");
-                        Debug.Log(board[x, y]);
-                        Debug.Log("board[x,y-1]");
-                        Debug.Log(board[x, y - 1]);
-                        Debug.Log("Is in free fall");                        
-                        Debug.Log(isInFreeFall);
-                        Debug.Log("Square Check");
-                        Debug.Log(CheckSquare(x, y));
-                    }
-
-                    if (!isInFreeFall && CheckSquare(x, y))
+                    if (!IsInFreeFall(x, y)  && CheckSquare(x, y))
                     {
                         markedForDeletion[x, y] = true;
                         markedForDeletion[x, y + 1] = true;
@@ -263,6 +242,14 @@ namespace GameLogic
 
         private bool CheckSquare(int x, int y)
         {
+
+            //Should not count pieces that are in free fall on the right;
+            
+            if (IsInFreeFall(x+1,y) || IsInFreeFall(x+1,y+1))
+            {
+                return false;
+            }
+            
 
             bool checkColor1 = board[x, y] == 1 && board[x, y + 1] == 1 && board[x + 1, y] == 1 && board[x + 1, y + 1] == 1;
             bool checkColor2 = board[x, y] == 2 && board[x, y + 1] == 2 && board[x + 1, y] == 2 && board[x + 1, y + 1] == 2;
