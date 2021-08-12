@@ -128,7 +128,7 @@ public class GameGrid : MonoBehaviour {
         cell.transform.parent = this.transform;
 
         cell.transform.localPosition = new Vector3(x * cellSize, y * cellSize, 0);
-
+        /*
         var topLine = DrawLine(new Vector3(0, 0, 0), new Vector3(x2, y1, 0), color,cell);
           topLine.name = "Top Horizontal Line";
         //Horizonal Line Bottom
@@ -141,6 +141,7 @@ public class GameGrid : MonoBehaviour {
         //Vertical Line Bottom
         var rightLine = DrawLine(new Vector3(x2, y1, 0), new Vector3(x2, y2, 0), color,cell);
         rightLine.name = "Right Vertical Line";
+        */
 
         return cell;
     }
