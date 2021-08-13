@@ -28,21 +28,24 @@ public class GameBlock : MonoBehaviour
 
         //use the first one as the width to use.
         var pieceSize = bottomLeftPiece.GetComponent<Collider>().bounds.size;
+        //temporary fix to put have spaces. 
+        var xSize = 1;
+        var ySize = 1;
 
 
         bottomRightPiece = Instantiate(blockPiecePrefab);
         bottomRightPiece.transform.parent = this.transform;
-        bottomRightPiece.transform.localPosition = new Vector3(pieceSize.x, 0, 0);
+        bottomRightPiece.transform.localPosition = new Vector3(xSize, 0, 0);
         bottomRightPiece.GetComponent<GameBlockPiece>().BlockType = 2;
 
         topLeftPiece = Instantiate(blockPiecePrefab);
         topLeftPiece.transform.parent = this.transform;
-        topLeftPiece.transform.localPosition = new Vector3(0, pieceSize.y, 0);
+        topLeftPiece.transform.localPosition = new Vector3(0, ySize, 0);
         topLeftPiece.GetComponent<GameBlockPiece>().BlockType = 1;
 
         topRightPiece = Instantiate(blockPiecePrefab);
         topRightPiece.transform.parent = this.transform;
-        topRightPiece.transform.localPosition = new Vector3(pieceSize.x, pieceSize.y, 0);
+        topRightPiece.transform.localPosition = new Vector3(xSize,ySize, 0);
         topRightPiece.GetComponent<GameBlockPiece>().BlockType = 2;
     }
 

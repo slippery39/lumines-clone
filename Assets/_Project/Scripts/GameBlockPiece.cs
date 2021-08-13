@@ -13,12 +13,13 @@ public class GameBlockPiece : MonoBehaviour
 
     [SerializeField]
     Material material2;
-
     public int BlockType
     {
         get { return blockType; }
         set { blockType = value; }
     }
+
+
 
     private void Awake()
     {

@@ -232,7 +232,6 @@ GameObject:
   - component: {fileID: 148023325}
   - component: {fileID: 148023324}
   - component: {fileID: 148023327}
-  - component: {fileID: 148023328}
   m_Layer: 0
   m_Name: GameBlockPiece
   m_TagString: Untagged
@@ -325,22 +324,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 148023322}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 05faf98ef0c06b1418c3260527d18d0b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &148023328
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 148023322}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4f1f601f75e055c43a0ac8fff08545fb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  blockType: 0
+  blockType: 1
   material1: {fileID: 2100000, guid: 077c196c152431d409ffe8ebd8a53557, type: 2}
   material2: {fileID: 2100000, guid: e72d08e83f20d6a4b86f3908cfd804e4, type: 2}
 --- !u!1 &705507993
@@ -594,7 +581,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5b424bd8e7abe7045acee83c1cd3990f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  blockPiecePrefab: {fileID: 148023328}
+  blockPiecePrefab: {fileID: 148023327}
 --- !u!1 &1399434023
 GameObject:
   m_ObjectHideFlags: 0
@@ -814,7 +801,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cellSize: 1
-  blockPiecePrefab: {fileID: 148023328}
+  blockPiecePrefab: {fileID: 148023327}
   gameBlockPrefab: {fileID: 1318523796}
   currentBlock: {fileID: 0}
   gridLineColors: {r: 0.5, g: 0.5, b: 0.5, a: 1}
