@@ -50,9 +50,10 @@ namespace GameLogic
             currentBlock = CreateMoveableBlock();
         }
 
+        //temporary function to move our timeline, it should actually be synced to a beat.
         public void MoveTimeLine()
         {
-            _timeLinePosition += 0.05f;
+            _timeLinePosition += 0.0025f;
             if (_timeLinePosition > 1)
             {
                 _timeLinePosition = 0;
