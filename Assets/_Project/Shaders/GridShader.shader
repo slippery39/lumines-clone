@@ -20,8 +20,6 @@ Shader "Unlit/GridShader"
             CGPROGRAM
             #pragma vertex vert
             #pragma fragment frag
-            // make fog work
-            #pragma multi_compile_fog
 
             #include "UnityCG.cginc"
             #define PI 3.1415926538
@@ -57,7 +55,6 @@ Shader "Unlit/GridShader"
 
             fixed4 frag(v2f i) : SV_Target
             {
-                // step one - draw a square with the shader.
 
                 float2 uv = float2(i.uv.x * _Width,i.uv.y*_Height);
                 uv = frac(uv);
@@ -84,45 +81,18 @@ Shader "Unlit/GridShader"
                 if (i.uv.y <= borderSize/8) {
                     color = white;
                 }
-
-                //bpm = 60/
                 //time.y is measured in seconds
-               float4 c = tex2D(_MainTex, i.uv + float2(_Time.y/20,_Time.y/20));  /* float4(_Time.zzz,1.0)*/;
-               //float4 wave = float4(clamp(sin(12.0 * _Time.yyy),0.7,1.0),1.0);
-               //c *= wave * color; //float4(clamp(_SinTime.w*20,0.3,0.6), clamp(_SinTime.w*20,0.3,0.6), clamp(_SinTime.w*20,0.3,0.6),1.0);
+                //sample the texture and offset by time.
+               float4 c = tex2D(_MainTex, i.uv + float2(_Time.y/20,_Time.y/20));  /* float4(_Time.zzz,1.0)*/;  
 
-               //float baseValue = Mathf.Cos(((Time.time * Mathf.PI) * (BPM / 60f)) % Mathf.PI);
+               //creates a flashing pulse effect
+               float pulseValue = clamp(cos(((_Time.y * PI) * (_BPM / 60.0)) % PI),0.6,1.0);
 
-               //brighten up the texture
-               float baseValue = clamp(cos(((_Time.y * PI) * (_BPM / 60.0)) % PI),0.6,1.0);
-
-
-               c *= float4(baseValue, baseValue, baseValue, 1.0) * color;
+               c *= float4(pulseValue,pulseValue,pulseValue, 1.0) * color;
 
           
              
                return c;
-
-         
-              //how do we collapse borders?
-                
-                
-                /*
-                * keeping this just in case, 
-                //bottom left
-                float2 bl = step(float2(borderSize, borderSize), uv);
-                        float pct = bl.x * bl.y;
-
-                //top-right
-                float2 tr = step(float2(borderSize, borderSize), 1.0 - uv);
-                pct = pct * (tr.x * tr.y);
-
-                //want white lines with black background;
-                //float3 color = float3(1-pct,1-pct,1-pct);
-
-                
-                return float4(color,1.0);
-                */
             }
             ENDCG
         }
