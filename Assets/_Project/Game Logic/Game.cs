@@ -94,8 +94,6 @@ namespace GameLogic
 
         public void MoveLeft()
         {
-
-            Debug.Log(CurrentBlock.Y);
             if (currentBlock.X == 0)
             {
                 return;
