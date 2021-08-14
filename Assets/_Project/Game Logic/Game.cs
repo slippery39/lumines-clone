@@ -154,6 +154,13 @@ namespace GameLogic
             /*
              * //order is top left, top right, bottom left, bottom right
              */
+
+            if (CurrentBlock.Y >= Height)
+            {
+                Debug.LogWarning("GAME OVER");
+                return;
+            }
+
             board[CurrentBlock.X, CurrentBlock.Y] = CurrentBlock.Data[0];
             board[CurrentBlock.X + 1, CurrentBlock.Y] = CurrentBlock.Data[1];
             board[CurrentBlock.X, CurrentBlock.Y - 1] = CurrentBlock.Data[2];
