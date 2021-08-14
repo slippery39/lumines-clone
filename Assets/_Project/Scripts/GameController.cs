@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(CustomInput))]
 public class GameController : MonoBehaviour
 {
 
@@ -14,6 +15,9 @@ public class GameController : MonoBehaviour
     private float moveDownTime = 1.0f;
     private float nextMoveDownTime = 1.0f;
 
+
+    private CustomInput customInputHandler;
+
     private void Awake()
     {
         luminesGame = new Game();
@@ -21,7 +25,15 @@ public class GameController : MonoBehaviour
 
     void Start()
     {
-        
+        //initialize our keydownTime dict.
+        customInputHandler = GetComponent<CustomInput>();
+
+        customInputHandler.AddHandler(KeyCode.LeftArrow, luminesGame.MoveLeft);
+        customInputHandler.AddHandler(KeyCode.RightArrow, luminesGame.MoveRight);
+        customInputHandler.AddHandler(KeyCode.DownArrow, luminesGame.MoveDown);
+
+        //To prevent players from accidently placing too many blocks in a row from holding down the down key
+        luminesGame.OnBlockPlaced += () => customInputHandler.ResetThrottleTime(KeyCode.DownArrow);
     }
 
     // Update is called once per frame
@@ -43,22 +55,7 @@ public class GameController : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.W))
         {
             luminesGame.CurrentBlock.RotateRight();
-        }
-
-        if (Input.GetKeyDown(KeyCode.LeftArrow))
-        {
-            luminesGame.MoveLeft();
-        }
-
-        if (Input.GetKeyDown(KeyCode.RightArrow))
-        {
-            luminesGame.MoveRight();
-        }
-
-        if (Input.GetKeyDown(KeyCode.DownArrow))
-        {
-            luminesGame.MoveDown();
-        }
+        } 
 
         //Our Loop Is Here
         luminesGame.MarkDeletions();

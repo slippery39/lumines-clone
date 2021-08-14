@@ -26,6 +26,9 @@ namespace GameLogic
         private int bufferedHeight = 3; //height at the top of the game grid where the movable blocks will spawn.
 
 
+        public event Action OnBlockPlaced;
+
+
 
         private float _timeLinePosition = 0.0f;
         public float  TimeLinePosition { get { return _timeLinePosition; } }
@@ -157,6 +160,9 @@ namespace GameLogic
             board[CurrentBlock.X + 1, CurrentBlock.Y] = CurrentBlock.Data[1];
             board[CurrentBlock.X, CurrentBlock.Y - 1] = CurrentBlock.Data[2];
             board[CurrentBlock.X + 1, CurrentBlock.Y - 1] = CurrentBlock.Data[3];
+            
+            OnBlockPlaced?.Invoke();
+           
             currentBlock = CreateMoveableBlock();
         }
 
