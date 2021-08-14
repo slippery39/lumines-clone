@@ -4,10 +4,10 @@ using UnityEngine;
 using System;
 using System.Linq;
 
-public class CustomInput : MonoBehaviour
+public class ThrottledInput : MonoBehaviour
 {
 
-    private Dictionary<KeyCode, CustomInputInfo> keyInputs = new Dictionary<KeyCode, CustomInputInfo>();
+    private Dictionary<KeyCode, ThrottledInputInfo> keyInputs = new Dictionary<KeyCode, ThrottledInputInfo>();
    
     // Start is called before the first frame update
     void Start()
@@ -31,21 +31,21 @@ public class CustomInput : MonoBehaviour
             if (Input.GetKey(key))
             {
                 //Is Throttled, Can FireEvent
-                if (inputInfo.timeDown >= inputInfo.throttleDelay && inputInfo.lastTimeDown >= inputInfo.timeDelayAfterThrottle)
+                if (inputInfo.totalTimeDown >= inputInfo.throttleDelay && inputInfo.timeSinceLastThrottle >= inputInfo.throttleTime)
                 {
                     inputInfo.handler();
-                    inputInfo.lastTimeDown = 0.0f;
+                    inputInfo.timeSinceLastThrottle = 0.0f;
                 }
                 else
                 {
-                    inputInfo.lastTimeDown += Time.deltaTime;
+                    inputInfo.timeSinceLastThrottle += Time.deltaTime;
                 }
-                inputInfo.timeDown += Time.deltaTime;
+                inputInfo.totalTimeDown += Time.deltaTime;
             }
             else
             {
-                inputInfo.lastTimeDown = 0.0f;
-                inputInfo.timeDown = 0.0f;
+                inputInfo.timeSinceLastThrottle = 0.0f;
+                inputInfo.totalTimeDown = 0.0f;
             }
         });
     }
@@ -57,21 +57,21 @@ public class CustomInput : MonoBehaviour
             throw new Exception("Cannot add another handler to the CustomInput");
         }
 
-        keyInputs.Add(keyCode, new CustomInputInfo
+        keyInputs.Add(keyCode, new ThrottledInputInfo
         {
             keyCode = keyCode,
             handler = handler
         });
     }
 
-    public void ResetThrottleTime(KeyCode keyCode)
+    public void ResetThrottleDelayTime(KeyCode keyCode)
     {
         if (!keyInputs.ContainsKey(keyCode))
         {
             throw new Exception("Trying to access keycode " + keyCode.ToString() + " when it doesn't exist in the CustomInput");
         }
 
-        keyInputs[keyCode].timeDown = 0.0f;
+        keyInputs[keyCode].totalTimeDown = 0.0f;
 
     }
 }

@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(CustomInput))]
+[RequireComponent(typeof(ThrottledInput))]
 public class GameController : MonoBehaviour
 {
 
@@ -16,7 +16,7 @@ public class GameController : MonoBehaviour
     private float nextMoveDownTime = 1.0f;
 
 
-    private CustomInput customInputHandler;
+    private ThrottledInput customInputHandler;
 
     private void Awake()
     {
@@ -26,14 +26,14 @@ public class GameController : MonoBehaviour
     void Start()
     {
         //initialize our keydownTime dict.
-        customInputHandler = GetComponent<CustomInput>();
+        customInputHandler = GetComponent<ThrottledInput>();
 
         customInputHandler.AddHandler(KeyCode.LeftArrow, luminesGame.MoveLeft);
         customInputHandler.AddHandler(KeyCode.RightArrow, luminesGame.MoveRight);
         customInputHandler.AddHandler(KeyCode.DownArrow, luminesGame.MoveDown);
 
         //To prevent players from accidently placing too many blocks in a row from holding down the down key
-        luminesGame.OnBlockPlaced += () => customInputHandler.ResetThrottleTime(KeyCode.DownArrow);
+        luminesGame.OnBlockPlaced += () => customInputHandler.ResetThrottleDelayTime(KeyCode.DownArrow);
     }
 
     // Update is called once per frame
