@@ -61,6 +61,7 @@ namespace GameLogic
             {
                 _timeLinePosition = 0;
             }
+            TimeLineCheckDeletions();
             
         }
 
@@ -201,6 +202,21 @@ namespace GameLogic
                 }
             }
             return false;
+        }
+
+        public void TimeLineCheckDeletions()
+        {
+            int timeLinePosToGridX = Convert.ToInt32(Math.Floor(_timeLinePosition * (float)Width));
+            
+            for (var i = 0; i < Height; i++)
+            {
+                if (markedForDeletion[timeLinePosToGridX, i])
+                {
+                    board[timeLinePosToGridX, i] = 0;
+                    markedForDeletion[timeLinePosToGridX, i] = false;
+                }
+            }
+                
         }
 
         public void MarkDeletions()
