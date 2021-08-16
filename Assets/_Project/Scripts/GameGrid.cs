@@ -91,6 +91,12 @@ public class GameGrid : MonoBehaviour {
         {
             for (int y = 0; y < height; y++)
             {
+
+                if (luminesGame.timeLineMarked[x, y])
+                {
+                    createdBlockPieces[x, y].BlockType = 5;
+                    continue;
+                }
                 createdBlockPieces[x, y].BlockType = luminesGame.Deletions[x, y] ? luminesGame.Board[x, y] + 2 : luminesGame.Board[x, y];
             }
         }

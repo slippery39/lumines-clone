@@ -63,6 +63,11 @@ public class GameBlockPiece : MonoBehaviour
         {
             this.GetComponent<Renderer>().material.color = Color.grey;
         }
+        //Marked for deletion color 1
+        else if (blockType == 5)
+        {
+            this.GetComponent<Renderer>().material.color = Color.red;
+        }
     }
 
 }

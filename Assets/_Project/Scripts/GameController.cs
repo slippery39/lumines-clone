@@ -70,7 +70,7 @@ public class GameController : MonoBehaviour
         }
 
         //Gravity Tick - frame count is temporary.
-        if (Time.frameCount % 4 == 0)
+        if (Time.frameCount % 8 == 0)
         {
             luminesGame.BoardGravity();
         }
