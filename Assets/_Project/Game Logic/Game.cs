@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 
 using UnityEngine;
 
+using System.IO;
+
 namespace GameLogic
 {
 
@@ -200,6 +202,10 @@ namespace GameLogic
             {
                 for (var yy = y; yy >= 0; yy--)
                 {
+                    if (timeLineMarked[x, yy])
+                    {
+                        continue;
+                    }
                     if (board[x, yy] == 0)
                     {
                         return true; //will return true if any block underneath is 0;
@@ -221,6 +227,26 @@ namespace GameLogic
                     timeLineMarked[x, y] = true;
                 }
             }
+        }
+
+        private string Arr2dToString<T>(T[,] arr)
+        {
+            var result = string.Empty;
+            var maxX = arr.GetLength(0);
+            var maxY = arr.GetLength(1);
+            for (var y = 0; y < maxY; y++)
+            {
+                result += "{";
+                for (var x = 0; x < maxX; x++)
+                {
+                    result += $"{arr[y, x]},";
+                }
+
+                result += "}" + Environment.NewLine;
+            }
+
+
+            return result;
         }
 
         public void TimeLineCheckDeletions2()
@@ -272,8 +298,26 @@ namespace GameLogic
                     {
                         //this should never happen, once something has been marked by the timeline, there should always
                         //be something to delete.
-                        Debug.LogWarning("no toucbing squares found even though timeline marked an area for " + x + ","+ y);
-                        Debug.LogWarning($"value :{value} markedForDeletion: {markedForDeletion[x,y]}");
+                        Debug.LogWarning("no touching squares found even though timeline marked an area for " + x + "," + y);
+                        Debug.LogWarning($"value :{value} markedForDeletion: {markedForDeletion[x, y]}");
+
+
+
+                        ThrottledLogger.LogToFile($"TouchingSquareErr-[{x}{y}]",
+                            $"{x},{y}\r\n" +
+                            $"Value : {board[x,y]} \r\n"+
+                            $"Marked in TimeLine? {timeLineMarked[x, y]} \r\n" +
+                            $"Marked for Deletion? {markedForDeletion[x, y]} \r\n" +
+                            " ----Board----- \r\n\r\n" +
+                            Arr2dToString(board) + Environment.NewLine +
+                            "---Deletions----\r\n\r\n" +
+                            Arr2dToString(markedForDeletion) + Environment.NewLine +
+                            "--TimeLine Marked---\r\n\r\n" +
+                            Arr2dToString(timeLineMarked));
+
+                            
+
+                            
 
                         continue;
                         //todo possibly download board states when this happens.
