@@ -17,6 +17,8 @@ namespace GameLogic
         public static void LogToFile(string path, string contents)
         {
             var currentTime = DateTime.Now;
+
+            
             
             if (lastLogTimes.ContainsKey(path))
             {
@@ -32,7 +34,7 @@ namespace GameLogic
                 lastLogTimes.Add(path, currentTime);
             }
 
-            using (var sw = new StreamWriter(path + currentTime.ToFileTime()))
+            using (var sw = new StreamWriter("CustomLogs/"+ path + currentTime.ToFileTime()))
             {
                 sw.WriteLine(contents);
             }
