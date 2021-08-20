@@ -62,9 +62,14 @@ namespace GameLogic
         }
 
         //temporary function to move our timeline, it should actually be synced to a beat.
-        public void MoveTimeLine()
+        public void MoveTimeLine(float normalizedAmt)
         {
-            _timeLinePosition += 0.0007f;
+
+            //move by the normalized amount
+            //check to see if we would have passed a grid position
+            //(i.e. TimeLineMark and TimeLineCheckDeletions2 will need to have a value inputted)
+            _timeLinePosition += normalizedAmt;
+
             if (_timeLinePosition > 1)
             {
                 _timeLinePosition = 0;
