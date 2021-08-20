@@ -78,8 +78,8 @@ namespace GameLogic
 
             if ( (nextGridPos > currentGridPos) || (nextGridPos == 0 && currentGridPos!=0) )
             {
-                TimeLineMark(nextGridPos);
                 TimeLineCheckDeletions(nextGridPos);
+                TimeLineMark(nextGridPos);                
             }
         }
 
@@ -255,6 +255,38 @@ namespace GameLogic
             return result;
         }
 
+        private int GetAmountToDelete(int columnIndex)
+        {
+            int amount = 0;
+
+            for (var y = 0; y < Height; y++)
+            {
+                if (markedForDeletion[columnIndex, y])
+                {
+                    amount++;   
+                }
+            }
+            return amount;
+        }
+
+        private void VisitGrid(Action<int,int> func)
+        {
+            for (var x = 0;x< Width; x++)
+            {
+                for (var y = 0; y < Height; y++)
+                {
+                    func(x, y);
+                }
+            }
+        }
+
+        private void DeleteCell(int x, int y)
+        {
+            board[x, y] = 0;
+            markedForDeletion[x, y] = false;
+            timeLineMarked[x, y] = false;
+        }
+
         public void TimeLineCheckDeletions(int x)
         {
              //We only want to delete squares after we have fully passed them,
@@ -273,100 +305,24 @@ namespace GameLogic
                 return;
             }
 
+            //New algorithm, check to see if the next column has any marked squares we should not delete if that is the case.
+            var nextCol = (x + 1 == Width ? 0 : x + 1);
 
-            for (var y = 0; y < Height; y++)
+            if (nextCol!=0 && GetAmountToDelete(nextCol) > 0)
             {
-                if (timeLineMarked[x, y])
-                {
-                    var value = board[x, y];
-                    var visited = new Dictionary<string, int>();
-
-                    //there are 4 squares this could be a part of here. top left, top right, bottom left, bottom right
-                    //should only be checking to the right of the time line.
-                    var topLeft = new Vector2Int(x - 1, y + 1);
-                    var topRight = new Vector2Int(x, y + 1);
-                    var bottomLeft = new Vector2Int(x, y - 1);
-                    var bottomRight = new Vector2Int(x + 1, y - 1);
-
-                    var touchingSquares =
-                         FindTouchingSquares(new Vector2Int(x, y), value, visited)
-                        .Concat(FindTouchingSquares(topLeft, value, visited))
-                        .Concat(FindTouchingSquares(topRight, value, visited))
-                        .Concat(FindTouchingSquares(bottomLeft, value, visited))
-                        .Concat(FindTouchingSquares(bottomRight, value, visited))
-                        .ToList();
-
-                    if (touchingSquares.Count == 0)
-                    {
-                        //this should never happen, once something has been marked by the timeline, there should always
-                        //be something to delete.
-                        Debug.LogWarning("no touching squares found even though timeline marked an area for " + x + "," + y);
-                        Debug.LogWarning($"value :{value} markedForDeletion: {markedForDeletion[x, y]}");
-
-
-
-                        ThrottledLogger.LogToFile($"TouchingSquareErr-[{x}{y}]",
-                            $"{x},{y}\r\n" +
-                            $"Value : {board[x,y]} \r\n"+
-                            $"Marked in TimeLine? {timeLineMarked[x, y]} \r\n" +
-                            $"Marked for Deletion? {markedForDeletion[x, y]} \r\n" +
-                            " ----Board----- \r\n\r\n" +
-                            Arr2dToString(board) + Environment.NewLine +
-                            "---Deletions----\r\n\r\n" +
-                            Arr2dToString(markedForDeletion) + Environment.NewLine +
-                            "--TimeLine Marked---\r\n\r\n" +
-                            Arr2dToString(timeLineMarked));
-
-                            
-
-                            
-
-                        continue;
-                        //todo possibly download board states when this happens.
-                    }
-
-
-                   
-
-                    var maxSquareX = touchingSquares.Max(sq => sq.x);               
-
-                    if (x > maxSquareX)
-                    {
-                        touchingSquares.ForEach(sq =>
-                        {
-                            var xx = sq.x;
-                            var yy = sq.y;
-
-                            //we actually have to check for each part, since we only want to delete things that the timeline 
-                            //has marked.
-
-                            var coords = new List<Vector2Int>
-                            {
-                                new Vector2Int(xx,yy),
-                                new Vector2Int(xx+1,yy),
-                                new Vector2Int(xx,yy-1),
-                                new Vector2Int(xx+1,yy-1)
-                            };
-
-                            coords.ForEach(coord =>
-                            {
-                                if (timeLineMarked[coord.x, coord.y])
-                                {
-                                    board[coord.x, coord.y] = 0;
-                                    markedForDeletion[coord.x, coord.y] = false;
-                                    timeLineMarked[coord.x, coord.y] = false;
-                                }
-                                else
-                                {
-                                    markedForDeletion[coord.x, coord.y] = false;                                    
-                                }
-                            });
-                        });
-                    }
-                    //go back and check all the other parts of the square that were marked.
-                }
+                return;
             }
-
+            else
+            {
+                VisitGrid((xx, yy) =>
+                {
+                    //not sure if we need this xx<=x.
+                    if (xx<= x && timeLineMarked[xx,yy])
+                    {
+                        DeleteCell(xx, yy);
+                    }
+                });
+            }
         }
 
     
@@ -415,6 +371,7 @@ namespace GameLogic
             }
         }
 
+        //not in use currently but could be useful in the future.
         private List<Vector2Int> FindTouchingSquares(Vector2Int coords, int value, Dictionary<string, int> visited)
         {
             var key = coords.ToString();
