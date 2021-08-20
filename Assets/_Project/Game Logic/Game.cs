@@ -79,10 +79,8 @@ namespace GameLogic
             if ( (nextGridPos > currentGridPos) || (nextGridPos == 0 && currentGridPos!=0) )
             {
                 TimeLineMark(nextGridPos);
+                TimeLineCheckDeletions(nextGridPos);
             }
-
-            TimeLineCheckDeletions2();
-
         }
 
 
@@ -247,7 +245,7 @@ namespace GameLogic
                 result += "{";
                 for (var x = 0; x < maxX; x++)
                 {
-                    result += $"{arr[y, x]},";
+                    result += $"{arr[x, y]},";
                 }
 
                 result += "}" + Environment.NewLine;
@@ -257,13 +255,9 @@ namespace GameLogic
             return result;
         }
 
-        public void TimeLineCheckDeletions2()
+        public void TimeLineCheckDeletions(int x)
         {
-            float timeLinePos = _timeLinePosition * (float)Width;
-            int x = Convert.ToInt32(Math.Floor(timeLinePos));
-
-
-            //We only want to delete squares after we have fully passed them,
+             //We only want to delete squares after we have fully passed them,
             //to do this we will always check the previous column intead of the curret one.
             if (x == 0)
             {
