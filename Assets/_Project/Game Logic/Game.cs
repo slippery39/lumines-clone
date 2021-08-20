@@ -68,13 +68,19 @@ namespace GameLogic
             //move by the normalized amount
             //check to see if we would have passed a grid position
             //(i.e. TimeLineMark and TimeLineCheckDeletions2 will need to have a value inputted)
-            _timeLinePosition += normalizedAmt;
 
-            if (_timeLinePosition > 1)
+            //check to see if we passed a grid boundary.
+            int currentGridPos = Mathf.FloorToInt(_timeLinePosition * Width);
+            _timeLinePosition += normalizedAmt;
+            _timeLinePosition = Mathf.Repeat(_timeLinePosition, 1);
+
+            int nextGridPos = Mathf.FloorToInt(_timeLinePosition * Width);            
+
+            if ( (nextGridPos > currentGridPos) || (nextGridPos == 0 && currentGridPos!=0) )
             {
-                _timeLinePosition = 0;
+                TimeLineMark(nextGridPos);
             }
-            TimeLineMark();
+
             TimeLineCheckDeletions2();
 
         }
@@ -220,14 +226,11 @@ namespace GameLogic
             return false;
         }
 
-        public void TimeLineMark()
+        public void TimeLineMark(int x)
         {
-            float timeLinePos = _timeLinePosition * (float)Width;
-            int x = Convert.ToInt32(Math.Floor(timeLinePos));
-
-            for (var y = 0; y < Height; y++)
+           for (var y = 0; y < Height; y++)
             {
-                if (markedForDeletion[x, y] && (timeLinePos - x <0.05))
+                if (markedForDeletion[x, y])
                 {
                     timeLineMarked[x, y] = true;
                 }
