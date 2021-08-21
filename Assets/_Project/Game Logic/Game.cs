@@ -11,6 +11,7 @@ using System.IO;
 namespace GameLogic
 {
 
+    [System.Serializable]
     public class Game
     {
         private int[,] board;
@@ -24,6 +25,9 @@ namespace GameLogic
 
         private MoveableBlock currentBlock;
         public MoveableBlock CurrentBlock { get { return currentBlock; } }
+
+        Queue<MoveableBlock> nextBlocks = new Queue<MoveableBlock>();
+
 
         public bool[,] timeLineMarked;
 
@@ -59,6 +63,11 @@ namespace GameLogic
             }
 
             currentBlock = CreateMoveableBlock();
+            //store a list of the next blocks
+
+            nextBlocks.Enqueue(CreateMoveableBlock());
+            nextBlocks.Enqueue(CreateMoveableBlock());
+            nextBlocks.Enqueue(CreateMoveableBlock());
         }
 
         //temporary function to move our timeline, it should actually be synced to a beat.
@@ -180,7 +189,8 @@ namespace GameLogic
 
             OnBlockPlaced?.Invoke();
 
-            currentBlock = CreateMoveableBlock();
+            currentBlock = nextBlocks.Dequeue();
+            nextBlocks.Enqueue(CreateMoveableBlock());
         }
 
         private MoveableBlock CreateMoveableBlock()

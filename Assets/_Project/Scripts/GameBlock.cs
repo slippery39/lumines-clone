@@ -56,6 +56,11 @@ public class GameBlock : MonoBehaviour
             throw new System.Exception("Null color codes found in call to SetColors for the GameBlock");
         }
 
+        if (colorCodes.Length != 4)
+        {
+            throw new System.Exception("Invalid length for color codes parameter. Length was " + colorCodes.Length + ". Was expecting 4");
+        }
+
         topLeftPiece.GetComponent<GameBlockPiece>().BlockType = colorCodes[0];
         topRightPiece.GetComponent<GameBlockPiece>().BlockType = colorCodes[1];
         bottomLeftPiece.GetComponent<GameBlockPiece>().BlockType = colorCodes[2];

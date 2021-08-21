@@ -7,12 +7,13 @@ using UnityEngine;
 
 namespace GameLogic
 { 
-   
+   [System.Serializable]
     public  class MoveableBlock
     {
         public int X { get; set; }
         public int Y { get; set; }
 
+        [SerializeField]
         private int[] data = new int[4]; //order is top left, top right, bottom left, bottom right
         public int[] Data { get { return data; } }
 
@@ -24,14 +25,19 @@ namespace GameLogic
             data[3] = 1;
         }
 
+        
+
         public static MoveableBlock CreateRandom()
         {
+
+            var rng = new System.Random();
+
             var block = new MoveableBlock();
 
-            block.data[0] = UnityEngine.Random.Range(1, 3);
-            block.data[1] = UnityEngine.Random.Range(1, 3);
-            block.data[2] = UnityEngine.Random.Range(1, 3);
-            block.data[3] = UnityEngine.Random.Range(1, 3);
+            block.data[0] = rng.Next(1, 3);
+            block.data[1] = rng.Next(1, 3);
+            block.data[2] = rng.Next(1, 3);
+            block.data[3] = rng.Next(1, 3);
 
             return block;
         }
