@@ -72,10 +72,25 @@ public class Conductor : MonoBehaviour
     void Update()
     {
         //determine how many seconds since the song started
+
+        var previousSongPosition = -songPosition;
+        var previousSongBeat = songPositionInBeats;
+
+        
+
+
         songPosition = (float)(AudioSettings.dspTime - dspSongTime);
+
+        
+
 
         //determine how many beats since the song started
         songPositionInBeats = songPosition / secPerBeat;
+
+        //What do we need to move the timeline?
+        //Every beat is 1/8 of the lineline.
+        gameController.luminesGame.MoveTimeLine( (songPositionInBeats - previousSongBeat) / 8);
+
 
         DebugInfo();
 

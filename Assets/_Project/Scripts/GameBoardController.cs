@@ -45,7 +45,6 @@ public class GameBoardController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        gameController.luminesGame.MoveTimeLine(0.0009f);
         SetTimeLinePosition();
     }
 
