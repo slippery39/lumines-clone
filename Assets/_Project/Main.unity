@@ -783,6 +783,7 @@ MonoBehaviour:
   grid: {fileID: 7055448}
   cells: {fileID: 2131497813}
   timeLine: {fileID: 1802197871}
+  upcomingBlocks: {fileID: 1706974965}
 --- !u!1 &1706974963
 GameObject:
   m_ObjectHideFlags: 0
@@ -792,7 +793,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1706974964}
-  - component: {fileID: 1706974968}
   - component: {fileID: 1706974967}
   - component: {fileID: 1706974966}
   - component: {fileID: 1706974965}
@@ -812,7 +812,7 @@ Transform:
   m_GameObject: {fileID: 1706974963}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: -3.3037, y: 7.8603, z: 0}
-  m_LocalScale: {x: 4.232372, y: 7.4196787, z: 1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1399434024}
   m_RootOrder: 3
@@ -889,14 +889,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!33 &1706974968
-MeshFilter:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1706974963}
-  m_Mesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!1 &1778745642
 GameObject:
   m_ObjectHideFlags: 0

@@ -26,7 +26,8 @@ namespace GameLogic
         private MoveableBlock currentBlock;
         public MoveableBlock CurrentBlock { get { return currentBlock; } }
 
-        Queue<MoveableBlock> nextBlocks = new Queue<MoveableBlock>();
+        private Queue<MoveableBlock> nextBlocks = new Queue<MoveableBlock>();
+        public Queue<MoveableBlock> UpcomingBlocks { get { return nextBlocks; } }
 
 
         public bool[,] timeLineMarked;

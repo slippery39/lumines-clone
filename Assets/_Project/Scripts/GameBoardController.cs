@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 public class GameBoardController : MonoBehaviour
 {
@@ -14,6 +15,9 @@ public class GameBoardController : MonoBehaviour
     private GameObject cells;
     [SerializeField]
     private GameObject timeLine;
+
+    [SerializeField]
+    private NextBlocks upcomingBlocks;
     // Start is called before the first frame update
     void Start()
     {
@@ -38,6 +42,11 @@ public class GameBoardController : MonoBehaviour
             throw new System.Exception("Please ensure you have connected the timeLine to the GameBoardController in the inspector");
         }
 
+        if (upcomingBlocks == null)
+        {
+            throw new System.Exception("Please ensure you have connected the upcomingBlocks to the GameBoardController in the inspector");
+        }
+
         cells.GetComponent<GameGrid>().Initialize(gameController.luminesGame);
         
     }
@@ -46,10 +55,16 @@ public class GameBoardController : MonoBehaviour
     void Update()
     {
         SetTimeLinePosition();
+        SetUpcomingBlocks();
     }
 
     private void SetTimeLinePosition()
     {
         timeLine.transform.localPosition = new Vector3(gameController.luminesGame.TimeLinePosition * gameController.luminesGame.Width,timeLine.transform.localPosition.y,timeLine.transform.localPosition.z);
+    }
+
+    private void SetUpcomingBlocks()
+    {
+        upcomingBlocks.nextBlocks = gameController.luminesGame.UpcomingBlocks.ToList();
     }
 }

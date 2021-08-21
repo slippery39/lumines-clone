@@ -8,7 +8,7 @@ public class NextBlocks : MonoBehaviour
     // Start is called before the first frame update
 
     [SerializeField]
-    private List<MoveableBlock> nextBlocks = new List<MoveableBlock>();
+    public List<MoveableBlock> nextBlocks = new List<MoveableBlock>();
 
     private List<GameBlock> instantiatedBlocks = new List<GameBlock>();
 
@@ -33,7 +33,7 @@ public class NextBlocks : MonoBehaviour
     void Update()
     {        
 
-        for (var i = 0; i < blocksToShow; i++)
+        for (var i = 0; i < nextBlocks.Count; i++)
         {
             var blockInfo = nextBlocks[i];
             instantiatedBlocks[i].SetColors(blockInfo.Data);

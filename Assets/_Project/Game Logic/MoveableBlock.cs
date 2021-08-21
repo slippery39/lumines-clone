@@ -29,15 +29,12 @@ namespace GameLogic
 
         public static MoveableBlock CreateRandom()
         {
-
-            var rng = new System.Random();
-
             var block = new MoveableBlock();
 
-            block.data[0] = rng.Next(1, 3);
-            block.data[1] = rng.Next(1, 3);
-            block.data[2] = rng.Next(1, 3);
-            block.data[3] = rng.Next(1, 3);
+            block.data[0] = GameRNG.RandomInt(1, 3);
+            block.data[1] = GameRNG.RandomInt(1, 3);
+            block.data[2] = GameRNG.RandomInt(1, 3);
+            block.data[3] = GameRNG.RandomInt(1, 3);
 
             return block;
         }
