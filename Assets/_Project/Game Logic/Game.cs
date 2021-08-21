@@ -354,18 +354,6 @@ namespace GameLogic
                         markedForDeletion[x + 1, y + 1] = true;
 
                         markedSquares.Add(new Vector2Int(x, y + 1).ToString(), board[x, y+1]);
-
-                        //todo - add the square to the list, any other squares that touch this one
-
-                        //timeline moves over a deletion marked piece - we mark it.
-                        //once the timeline completely moves over the square, we delete the whole square
-                        //but this also includes multiple squares
-
-                        //so we need to make some sort of graph of squares. 
-
-                        //
-
-
                     }
                 }
             }

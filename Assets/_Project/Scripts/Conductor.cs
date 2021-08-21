@@ -1,52 +1,84 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class Conductor : MonoBehaviour
 {
-    // Start is called before the first frame update
+ 
+    //Song beats per minute
+    //This is determined by the song you're trying to sync up to
+    public float songBpm;
 
-    private float _bpm = 123.97f;
-    public float BPM { get { return BPM; } set { BPM = value; } }
+    //The number of seconds for each song beat
+    public float secPerBeat;
 
+    //The numer of beats for each second
+    public float beatsPerSecond;
 
-    private float BPS = 123.97f / 60f;
+    //Current song position, in seconds
+    public float songPosition;
 
-    int lastBeat = -99;
+    //Current song position, in beats
+    public float songPositionInBeats;
 
-    AudioSource source;
+    //How many seconds have passed since the song started
+    public float dspSongTime;
+
+    //an AudioSource attached to this GameObject that will play the music.
+    public AudioSource musicSource;
+
+  
 
     [SerializeField]
-    TextMesh text;
+    TextMesh debugText;
 
     [SerializeField]
-    TextMesh bpsText;
+    GameController gameController;
 
     void Start()
     {
 
-        source = GetComponent<AudioSource>();
-        source.Play();
+        //Load the AudioSource attached to the Conductor GameObject
+        musicSource = GetComponent<AudioSource>();
 
-        bpsText.text = BPS.ToString();
+        //Calculate the number of seconds in each beat
+        secPerBeat = 60f / songBpm;
+
+        //Calculate the number of beats per second
+        beatsPerSecond = songBpm / 60f;
+
+        //Record the time when the music starts
+        dspSongTime = (float)AudioSettings.dspTime;
+
+        //Start the music
+        musicSource.Play();            
+
+    }
+
+    void DebugInfo()
+    {
+        debugText.text =
+           "Beats Per Minute :" + songBpm.ToString() + Environment.NewLine +
+           "Beats Per Second : " + beatsPerSecond.ToString() + Environment.NewLine +
+           "Seconds Per Beat : " + secPerBeat.ToString() + Environment.NewLine +
+           "Current Song Time : " + musicSource.time.ToString() + Environment.NewLine +
+           "Current DSP Song Time : " + dspSongTime + Environment.NewLine +
+           "Current Song Position : " + songPosition.ToString() + Environment.NewLine +
+           "Song Position In Beats : " + songPositionInBeats.ToString() + Environment.NewLine;
     }
 
     // Update is called once per frame
     void Update()
     {
-        //current beat position
-        //Debug.Log(GetComponent<AudioSource>().time * BPS);
+        //determine how many seconds since the song started
+        songPosition = (float)(AudioSettings.dspTime - dspSongTime);
 
-        // 4/4 beat position
-        int beat = 1 + Mathf.CeilToInt(source.time * BPS) % 4;
-        if (beat != lastBeat)
-        {
+        //determine how many beats since the song started
+        songPositionInBeats = songPosition / secPerBeat;
 
-            text.text = beat.ToString();
-        }
-        lastBeat = beat;
+        DebugInfo();
 
-        //TODO - move the timeline.
     }
 
 }
