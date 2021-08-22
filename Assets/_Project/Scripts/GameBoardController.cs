@@ -19,6 +19,9 @@ public class GameBoardController : MonoBehaviour
     [SerializeField]
     private NextBlocks upcomingBlocks;
     // Start is called before the first frame update
+
+    private Renderer gridRenderer;
+    
     void Start()
     {
         if (gameController == null)
@@ -47,7 +50,14 @@ public class GameBoardController : MonoBehaviour
             throw new System.Exception("Please ensure you have connected the upcomingBlocks to the GameBoardController in the inspector");
         }
 
-        cells.GetComponent<GameGrid>().Initialize(gameController.luminesGame);
+        gridRenderer = grid.GetComponent<Renderer>();
+
+        if (gridRenderer == null)
+        {
+            throw new System.Exception("Could not find the grid renderer on the grid game object");
+        }
+
+        cells.GetComponent<GameGrid>().Initialize(gameController.luminesGame);      
         
     }
 
@@ -66,5 +76,11 @@ public class GameBoardController : MonoBehaviour
     private void SetUpcomingBlocks()
     {
         upcomingBlocks.nextBlocks = gameController.luminesGame.UpcomingBlocks.ToList();
+    }
+
+    public void SetBPM(float bpm)
+    {
+        //testing the BPM setting on our material;
+        gridRenderer.material.SetFloat("_BPM", bpm);
     }
 }

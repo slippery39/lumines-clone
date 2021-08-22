@@ -36,6 +36,9 @@ public class Conductor : MonoBehaviour
     [SerializeField]
     GameController gameController;
 
+    [SerializeField]
+    GameBoardController gameBoard;
+
     void Start()
     {
 
@@ -51,8 +54,13 @@ public class Conductor : MonoBehaviour
         //Record the time when the music starts
         dspSongTime = (float)AudioSettings.dspTime;
 
+        gameBoard.SetBPM(songBpm);
+
         //Start the music
-        musicSource.Play();            
+        musicSource.Play();
+
+        
+        
 
     }
 
@@ -94,6 +102,7 @@ public class Conductor : MonoBehaviour
 
         DebugInfo();
 
+        gameBoard.SetBPM(songBpm);
     }
 
 }
