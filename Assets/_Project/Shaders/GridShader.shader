@@ -3,7 +3,7 @@ Shader "Unlit/GridShader"
     Properties
     {
         _Width("Width",Range(1,999)) = 16
-        _Height("Height", Range(1, 999)) = 9
+        _Height("Height", Range(1, 999)) = 10
         _BPM("BPM", Range(40,300)) = 120
         _MainTex ("Texture", 2D) = "white" {}
     }
