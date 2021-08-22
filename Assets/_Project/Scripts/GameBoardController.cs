@@ -17,6 +17,9 @@ public class GameBoardController : MonoBehaviour
     private GameObject timeLine;
 
     [SerializeField]
+    private GameObject dropPreview;
+
+    [SerializeField]
     private NextBlocks upcomingBlocks;
     // Start is called before the first frame update
 
@@ -50,6 +53,12 @@ public class GameBoardController : MonoBehaviour
             throw new System.Exception("Please ensure you have connected the upcomingBlocks to the GameBoardController in the inspector");
         }
 
+        if (dropPreview == null)
+        {
+            throw new System.Exception("Please ensure the drop preview object is connected to the GameBoardController in the inspector");
+        }
+
+
         gridRenderer = grid.GetComponent<Renderer>();
 
         if (gridRenderer == null)
@@ -66,6 +75,7 @@ public class GameBoardController : MonoBehaviour
     {
         SetTimeLinePosition();
         SetUpcomingBlocks();
+        SetBlockDropPreviewPosition();
     }
 
     private void SetTimeLinePosition()
@@ -76,6 +86,11 @@ public class GameBoardController : MonoBehaviour
     private void SetUpcomingBlocks()
     {
         upcomingBlocks.nextBlocks = gameController.luminesGame.UpcomingBlocks.ToList();
+    }
+
+    private void SetBlockDropPreviewPosition()
+    {
+        dropPreview.transform.localPosition = new Vector3(gameController.luminesGame.CurrentBlock.X + 1, dropPreview.transform.localPosition.y, dropPreview.transform.localPosition.z);
     }
 
     public void SetBPM(float bpm)
