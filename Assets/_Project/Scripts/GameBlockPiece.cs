@@ -13,11 +13,18 @@ public class GameBlockPiece : MonoBehaviour
 
     [SerializeField]
     Material material2;
+
+    [SerializeField]
+    Material deletionMaterial;
     public int BlockType
     {
         get { return blockType; }
         set { blockType = value; }
     }
+
+
+    private Renderer rendererComponent;
+    private MeshRenderer meshRenderer;
 
 
 
@@ -27,6 +34,9 @@ public class GameBlockPiece : MonoBehaviour
         {
             throw new System.Exception("Make sure both materials are set for a block");
         }
+
+        rendererComponent = this.GetComponent<Renderer>();
+        meshRenderer = this.GetComponent<MeshRenderer>();
     }
 
     // Start is called before the first frame update
@@ -38,35 +48,39 @@ public class GameBlockPiece : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        this.transform.localScale = new Vector3(0.95f, 0.95f, 0.1f);
 
         if (blockType == 0)
         {
-            this.GetComponent<MeshRenderer>().enabled = false;
+            meshRenderer.enabled = false;
         }
         else
         {
-            this.GetComponent<MeshRenderer>().enabled = true;
+            meshRenderer.enabled = true;
         }
+
         if (blockType == 1)
         {
-            this.GetComponent<Renderer>().material = material1;
+            rendererComponent.material = material1;
         }
         else if (blockType == 2)
         {
-            this.GetComponent<Renderer>().material = material2;
+            rendererComponent.material = material2;
         }
         else if (blockType == 3)
         {
-            this.GetComponent<Renderer>().material.color = Color.cyan;
+            rendererComponent.material.color = Color.cyan;
         }
         else if (blockType == 4)
         {
-            this.GetComponent<Renderer>().material.color = Color.grey;
+            rendererComponent.material.color = Color.grey;
         }
-        //Marked for deletion color 1
+        //Marked for deletion
         else if (blockType == 5)
         {
-            this.GetComponent<Renderer>().material.color = Color.red;
+            //hack to make the scale normal
+            this.transform.localScale = new Vector3(1, 1, 0.1f);
+            rendererComponent.material = deletionMaterial;
         }
     }
 

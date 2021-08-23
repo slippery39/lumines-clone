@@ -330,6 +330,7 @@ MonoBehaviour:
   blockType: 1
   material1: {fileID: 2100000, guid: 077c196c152431d409ffe8ebd8a53557, type: 2}
   material2: {fileID: 2100000, guid: e72d08e83f20d6a4b86f3908cfd804e4, type: 2}
+  deletionMaterial: {fileID: 2100000, guid: 0d15a41b7271e93449a6a4fc7247e60d, type: 2}
 --- !u!1 &705507993
 GameObject:
   m_ObjectHideFlags: 0
