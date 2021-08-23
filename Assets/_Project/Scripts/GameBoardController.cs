@@ -23,8 +23,15 @@ public class GameBoardController : MonoBehaviour
     private NextBlocks upcomingBlocks;
     // Start is called before the first frame update
 
+    [SerializeField]
     private Renderer gridRenderer;
-    
+
+
+    private void Awake()
+    {
+       
+    }
+
     void Start()
     {
         if (gameController == null)
@@ -95,6 +102,10 @@ public class GameBoardController : MonoBehaviour
 
     public void SetBPM(float bpm)
     {
+        if (gridRenderer == null)
+        {
+            return;
+        }
         //testing the BPM setting on our material;
         gridRenderer.material.SetFloat("_BPM", bpm);
     }

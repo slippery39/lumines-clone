@@ -59,6 +59,12 @@ public class Conductor : MonoBehaviour
         //Start the music
         musicSource.Play();
 
+
+        if (gameBoard == null)
+        {
+            throw new Exception("Game Board has not been found for the Conductor");
+        }
+
         
         
 

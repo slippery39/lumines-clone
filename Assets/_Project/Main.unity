@@ -559,7 +559,7 @@ MonoBehaviour:
   musicSource: {fileID: 846129856}
   debugText: {fileID: 1778745644}
   gameController: {fileID: 2101313368}
-  gameBoard: {fileID: 0}
+  gameBoard: {fileID: 1399434025}
 --- !u!4 &846129858
 Transform:
   m_ObjectHideFlags: 0
