@@ -6,7 +6,7 @@ public class GameBlockPiece : MonoBehaviour
 {
 
     [SerializeField]
-    int blockType = 1;
+    BlockTypes blockType = BlockTypes.Nothing;
 
     [SerializeField]
     Material material1;
@@ -18,8 +18,8 @@ public class GameBlockPiece : MonoBehaviour
     Material deletionMaterial;
     public int BlockType
     {
-        get { return blockType; }
-        set { blockType = value; }
+        get { return (int)blockType; }
+        set { blockType = (BlockTypes)value; }
     }
 
 
@@ -50,7 +50,7 @@ public class GameBlockPiece : MonoBehaviour
     {
         this.transform.localScale = new Vector3(0.95f, 0.95f, 0.1f);
 
-        if (blockType == 0)
+        if (blockType == BlockTypes.Nothing) //nothing
         {
             meshRenderer.enabled = false;
         }
@@ -59,24 +59,24 @@ public class GameBlockPiece : MonoBehaviour
             meshRenderer.enabled = true;
         }
 
-        if (blockType == 1)
+        if (blockType == BlockTypes.Color1) //color 1
         {
             rendererComponent.material = material1;
         }
-        else if (blockType == 2)
+        else if (blockType == BlockTypes.Color2) //color 2
         {
             rendererComponent.material = material2;
         }
-        else if (blockType == 3)
+        else if (blockType == BlockTypes.Color1Marked) //color 1 marked
         {
             rendererComponent.material.color = Color.cyan;
         }
-        else if (blockType == 4)
+        else if (blockType == BlockTypes.Color2Marked) //color 2 marked
         {
             rendererComponent.material.color = Color.grey;
         }
         //Marked for deletion
-        else if (blockType == 5)
+        else if (blockType == BlockTypes.DeletionInProgress) //DeletionInProgress
         {
             //hack to make the scale normal
             this.transform.localScale = new Vector3(1, 1, 0.1f);
