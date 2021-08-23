@@ -88,7 +88,7 @@ Shader "Unlit/GridShader"
                //creates a flashing pulse effect
                float pulseValue = clamp(cos(((_Time.y * PI) * (_BPM / 60.0)) % PI),0.6,1.0);
 
-               c *= float4(pulseValue,pulseValue,pulseValue, 1.0) * color;
+               c *= float4(pulseValue,pulseValue,pulseValue, 0.7) * color;
 
           
              

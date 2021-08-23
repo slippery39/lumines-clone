@@ -3,7 +3,7 @@ using UnityEngine;
 using GameLogic;
 
 
-public class GameGrid : MonoBehaviour {
+public class GameCellsController : MonoBehaviour {
 
     [SerializeField]
     private float cellSize = 1.0f;

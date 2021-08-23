@@ -66,7 +66,7 @@ public class GameBoardController : MonoBehaviour
             throw new System.Exception("Could not find the grid renderer on the grid game object");
         }
 
-        cells.GetComponent<GameGrid>().Initialize(gameController.luminesGame);      
+        cells.GetComponent<GameCellsController>().Initialize(gameController.luminesGame);      
         
     }
 
