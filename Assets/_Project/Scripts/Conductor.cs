@@ -39,6 +39,9 @@ public class Conductor : MonoBehaviour
     [SerializeField]
     GameBoardController gameBoard;
 
+    [SerializeField]
+    Mascot mascot;
+
     void Start()
     {
 
@@ -56,6 +59,8 @@ public class Conductor : MonoBehaviour
 
         gameBoard.SetBPM(songBpm);
 
+        
+
         //Start the music
         musicSource.Play();
 
@@ -65,6 +70,10 @@ public class Conductor : MonoBehaviour
             throw new Exception("Game Board has not been found for the Conductor");
         }
 
+        if (mascot == null)
+        {
+            throw new Exception("Could not find the mascot for the conductor");
+        }
         
         
 
@@ -100,6 +109,8 @@ public class Conductor : MonoBehaviour
 
         //determine how many beats since the song started
         songPositionInBeats = songPosition / secPerBeat;
+
+        mascot.songPositionInBeats = songPositionInBeats;
 
         //What do we need to move the timeline?
         //Every beat is 1/8 of the lineline.
