@@ -94,7 +94,7 @@ public class GameCellsController : MonoBehaviour {
 
                 if (luminesGame.timeLineMarked[x, y] && luminesGame.Board[x,y]!=0)
                 {
-                    createdBlockPieces[x, y].BlockType = 5;
+                    createdBlockPieces[x, y].BlockType = BlockTypes.DeletionInProgress;
                     continue;
                 }
                 if (luminesGame.timeLineMarked[x,y] && luminesGame.Board[x, y] == 0)
@@ -102,7 +102,7 @@ public class GameCellsController : MonoBehaviour {
 
                     Debug.LogError($"Error found with our game at {x},{y}");
                 }
-                createdBlockPieces[x, y].BlockType = luminesGame.Deletions[x, y] ? luminesGame.Board[x, y] + 2 : luminesGame.Board[x, y];
+                createdBlockPieces[x, y].BlockType = luminesGame.Deletions[x, y] ? (BlockTypes)luminesGame.Board[x, y] + 2 : (BlockTypes)luminesGame.Board[x, y];
             }
         }
 
@@ -120,7 +120,7 @@ public class GameCellsController : MonoBehaviour {
         var block = Instantiate(blockPiecePrefab.gameObject);
         block.transform.parent = cell.transform;
         block.transform.localPosition = new Vector3(cellSize / 2, cellSize / 2, 0);
-        block.GetComponent<GameBlockPiece>().BlockType = luminesGame.Board[x, y];
+        block.GetComponent<GameBlockPiece>().BlockType = (BlockTypes)luminesGame.Board[x, y];
         block.name = "Game Block";
 
         return block.GetComponent<GameBlockPiece>();

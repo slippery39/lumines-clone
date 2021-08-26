@@ -24,7 +24,7 @@ public class GameBlock : MonoBehaviour
         bottomLeftPiece = Instantiate(blockPiecePrefab);
         bottomLeftPiece.transform.parent = this.transform;
         bottomLeftPiece.transform.localPosition = new Vector3(0, 0, 0);
-        bottomLeftPiece.GetComponent<GameBlockPiece>().BlockType = 1;
+        bottomLeftPiece.GetComponent<GameBlockPiece>().BlockType = BlockTypes.Color1;
 
         //use the first one as the width to use.
         var pieceSize = bottomLeftPiece.GetComponent<Collider>().bounds.size;
@@ -36,17 +36,17 @@ public class GameBlock : MonoBehaviour
         bottomRightPiece = Instantiate(blockPiecePrefab);
         bottomRightPiece.transform.parent = this.transform;
         bottomRightPiece.transform.localPosition = new Vector3(xSize, 0, 0);
-        bottomRightPiece.GetComponent<GameBlockPiece>().BlockType = 2;
+        bottomRightPiece.GetComponent<GameBlockPiece>().BlockType = BlockTypes.Color2;
 
         topLeftPiece = Instantiate(blockPiecePrefab);
         topLeftPiece.transform.parent = this.transform;
         topLeftPiece.transform.localPosition = new Vector3(0, ySize, 0);
-        topLeftPiece.GetComponent<GameBlockPiece>().BlockType = 1;
+        topLeftPiece.GetComponent<GameBlockPiece>().BlockType = BlockTypes.Color1;
 
         topRightPiece = Instantiate(blockPiecePrefab);
         topRightPiece.transform.parent = this.transform;
         topRightPiece.transform.localPosition = new Vector3(xSize,ySize, 0);
-        topRightPiece.GetComponent<GameBlockPiece>().BlockType = 2;
+        topRightPiece.GetComponent<GameBlockPiece>().BlockType = BlockTypes.Color2;
     }
 
     public void SetColors(int[] colorCodes)
@@ -61,10 +61,10 @@ public class GameBlock : MonoBehaviour
             throw new System.Exception("Invalid length for color codes parameter. Length was " + colorCodes.Length + ". Was expecting 4");
         }
 
-        topLeftPiece.GetComponent<GameBlockPiece>().BlockType = colorCodes[0];
-        topRightPiece.GetComponent<GameBlockPiece>().BlockType = colorCodes[1];
-        bottomLeftPiece.GetComponent<GameBlockPiece>().BlockType = colorCodes[2];
-        bottomRightPiece.GetComponent<GameBlockPiece>().BlockType = colorCodes[3];
+        topLeftPiece.GetComponent<GameBlockPiece>().BlockType = (BlockTypes)colorCodes[0];
+        topRightPiece.GetComponent<GameBlockPiece>().BlockType = (BlockTypes)colorCodes[1];
+        bottomLeftPiece.GetComponent<GameBlockPiece>().BlockType = (BlockTypes)colorCodes[2];
+        bottomRightPiece.GetComponent<GameBlockPiece>().BlockType = (BlockTypes)colorCodes[3];
         
     }
 

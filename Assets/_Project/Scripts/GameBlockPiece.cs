@@ -16,12 +16,11 @@ public class GameBlockPiece : MonoBehaviour
 
     [SerializeField]
     Material deletionMaterial;
-    public int BlockType
+    public BlockTypes BlockType
     {
-        get { return (int)blockType; }
-        set { blockType = (BlockTypes)value; }
+        get { return blockType; }
+        set { blockType = value; }
     }
-
 
     private Renderer rendererComponent;
     private MeshRenderer meshRenderer;
@@ -30,7 +29,7 @@ public class GameBlockPiece : MonoBehaviour
 
     private void Awake()
     {
-       if(material1 == null || material2 == null)
+        if (material1 == null || material2 == null)
         {
             throw new System.Exception("Make sure both materials are set for a block");
         }
