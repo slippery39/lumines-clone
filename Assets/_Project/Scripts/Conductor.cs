@@ -57,7 +57,7 @@ public class Conductor : MonoBehaviour
         //Record the time when the music starts
         dspSongTime = (float)AudioSettings.dspTime;
 
-        gameBoard.SetBPM(songBpm);
+        gameBoard.SetSongPositionInBeats(songBpm);
 
         
 
@@ -97,14 +97,9 @@ public class Conductor : MonoBehaviour
         //determine how many seconds since the song started
 
         var previousSongPosition = -songPosition;
-        var previousSongBeat = songPositionInBeats;
+        var previousSongBeat = songPositionInBeats;     
 
-        
-
-
-        songPosition = (float)(AudioSettings.dspTime - dspSongTime);
-
-        
+        songPosition = (float)(AudioSettings.dspTime - dspSongTime);       
 
 
         //determine how many beats since the song started
@@ -119,7 +114,7 @@ public class Conductor : MonoBehaviour
 
         DebugInfo();
 
-        gameBoard.SetBPM(songBpm);
+        gameBoard.SetSongPositionInBeats(songPositionInBeats);
     }
 
 }

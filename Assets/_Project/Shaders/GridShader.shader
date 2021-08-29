@@ -4,7 +4,7 @@ Shader "Unlit/GridShader"
     {
         _Width("Width",Range(1,999)) = 16
         _Height("Height", Range(1, 999)) = 10
-        _BPM("BPM", Range(40,300)) = 120
+        _SongPositionInBeats("SongPositionInBeats",Float) = 0
         _MainTex ("Texture", 2D) = "white" {}
     }
     SubShader
@@ -42,7 +42,7 @@ Shader "Unlit/GridShader"
 
             float _Width;
             float _Height;
-            float _BPM;
+            float _SongPositionInBeats;
            
 
             v2f vert (appdata v)
@@ -83,10 +83,9 @@ Shader "Unlit/GridShader"
                 }
                 //time.y is measured in seconds
                 //sample the texture and offset by time.
-               float4 c = tex2D(_MainTex, i.uv + float2(_Time.y/20,_Time.y/20));  /* float4(_Time.zzz,1.0)*/;  
+               float4 c = tex2D(_MainTex, i.uv + float2(_Time.y/20,_Time.y/20));  /* float4(_Time.zzz,1.0)*/; 
 
-               //creates a flashing pulse effect
-               float pulseValue = clamp(cos(((_Time.y * PI) * (_BPM / 60.0)) % PI),0.6,1.0);
+               float pulseValue = clamp( abs(cos(_SongPositionInBeats * PI) % PI),0.6,1.0);
 
                c *= float4(pulseValue,pulseValue,pulseValue, 0.7) * color;
 

@@ -100,13 +100,13 @@ public class GameBoardController : MonoBehaviour
         dropPreview.transform.localPosition = new Vector3(gameController.luminesGame.CurrentBlock.X + 1, dropPreview.transform.localPosition.y, dropPreview.transform.localPosition.z);
     }
 
-    public void SetBPM(float bpm)
+    public void SetSongPositionInBeats(float songPositionInBeats)
     {
         if (gridRenderer == null)
         {
             return;
         }
         //testing the BPM setting on our material;
-        gridRenderer.material.SetFloat("_BPM", bpm);
+        gridRenderer.material.SetFloat("_SongPositionInBeats", songPositionInBeats);
     }
 }

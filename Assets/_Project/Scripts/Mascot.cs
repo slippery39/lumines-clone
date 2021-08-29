@@ -18,7 +18,6 @@ public class Mascot : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //what is time.y? -song position in beats?
         float signedPulse = Mathf.Cos(songPositionInBeats * Mathf.PI) % Mathf.PI;
         float pulseValue = Mathf.Abs(signedPulse);
         pulseValue = EaseOutSine(pulseValue);
