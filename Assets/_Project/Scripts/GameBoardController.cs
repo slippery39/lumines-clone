@@ -24,6 +24,9 @@ public class GameBoardController : MonoBehaviour
     // Start is called before the first frame update
 
     [SerializeField]
+    private ScoreBoard scoreBoard;
+
+    [SerializeField]
     private Renderer gridRenderer;
 
 
@@ -83,6 +86,8 @@ public class GameBoardController : MonoBehaviour
         SetTimeLinePosition();
         SetUpcomingBlocks();
         SetBlockDropPreviewPosition();
+
+        scoreBoard.CurrentTime = gameController.CurrentTime;
     }
 
     private void SetTimeLinePosition()

@@ -12,11 +12,15 @@ public class GameController : MonoBehaviour
 
 
     private float currentTime = 0.0f;
+
+    public float CurrentTime { get { return currentTime; } }
+
     private float moveDownTime = 1.0f;
     private float nextMoveDownTime = 1.0f;
 
 
     private ThrottledInput customInputHandler;
+
 
     private void Awake()
     {
@@ -75,5 +79,6 @@ public class GameController : MonoBehaviour
             luminesGame.BoardGravity();
         }
 
+        
     }
 }

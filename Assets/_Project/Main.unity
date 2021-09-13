@@ -1573,6 +1573,7 @@ Transform:
   - {fileID: 1706974964}
   - {fileID: 1777390945}
   - {fileID: 1915081329}
+  - {fileID: 1674644410}
   m_Father: {fileID: 0}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1594,6 +1595,7 @@ MonoBehaviour:
   timeLine: {fileID: 1802197871}
   dropPreview: {fileID: 1777390941}
   upcomingBlocks: {fileID: 1706974965}
+  scoreBoard: {fileID: 1674644411}
   gridRenderer: {fileID: 0}
 --- !u!1 &1674644406
 GameObject:
@@ -1607,6 +1609,7 @@ GameObject:
   - component: {fileID: 1674644409}
   - component: {fileID: 1674644408}
   - component: {fileID: 1674644407}
+  - component: {fileID: 1674644411}
   m_Layer: 5
   m_Name: Scoreboard
   m_TagString: Untagged
@@ -1689,7 +1692,7 @@ RectTransform:
   - {fileID: 1974555349}
   - {fileID: 65869276}
   - {fileID: 1318740568}
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 1399434024}
   m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -1697,6 +1700,22 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!114 &1674644411
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1674644406}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4fb069cf814cf04a8ce73cae55d3683, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  timeLabel: {fileID: 875232509}
+  scoreLabel: {fileID: 481897914}
+  erasedLabel: {fileID: 700507837}
+  currentTime: 0
 --- !u!1 &1706974963
 GameObject:
   m_ObjectHideFlags: 0
@@ -2627,7 +2646,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 7
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2131497813
 GameObject:
