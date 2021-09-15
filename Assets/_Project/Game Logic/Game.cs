@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 
 using System.IO;
+using Game_Logic;
 
 namespace GameLogic
 {
@@ -37,7 +38,8 @@ namespace GameLogic
         private int bufferedHeight = 3; //height at the top of the game grid where the movable blocks will spawn.
 
 
-        public event Action OnBlockPlaced;
+        public event Action<GameEventInfo> OnBlockPlaced;
+        public event Action<GameEventInfo> OnNewSquareFormed;
 
 
 
@@ -89,7 +91,7 @@ namespace GameLogic
             if ( (nextGridPos > currentGridPos) || (nextGridPos == 0 && currentGridPos!=0) )
             {
                 TimeLineCheckDeletions(nextGridPos);
-                TimeLineMark(nextGridPos);                
+                MarkByTimeLine(nextGridPos);                
             }
         }
 
@@ -105,13 +107,14 @@ namespace GameLogic
                     if (board[x, y - 1] == 0 && !timeLineMarked[x,y] )
                     {
                         board[x, y - 1] = board[x, y];
-                        board[x, y] = 0;
-
+                        board[x, y] = 0;  
+                        
                         
                         
                     }
-                }
+                  }
             }
+            //TODO - Check for new squares formed.
         }
 
         public void MoveLeft()
@@ -127,8 +130,6 @@ namespace GameLogic
             }
 
             currentBlock.X = Math.Max(currentBlock.X - 1, 0);
-
-            //TODO - Need to check for collisions right;
         }
 
         public void MoveRight()
@@ -145,8 +146,6 @@ namespace GameLogic
             }
 
             currentBlock.X = Math.Min(Width - 2, currentBlock.X + 1);
-
-            //TODO - Need to check for collisions right;
         }
 
         public void MoveDown()
@@ -188,7 +187,14 @@ namespace GameLogic
             board[CurrentBlock.X, CurrentBlock.Y - 1] = CurrentBlock.Data[2];
             board[CurrentBlock.X + 1, CurrentBlock.Y - 1] = CurrentBlock.Data[3];
 
-            OnBlockPlaced?.Invoke();
+
+            var info = new GameEventInfo();
+            info.CurrentSquares = GetAllSquares();
+            
+
+            OnBlockPlaced?.Invoke(info);
+
+            //TODO - pass information to the OnBlockPlaced
 
             currentBlock = nextBlocks.Dequeue();
             nextBlocks.Enqueue(CreateMoveableBlock());
@@ -207,6 +213,11 @@ namespace GameLogic
 
         public bool IsInFreeFall(int x, int y)
         {
+
+            if (x >=Width || y >= Height)
+            {
+                throw new Exception("Invalid arguments for IsInFreeFall. Outside the bounds : " + x + "," + y);
+            }
 
             if (y == 0)
             {
@@ -235,7 +246,7 @@ namespace GameLogic
             return false;
         }
 
-        public void TimeLineMark(int x)
+        public void MarkByTimeLine(int x)
         {
            for (var y = 0; y < Height; y++)
             {
@@ -244,26 +255,6 @@ namespace GameLogic
                     timeLineMarked[x, y] = true;
                 }
             }
-        }
-
-        private string Arr2dToString<T>(T[,] arr)
-        {
-            var result = string.Empty;
-            var maxX = arr.GetLength(0);
-            var maxY = arr.GetLength(1);
-            for (var y = 0; y < maxY; y++)
-            {
-                result += "{";
-                for (var x = 0; x < maxX; x++)
-                {
-                    result += $"{arr[x, y]},";
-                }
-
-                result += "}" + Environment.NewLine;
-            }
-
-
-            return result;
         }
 
         private int GetAmountToDelete(int columnIndex)
@@ -456,12 +447,49 @@ namespace GameLogic
             board[x, y] = 0;
         }
 
+        private List<Square> GetAllSquares()
+        {
+            //we need to get he value.
+            var squares = new List<Square>();
+
+            VisitGrid((x, y) =>
+            {
+               if (CheckSquare(x, y))
+                {
+                    squares.Add(new Square(x, y, this.board[x, y]));
+                }
+            });
+
+
+            return squares;
+
+            //Use case 1 <-- do this one first.
+            //be able in the ui to highlight with a white outline all the individual squares that are marked for deletion
+            
+            //A square can be determined by its Bottom Left coordinate.
+
+            //Use case 2
+            //WHen a block is placed, we should see a numer telling us how many squares are currently in the spot the block was placed.
+            //Also included gravity placed blocks.
+
+
+            //Starting from the bottom left
+            //Go through the grid
+            //Check if a square exists in that spot
+            //if it does add it to the list.
+
+        }
+
 
         private bool CheckSquare(int x, int y)
         {
 
             //Should not count pieces that are in free fall on the right;
 
+            if (x+1 >=Width || y+1 >=Height)
+            {
+                return false;
+            }
             if (IsInFreeFall(x + 1, y) || IsInFreeFall(x + 1, y + 1))
             {
                 return false;

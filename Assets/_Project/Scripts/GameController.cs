@@ -37,7 +37,7 @@ public class GameController : MonoBehaviour
         customInputHandler.AddHandler(KeyCode.DownArrow, luminesGame.MoveDown);
 
         //To prevent players from accidently placing too many blocks in a row from holding down the down key
-        luminesGame.OnBlockPlaced += () => customInputHandler.ResetThrottleDelayTime(KeyCode.DownArrow);
+        luminesGame.OnBlockPlaced += (info) => customInputHandler.ResetThrottleDelayTime(KeyCode.DownArrow);
     }
 
     // Update is called once per frame
