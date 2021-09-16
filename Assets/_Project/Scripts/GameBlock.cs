@@ -4,49 +4,24 @@ using UnityEngine;
 
 public class GameBlock : MonoBehaviour
 {
-    // Start is called before the first frame update
     [SerializeField]
-    private GameBlockPiece blockPiecePrefab;
-
-    GameBlockPiece bottomLeftPiece;
-    GameBlockPiece bottomRightPiece;
     GameBlockPiece topLeftPiece;
+    [SerializeField]
     GameBlockPiece topRightPiece;
+    [SerializeField]
+    GameBlockPiece bottomLeftPiece;
+    [SerializeField]
+    GameBlockPiece bottomRightPiece;
+
 
 
     private void Awake()
     {
-        if (blockPiecePrefab == null)
+        if (bottomLeftPiece == null || bottomRightPiece == null || topLeftPiece == null || topRightPiece == null)
         {
-            Debug.LogError("Could not find Block Piece Prefab for the GameBlock object");
+            throw new System.Exception("All pieces must be defined in a GameBlock");
         }
 
-        bottomLeftPiece = Instantiate(blockPiecePrefab);
-        bottomLeftPiece.transform.parent = this.transform;
-        bottomLeftPiece.transform.localPosition = new Vector3(0, 0, 0);
-        bottomLeftPiece.GetComponent<GameBlockPiece>().BlockType = BlockTypes.Color1;
-
-        //use the first one as the width to use.
-        var pieceSize = bottomLeftPiece.GetComponent<Collider>().bounds.size;
-        //temporary fix to put have spaces. 
-        var xSize = 1;
-        var ySize = 1;
-
-
-        bottomRightPiece = Instantiate(blockPiecePrefab);
-        bottomRightPiece.transform.parent = this.transform;
-        bottomRightPiece.transform.localPosition = new Vector3(xSize, 0, 0);
-        bottomRightPiece.GetComponent<GameBlockPiece>().BlockType = BlockTypes.Color2;
-
-        topLeftPiece = Instantiate(blockPiecePrefab);
-        topLeftPiece.transform.parent = this.transform;
-        topLeftPiece.transform.localPosition = new Vector3(0, ySize, 0);
-        topLeftPiece.GetComponent<GameBlockPiece>().BlockType = BlockTypes.Color1;
-
-        topRightPiece = Instantiate(blockPiecePrefab);
-        topRightPiece.transform.parent = this.transform;
-        topRightPiece.transform.localPosition = new Vector3(xSize,ySize, 0);
-        topRightPiece.GetComponent<GameBlockPiece>().BlockType = BlockTypes.Color2;
     }
 
     public void SetColors(int[] colorCodes)
