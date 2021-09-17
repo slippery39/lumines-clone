@@ -76,7 +76,14 @@ public class GameBoardController : MonoBehaviour
             throw new System.Exception("Could not find the grid renderer on the grid game object");
         }
 
-        cells.GetComponent<GameCellsController>().Initialize(gameController.luminesGame);      
+        cells.GetComponent<GameCellsController>().Initialize(gameController.luminesGame);
+
+        upcomingBlocks.SetNextBlocks(gameController.luminesGame.UpcomingBlocks.ToList());
+
+        gameController.luminesGame.OnNewBlock+=((onNewBlockInfo) =>
+        {
+            upcomingBlocks.SetNextBlocks(onNewBlockInfo.nextBlocks);
+        });
         
     }
 
@@ -97,13 +104,14 @@ public class GameBoardController : MonoBehaviour
 
     private void SetUpcomingBlocks()
     {
-        upcomingBlocks.nextBlocks = gameController.luminesGame.UpcomingBlocks.ToList();
+        upcomingBlocks.SetNextBlocks(gameController.luminesGame.UpcomingBlocks.ToList());
     }
 
     private void SetBlockDropPreviewPosition()
     {
         dropPreview.transform.localPosition = new Vector3(gameController.luminesGame.CurrentBlock.X + 1, dropPreview.transform.localPosition.y, dropPreview.transform.localPosition.z);
     }
+
 
     public void SetSongPositionInBeats(float songPositionInBeats)
     {

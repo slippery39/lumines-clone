@@ -40,7 +40,7 @@ namespace GameLogic
 
         public event Action<GameEventInfo> OnBlockPlaced;
         public event Action<GameEventInfo> OnNewSquareFormed;
-
+        public event Action<GameEventInfo> OnNewBlock;
 
 
         private float _timeLinePosition = 0.0f;
@@ -188,16 +188,21 @@ namespace GameLogic
             board[CurrentBlock.X + 1, CurrentBlock.Y - 1] = CurrentBlock.Data[3];
 
 
-            var info = new GameEventInfo();
-            info.CurrentSquares = GetAllSquares();
-            
+            var info = new GameEventInfo
+            {
+                CurrentSquares = GetAllSquares()
+            };
 
-            OnBlockPlaced?.Invoke(info);
 
             //TODO - pass information to the OnBlockPlaced
 
+            info.previousNextBlocks = this.nextBlocks.ToList();            
             currentBlock = nextBlocks.Dequeue();
             nextBlocks.Enqueue(CreateMoveableBlock());
+            info.nextBlocks = this.nextBlocks.ToList();
+
+            OnBlockPlaced?.Invoke(info);
+            OnNewBlock?.Invoke(info);
         }
 
         private MoveableBlock CreateMoveableBlock()
@@ -299,7 +304,7 @@ namespace GameLogic
             }
             else
             {
-                x = x - 1;
+                x--;
             }
 
             if (x < 0)

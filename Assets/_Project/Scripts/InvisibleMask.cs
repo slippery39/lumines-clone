@@ -23,7 +23,6 @@ public class InvisibleMask : MonoBehaviour
  
         foreach (Renderer rendr in renders)
         {
-            Debug.Log(rendr.transform.gameObject.name);
             rendr.material.renderQueue = 2004; // set their renderQueue
         }
         
