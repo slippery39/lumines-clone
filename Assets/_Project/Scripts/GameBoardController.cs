@@ -82,7 +82,7 @@ public class GameBoardController : MonoBehaviour
 
         gameController.luminesGame.OnNewBlock+=((onNewBlockInfo) =>
         {
-            upcomingBlocks.SetNextBlocks(onNewBlockInfo.nextBlocks);
+            upcomingBlocks.UpdateNextBlocks(onNewBlockInfo.nextBlocks);
         });
         
     }
@@ -91,7 +91,6 @@ public class GameBoardController : MonoBehaviour
     void Update()
     {
         SetTimeLinePosition();
-        SetUpcomingBlocks();
         SetBlockDropPreviewPosition();
 
         scoreBoard.CurrentTime = gameController.CurrentTime;
@@ -100,11 +99,6 @@ public class GameBoardController : MonoBehaviour
     private void SetTimeLinePosition()
     {
         timeLine.transform.localPosition = new Vector3(gameController.luminesGame.TimeLinePosition * gameController.luminesGame.Width,timeLine.transform.localPosition.y,timeLine.transform.localPosition.z);
-    }
-
-    private void SetUpcomingBlocks()
-    {
-        upcomingBlocks.SetNextBlocks(gameController.luminesGame.UpcomingBlocks.ToList());
     }
 
     private void SetBlockDropPreviewPosition()

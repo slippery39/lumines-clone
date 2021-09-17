@@ -25,8 +25,6 @@ public class GameBlockPiece : MonoBehaviour
     private Renderer rendererComponent;
     private MeshRenderer meshRenderer;
 
-
-
     private void Awake()
     {
         if (material1 == null || material2 == null)
@@ -38,14 +36,9 @@ public class GameBlockPiece : MonoBehaviour
         meshRenderer = this.GetComponent<MeshRenderer>();
     }
 
-    // Start is called before the first frame update
-    void Start()
-    {
 
-    }
-
-    // Update is called once per frame
-    void Update()
+    //I'm calling this in both Update() and LateUpdate() due to some visual errors that happen.
+    private void UpdateStuff()
     {
         this.transform.localScale = new Vector3(0.95f, 0.95f, 0.1f);
 
@@ -81,6 +74,16 @@ public class GameBlockPiece : MonoBehaviour
             this.transform.localScale = new Vector3(1, 1, 0.1f);
             rendererComponent.material = deletionMaterial;
         }
+    }
+
+    void Update()
+    {
+        UpdateStuff();
+    }
+
+    void LateUpdate()
+    {
+        UpdateStuff();
     }
 
 }
