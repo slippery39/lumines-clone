@@ -18,9 +18,10 @@ public class GameController : MonoBehaviour
     private float moveDownTime = 1.0f;
     private float nextMoveDownTime = 1.0f;
 
+    private float nextGravityTime = 1.05f;
 
     private ThrottledInput customInputHandler;
-
+  
 
     private void Awake()
     {
@@ -43,15 +44,6 @@ public class GameController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.S))
-        {
-            luminesGame.DeleteMarkedSquares();
-        }
-        if (Input.GetKeyDown(KeyCode.A))
-        {
-            luminesGame.BoardGravity();
-        }
-
         if (Input.GetKeyDown(KeyCode.Q))
         {
             luminesGame.CurrentBlock.RotateLeft();
@@ -59,7 +51,7 @@ public class GameController : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.W))
         {
             luminesGame.CurrentBlock.RotateRight();
-        } 
+        }
 
         //Our Loop Is Here
         luminesGame.MarkDeletions();
@@ -74,11 +66,12 @@ public class GameController : MonoBehaviour
         }
 
         //Gravity Tick - frame count is temporary.
-        if (Time.frameCount % 8 == 0)
+        if (currentTime > nextGravityTime)
         {
             luminesGame.BoardGravity();
+            nextGravityTime += 0.05f;
         }
 
-        
+
     }
 }
