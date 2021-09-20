@@ -355,7 +355,7 @@ namespace GameLogic
             {
                 for (var y = 0; y < Height - 1; y++)
                 {
-                    if (!IsInFreeFall(x, y) && CheckSquare(x, y))
+                    if (!IsInFreeFall(x, y) && CheckForSquare(x, y))
                     {
                         markedForDeletion[x, y] = true;
                         markedForDeletion[x, y + 1] = true;
@@ -434,26 +434,6 @@ namespace GameLogic
             //recursive function, keep checking until there is no other coords visited.
         }
 
-        public void DeleteMarkedSquares()
-        {
-            for (var x = 0; x < Width; x++)
-            {
-                for (var y = 0; y < Height; y++)
-                {
-                    if (markedForDeletion[x, y])
-                    {
-                        DeleteSquare(x, y);
-                    }
-                }
-            }
-        }
-
-        private void DeleteSquare(int x, int y)
-        {
-            markedForDeletion[x, y] = false;
-            board[x, y] = 0;
-        }
-
         private List<Square> GetAllSquares()
         {
             //we need to get he value.
@@ -461,7 +441,7 @@ namespace GameLogic
 
             VisitGrid((x, y) =>
             {
-               if (CheckSquare(x, y))
+               if (CheckForSquare(x, y))
                 {
                     squares.Add(new Square(x, y, this.board[x, y]));
                 }
@@ -469,26 +449,10 @@ namespace GameLogic
 
 
             return squares;
-
-            //Use case 1 <-- do this one first.
-            //be able in the ui to highlight with a white outline all the individual squares that are marked for deletion
-            
-            //A square can be determined by its Bottom Left coordinate.
-
-            //Use case 2
-            //WHen a block is placed, we should see a numer telling us how many squares are currently in the spot the block was placed.
-            //Also included gravity placed blocks.
-
-
-            //Starting from the bottom left
-            //Go through the grid
-            //Check if a square exists in that spot
-            //if it does add it to the list.
-
         }
 
 
-        private bool CheckSquare(int x, int y)
+        private bool CheckForSquare(int x, int y)
         {
 
             //Should not count pieces that are in free fall on the right;
