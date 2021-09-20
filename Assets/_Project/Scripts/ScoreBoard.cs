@@ -14,13 +14,23 @@ public class ScoreBoard : MonoBehaviour
     private float currentTime=0;
     public float CurrentTime { get { return currentTime; } set { currentTime = value; } }
 
+    [SerializeField]
+    private int blocksErased;
+    public int BlocksErased { get { return blocksErased; } set{ blocksErased = value; } }
+
+
+
+
 
 
     // Update is called once per frame
     void Update()
     {
         timeLabel.SetText(FormatTime(currentTime));
+        erasedLabel.SetText(blocksErased.ToString());
     }
+
+    
 
     
 
@@ -33,6 +43,8 @@ public class ScoreBoard : MonoBehaviour
     {
         return (int)(totalSeconds % 60);
     }
+
+
 
     string FormatTime(float totalSeconds)
     {

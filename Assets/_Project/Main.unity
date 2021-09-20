@@ -5078,7 +5078,7 @@ GameObject:
   - component: {fileID: 1399434024}
   - component: {fileID: 1399434025}
   m_Layer: 0
-  m_Name: GameBoard
+  m_Name: Game UI
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5840,6 +5840,7 @@ MonoBehaviour:
   scoreLabel: {fileID: 481897914}
   erasedLabel: {fileID: 700507837}
   currentTime: 0
+  blocksErased: 0
 --- !u!1 &1706974963
 GameObject:
   m_ObjectHideFlags: 0
@@ -5853,7 +5854,7 @@ GameObject:
   - component: {fileID: 1706974966}
   - component: {fileID: 1706974965}
   m_Layer: 0
-  m_Name: NextBlocks
+  m_Name: Upcoming Blocks
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6417,7 +6418,7 @@ GameObject:
   - component: {fileID: 1777390943}
   - component: {fileID: 1777390942}
   m_Layer: 0
-  m_Name: BlockDropPreview
+  m_Name: Block Drop Preview
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6997,7 +6998,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1832705450}
   m_Layer: 0
-  m_Name: BeatBoxes
+  m_Name: Beat Numbers
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -7321,7 +7322,7 @@ GameObject:
   - component: {fileID: 1915081330}
   - component: {fileID: 1915081333}
   m_Layer: 0
-  m_Name: Test Mascot
+  m_Name: Mascot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -8200,6 +8201,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c5ea9ede19811d54384203a1d2e8de39, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  erasedBlocksCount: 0
 --- !u!4 &2101313369
 Transform:
   m_ObjectHideFlags: 0

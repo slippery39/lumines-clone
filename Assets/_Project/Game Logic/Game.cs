@@ -39,8 +39,8 @@ namespace GameLogic
 
 
         public event Action<GameEventInfo> OnBlockPlaced;
-        public event Action<GameEventInfo> OnNewSquareFormed;
         public event Action<GameEventInfo> OnNewBlock;
+        public event Action<GameEventInfo> OnDeletion;
 
 
         private float _timeLinePosition = 0.0f;
@@ -188,18 +188,15 @@ namespace GameLogic
             board[CurrentBlock.X + 1, CurrentBlock.Y - 1] = CurrentBlock.Data[3];
 
 
-            var info = new GameEventInfo
-            {
-                CurrentSquares = GetAllSquares()
-            };
+            var info = new GameEventInfo();
 
 
             //TODO - pass information to the OnBlockPlaced
 
-            info.previousNextBlocks = this.nextBlocks.ToList();            
+            info.PreviousUpcomingBlocks = this.nextBlocks.ToList();            
             currentBlock = nextBlocks.Dequeue();
             nextBlocks.Enqueue(CreateMoveableBlock());
-            info.nextBlocks = this.nextBlocks.ToList();
+            info.UpcomingBlocks = this.nextBlocks.ToList();
 
             OnBlockPlaced?.Invoke(info);
             OnNewBlock?.Invoke(info);
@@ -323,11 +320,25 @@ namespace GameLogic
             }
             else
             {
+                //Delete all marked cells. Note that this currently runs even if there is nothing marked by the time line.
+                //Perhaps have an early exit for that case.
+                bool squareListProcessed = false;
                 VisitGrid((xx, yy) =>
                 {
+
+                    
+
                     //not sure if we need this xx<=x.
                     if (xx<= x && timeLineMarked[xx,yy])
                     {
+                        //We only want this to run once or else the amount of squares will change b
+                        if (!squareListProcessed)
+                        {
+                            var squares = GetAllTimeLineMarkedSquares();
+                            squareListProcessed = true;
+                            Debug.Log("Squares being Deleted : " + squares.Count);
+                            this.OnDeletion?.Invoke(new GameEventInfo { SquaresDeleted = squares });
+                        }
                         DeleteCell(xx, yy);
                     }
                 });
@@ -355,7 +366,7 @@ namespace GameLogic
             {
                 for (var y = 0; y < Height - 1; y++)
                 {
-                    if (!IsInFreeFall(x, y) && CheckForSquare(x, y))
+                    if (!IsInFreeFall(x, y) && CheckIfSquare(x, y))
                     {
                         markedForDeletion[x, y] = true;
                         markedForDeletion[x, y + 1] = true;
@@ -441,7 +452,23 @@ namespace GameLogic
 
             VisitGrid((x, y) =>
             {
-               if (CheckForSquare(x, y))
+               if (CheckIfSquare(x, y))
+                {
+                    squares.Add(new Square(x, y, this.board[x, y]));
+                }
+            });
+
+
+            return squares;
+        }
+
+        private List<Square> GetAllTimeLineMarkedSquares()
+        {
+            var squares = new List<Square>();
+
+            VisitGrid((x, y) =>
+            {
+                if (CheckIfSquare(x, y) && timeLineMarked[x,y])
                 {
                     squares.Add(new Square(x, y, this.board[x, y]));
                 }
@@ -452,7 +479,7 @@ namespace GameLogic
         }
 
 
-        private bool CheckForSquare(int x, int y)
+        private bool CheckIfSquare(int x, int y)
         {
 
             //Should not count pieces that are in free fall on the right;

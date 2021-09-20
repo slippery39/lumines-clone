@@ -21,6 +21,8 @@ public class GameController : MonoBehaviour
     private float nextGravityTime = 1.05f;
 
     private ThrottledInput customInputHandler;
+
+    public int erasedBlocksCount;
   
 
     private void Awake()
@@ -30,29 +32,35 @@ public class GameController : MonoBehaviour
 
     void Start()
     {
-        //initialize our keydownTime dict.
-        customInputHandler = GetComponent<ThrottledInput>();
-
-        customInputHandler.AddHandler(KeyCode.LeftArrow, luminesGame.MoveLeft);
-        customInputHandler.AddHandler(KeyCode.RightArrow, luminesGame.MoveRight);
-        customInputHandler.AddHandler(KeyCode.DownArrow, luminesGame.MoveDown);
-
-        //To prevent players from accidently placing too many blocks in a row from holding down the down key
-        luminesGame.OnBlockPlaced += (info) => customInputHandler.ResetThrottleDelayTime(KeyCode.DownArrow);
+        InitializeInputHandlers();
+        InitializeGameEventHandlers();
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Q))
-        {
-            luminesGame.CurrentBlock.RotateLeft();
-        }
-        if (Input.GetKeyDown(KeyCode.W))
-        {
-            luminesGame.CurrentBlock.RotateRight();
-        }
+        GameLoop();
+    }
 
+    private void InitializeInputHandlers()
+    {
+        customInputHandler = GetComponent<ThrottledInput>();
+        customInputHandler.AddHandler(KeyCode.LeftArrow, luminesGame.MoveLeft);
+        customInputHandler.AddHandler(KeyCode.RightArrow, luminesGame.MoveRight);
+        customInputHandler.AddHandler(KeyCode.DownArrow, luminesGame.MoveDown);
+        customInputHandler.AddHandler(KeyCode.Q, ()=> { luminesGame.CurrentBlock.RotateLeft(); });
+        customInputHandler.AddHandler(KeyCode.W, ()=> { luminesGame.CurrentBlock.RotateRight(); });        
+    }
+
+    private void InitializeGameEventHandlers()
+    {
+        //To prevent players from accidently placing too many blocks in a row from holding down the down key
+        luminesGame.OnBlockPlaced += (info) => customInputHandler.ResetThrottleDelayTime(KeyCode.DownArrow);
+        luminesGame.OnDeletion += (info) => erasedBlocksCount += info.SquaresDeleted.Count;
+    }
+
+    private void GameLoop()
+    {
         //Our Loop Is Here
         luminesGame.MarkDeletions();
 
@@ -71,7 +79,5 @@ public class GameController : MonoBehaviour
             luminesGame.BoardGravity();
             nextGravityTime += 0.05f;
         }
-
-
     }
 }

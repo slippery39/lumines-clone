@@ -82,7 +82,7 @@ public class GameBoardController : MonoBehaviour
 
         gameController.luminesGame.OnNewBlock+=((onNewBlockInfo) =>
         {
-            upcomingBlocks.UpdateNextBlocks(onNewBlockInfo.nextBlocks);
+            upcomingBlocks.UpdateNextBlocks(onNewBlockInfo.UpcomingBlocks);
         });
         
     }
@@ -94,6 +94,7 @@ public class GameBoardController : MonoBehaviour
         SetBlockDropPreviewPosition();
 
         scoreBoard.CurrentTime = gameController.CurrentTime;
+        scoreBoard.BlocksErased = gameController.erasedBlocksCount;
     }
 
     private void SetTimeLinePosition()

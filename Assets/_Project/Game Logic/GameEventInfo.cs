@@ -9,10 +9,11 @@ namespace Game_Logic
 {
     public class GameEventInfo
     {
-        public List<Square> CurrentSquares { get; set; }
 
-        public List<MoveableBlock> previousNextBlocks { get; set; }
-        public List<MoveableBlock> nextBlocks { get; set; }
+        public List<Square> SquaresDeleted { get; set; }
+        //These are used for the Next Blocks Preview.
+        public List<MoveableBlock> PreviousUpcomingBlocks { get; set; }
+        public List<MoveableBlock> UpcomingBlocks { get; set; }
         public GameEventInfo()
         {
 
