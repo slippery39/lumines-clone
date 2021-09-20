@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using TMPro;
 using UnityEngine;
 
 public class InvisibleMask : MonoBehaviour
@@ -20,11 +21,18 @@ public class InvisibleMask : MonoBehaviour
     {
         
         var renders = objectsToMask.SelectMany(obj => obj.GetComponentsInChildren<Renderer>().ToList());
+
+
+        
  
         foreach (Renderer rendr in renders)
         {
-            rendr.material.renderQueue = 2004; // set their renderQueue
+            rendr.material.renderQueue = 3052; // set their renderQueue
         }
-        
+
+        var textRenderers = objectsToMask.SelectMany(obj=>GetComponentsInChildren<TMP_Text>().ToList());
+
+        textRenderers.ToList().ForEach(txt => txt.fontMaterial.renderQueue = 3052);
+
     }
 }

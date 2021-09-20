@@ -216,6 +216,8 @@ namespace GameLogic
 
         }
 
+
+        //Checks if a cell on the grid should have gravity applied to it.
         public bool IsInFreeFall(int x, int y)
         {
 

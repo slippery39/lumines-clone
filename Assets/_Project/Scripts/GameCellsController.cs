@@ -60,8 +60,6 @@ public class GameCellsController : MonoBehaviour {
 
         this.luminesGame = luminesGame;
 
-        luminesGame.OnBlockPlaced += (info) => Debug.Log(info.CurrentSquares.Count);
-
         int width = luminesGame.Width;
         int height = luminesGame.Height;
 

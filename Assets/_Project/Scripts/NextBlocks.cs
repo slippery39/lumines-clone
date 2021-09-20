@@ -21,8 +21,6 @@ public class NextBlocks : MonoBehaviour
     [SerializeField]
     private List<MoveableBlock> nextBlocksTemp = new List<MoveableBlock>();
 
-    private List<Vector3> initialPositions;
-    private Vector3 initialExtraBlockPos;
     private float distanceBetweenBlocks;
     private Vector3 initialContainerPosition;
 
@@ -31,14 +29,10 @@ public class NextBlocks : MonoBehaviour
 
     void Start()
     {
-        initialPositions = instantiatedBlocks.Select(bl => bl.transform.position).ToList();
-
         if (extraBlock == null)
         {
             throw new System.Exception("Extra block is not instantiated in our next blocks component");
         }
-
-        initialExtraBlockPos = extraBlock.transform.position;
         distanceBetweenBlocks = (instantiatedBlocks[1].transform.position - instantiatedBlocks[2].transform.position).y;
         initialContainerPosition = blocksContainer.transform.position;
     }
@@ -47,19 +41,20 @@ public class NextBlocks : MonoBehaviour
     {        
         if (Input.GetKeyDown(KeyCode.F))
         {
-            Debug.Log("Key down f");
-            StartCoroutine("AnimateUp");
-            Debug.Log("animate up done?");
+            StartCoroutine("ScrollUpAnimation");
         }
     }
 
-    //Used when the user places a block.
+    //Animation that is used to create a "Scrolling" effect when the user places a block.
+    //This will be called whenever the "UpdateNextBlocks" method is called.
+    //The implementation is as follows:
+    //We tween the position of the container up
+    //
     IEnumerator ScrollUpAnimation()
     {
         var animSeq = DOTween.Sequence();
         animSeq.Append(blocksContainer.transform.DOMove(blocksContainer.transform.position + new Vector3(0, distanceBetweenBlocks, 0),0.1f));
         yield return animSeq.WaitForCompletion();
-
         ResetContainerPosition();
         SetNextBlocks(nextBlocksTemp);
         //Reset all the things.
@@ -78,7 +73,7 @@ public class NextBlocks : MonoBehaviour
 
         extraBlock.SetColors(nextBlocks[2].Data);
         nextBlocksTemp = nextBlocks.ToList();
-        StartCoroutine("AnimateUp");
+        StartCoroutine("ScrollUpAnimation");
     }
 
 
@@ -98,15 +93,6 @@ public class NextBlocks : MonoBehaviour
         blocksContainer.transform.position = initialContainerPosition;
     }
 
-    private void ResetBlockPositions()
-    {
-
-        for (var i = 0; i < instantiatedBlocks.Count; i++)
-        {
-            var block = instantiatedBlocks[i];
-            block.transform.position = initialPositions[i];
-        }
-    }
 
   
 
