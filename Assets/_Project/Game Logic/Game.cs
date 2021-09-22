@@ -15,24 +15,24 @@ namespace GameLogic
     [System.Serializable]
     public class Game
     {
-        private int[,] board;
-        public int[,] Board { get { return board; } }
-        private bool[,] markedForDeletion;
-        public bool[,] Deletions { get { return markedForDeletion; } }
-        public int Width { get { return width; } }
-        int width = 16;
-        public int Height { get { return height; } }
-        int height = 10;
+        private int[,] _board;
+        public int[,] Board { get { return _board; } }
+        private bool[,] _markedForDeletion;
+        public bool[,] Deletions { get { return _markedForDeletion; } }
+        public int Width { get { return _width; } }
+        private int _width = 16;
+        public int Height { get { return _height; } }
+        private int _height = 10;
 
-        private MoveableBlock currentBlock;
-        public MoveableBlock CurrentBlock { get { return currentBlock; } }
+        private MoveableBlock _currentBlock;
+        public MoveableBlock CurrentBlock { get { return _currentBlock; } }
 
-        private Queue<MoveableBlock> nextBlocks = new Queue<MoveableBlock>();
-        public Queue<MoveableBlock> UpcomingBlocks { get { return nextBlocks; } }
+        private Queue<MoveableBlock> _upcomingBlocks = new Queue<MoveableBlock>();
+        public Queue<MoveableBlock> UpcomingBlocks { get { return _upcomingBlocks; } }
 
         public bool[,] timeLineMarked;
 
-        private int bufferedHeight = 3; //height at the top of the game grid where the movable blocks will spawn.
+        private int _bufferedHeight = 3; //height at the top of the game grid where the movable blocks will spawn.
 
         public event Action<GameEventInfo> OnBlockPlaced;
         public event Action<GameEventInfo> OnNewBlock;
@@ -43,34 +43,36 @@ namespace GameLogic
         private float _timeLinePosition = 0.0f;
         public float TimeLinePosition { get { return _timeLinePosition; } }
 
-        private Dictionary<string, int> markedSquares = new Dictionary<string, int>();
+        private int _squaresDeletedThisTurn;
+
+        private Dictionary<string, int> _markedSquares = new Dictionary<string, int>();
         public Game()
         {
-            board = new int[width, height + bufferedHeight];
-            markedForDeletion = new bool[width, height];
-            timeLineMarked = new bool[width, height];
+            _board = new int[_width, _height + _bufferedHeight];
+            _markedForDeletion = new bool[_width, _height];
+            timeLineMarked = new bool[_width, _height];
 
 
             //Below is temporary just for testing.
-            for (var i = 0; i < width; i++)
+            for (var i = 0; i < _width; i++)
             {
-                for (var j = 0; j < height; j++)
+                for (var j = 0; j < _height; j++)
                 {
-                    board[i, j] = 0;
-                    markedForDeletion[i, j] = false;
+                    _board[i, j] = 0;
+                    _markedForDeletion[i, j] = false;
                     timeLineMarked[i, j] = false;
                 }
             }
 
-            currentBlock = CreateMoveableBlock();
+            _currentBlock = CreateMoveableBlock();
             //store a list of the next blocks
 
-            nextBlocks.Enqueue(CreateMoveableBlock());
-            nextBlocks.Enqueue(CreateMoveableBlock());
-            nextBlocks.Enqueue(CreateMoveableBlock());
+            _upcomingBlocks.Enqueue(CreateMoveableBlock());
+            _upcomingBlocks.Enqueue(CreateMoveableBlock());
+            _upcomingBlocks.Enqueue(CreateMoveableBlock());
         }
 
-        //temporary function to move our timeline, it should actually be synced to a beat.
+        //Client code will control the timeline movement.
         public void MoveTimeLine(float normalizedAmt)
         {
 
@@ -84,7 +86,9 @@ namespace GameLogic
 
             if (_timeLinePosition > 1)
             {
-                OnTimeLineEnd?.Invoke( new GameEventInfo() );
+                Debug.Log("TimeLineEnd Invoked in the game");
+                OnTimeLineEnd?.Invoke( new GameEventInfo() { SquaresDeletedThisTurn = _squaresDeletedThisTurn } );
+                _squaresDeletedThisTurn = 0;
             }
 
             _timeLinePosition = Mathf.Repeat(_timeLinePosition, 1);
@@ -107,10 +111,10 @@ namespace GameLogic
                 for (var y = 1; y < Height; y++)
                 {
                     //if a block has been marked by the timeline already then it should be unmoveable
-                    if (board[x, y - 1] == 0 && !timeLineMarked[x,y] )
+                    if (_board[x, y - 1] == 0 && !timeLineMarked[x,y] )
                     {
-                        board[x, y - 1] = board[x, y];
-                        board[x, y] = 0;  
+                        _board[x, y - 1] = _board[x, y];
+                        _board[x, y] = 0;  
                         
                         
                         
@@ -122,33 +126,33 @@ namespace GameLogic
 
         public void MoveLeft()
         {
-            if (currentBlock.X == 0)
+            if (_currentBlock.X == 0)
             {
                 return;
             }
 
-            if (board[CurrentBlock.X - 1, CurrentBlock.Y] > 0 || board[CurrentBlock.X - 1, CurrentBlock.Y - 1] > 0)
+            if (_board[CurrentBlock.X - 1, CurrentBlock.Y] > 0 || _board[CurrentBlock.X - 1, CurrentBlock.Y - 1] > 0)
             {
                 return;
             }
 
-            currentBlock.X = Math.Max(currentBlock.X - 1, 0);
+            _currentBlock.X = Math.Max(_currentBlock.X - 1, 0);
         }
 
         public void MoveRight()
         {
 
-            if (currentBlock.X == Width - 2)
+            if (_currentBlock.X == Width - 2)
             {
                 return;
             }
 
-            if (board[CurrentBlock.X + 2, CurrentBlock.Y] > 0 || board[CurrentBlock.X + 2, CurrentBlock.Y - 1] > 0)
+            if (_board[CurrentBlock.X + 2, CurrentBlock.Y] > 0 || _board[CurrentBlock.X + 2, CurrentBlock.Y - 1] > 0)
             {
                 return;
             }
 
-            currentBlock.X = Math.Min(Width - 2, currentBlock.X + 1);
+            _currentBlock.X = Math.Min(Width - 2, _currentBlock.X + 1);
         }
 
         public void Gravity()
@@ -169,21 +173,21 @@ namespace GameLogic
         {
             //Check to see if it would collide with any blocks.
 
-            if (currentBlock.Y - 2 < 0)
+            if (_currentBlock.Y - 2 < 0)
             {
                 SetToBoard();
                 return;
             }
 
             //Need to have a check in here in case it goes past the board.
-            if (board[currentBlock.X, currentBlock.Y - 2] > 0 || board[currentBlock.X + 1, currentBlock.Y - 2] > 0) //TODO - what does this mean?
+            if (_board[_currentBlock.X, _currentBlock.Y - 2] > 0 || _board[_currentBlock.X + 1, _currentBlock.Y - 2] > 0) //TODO - what does this mean?
             {
                 SetToBoard();
                 return;
                 //TODO - collision detected, block should be baked into the board and gravity should start being applied.
             }
 
-            currentBlock.Y--;
+            _currentBlock.Y--;
 
         }
 
@@ -199,10 +203,10 @@ namespace GameLogic
                 return;
             }
 
-            board[CurrentBlock.X, CurrentBlock.Y] = CurrentBlock.Data[0];
-            board[CurrentBlock.X + 1, CurrentBlock.Y] = CurrentBlock.Data[1];
-            board[CurrentBlock.X, CurrentBlock.Y - 1] = CurrentBlock.Data[2];
-            board[CurrentBlock.X + 1, CurrentBlock.Y - 1] = CurrentBlock.Data[3];
+            _board[CurrentBlock.X, CurrentBlock.Y] = CurrentBlock.Data[0];
+            _board[CurrentBlock.X + 1, CurrentBlock.Y] = CurrentBlock.Data[1];
+            _board[CurrentBlock.X, CurrentBlock.Y - 1] = CurrentBlock.Data[2];
+            _board[CurrentBlock.X + 1, CurrentBlock.Y - 1] = CurrentBlock.Data[3];
 
 
             var info = new GameEventInfo();
@@ -210,10 +214,10 @@ namespace GameLogic
 
             //TODO - pass information to the OnBlockPlaced
 
-            info.PreviousUpcomingBlocks = this.nextBlocks.ToList();            
-            currentBlock = nextBlocks.Dequeue();
-            nextBlocks.Enqueue(CreateMoveableBlock());
-            info.UpcomingBlocks = this.nextBlocks.ToList();
+            info.PreviousUpcomingBlocks = this._upcomingBlocks.ToList();            
+            _currentBlock = _upcomingBlocks.Dequeue();
+            _upcomingBlocks.Enqueue(CreateMoveableBlock());
+            info.UpcomingBlocks = this._upcomingBlocks.ToList();
 
             OnBlockPlaced?.Invoke(info);
             OnNewBlock?.Invoke(info);
@@ -223,8 +227,8 @@ namespace GameLogic
         {
 
             var block = MoveableBlock.CreateRandom();
-            block.X = (int)Math.Floor(width / 2.0);
-            block.Y = Height + bufferedHeight - 1;
+            block.X = (int)Math.Floor(_width / 2.0);
+            block.Y = Height + _bufferedHeight - 1;
 
             return block;
 
@@ -250,7 +254,7 @@ namespace GameLogic
                 return false;
             }
 
-            if (board[x, y] > 0)
+            if (_board[x, y] > 0)
             {
                 for (var yy = y; yy >= 0; yy--)
                 {
@@ -258,7 +262,7 @@ namespace GameLogic
                     {
                         continue;
                     }
-                    if (board[x, yy] == 0)
+                    if (_board[x, yy] == 0)
                     {
                         return true; //will return true if any block underneath is 0;
                     }
@@ -271,7 +275,7 @@ namespace GameLogic
         {
            for (var y = 0; y < Height; y++)
             {
-                if (markedForDeletion[x, y])
+                if (_markedForDeletion[x, y])
                 {
                     timeLineMarked[x, y] = true;
                 }
@@ -284,7 +288,7 @@ namespace GameLogic
 
             for (var y = 0; y < Height; y++)
             {
-                if (markedForDeletion[columnIndex, y])
+                if (_markedForDeletion[columnIndex, y])
                 {
                     amount++;   
                 }
@@ -305,8 +309,8 @@ namespace GameLogic
 
         private void DeleteCell(int x, int y)
         {
-            board[x, y] = 0;
-            markedForDeletion[x, y] = false;
+            _board[x, y] = 0;
+            _markedForDeletion[x, y] = false;
             timeLineMarked[x, y] = false;
         }
 
@@ -352,9 +356,10 @@ namespace GameLogic
                         if (!squareListProcessed)
                         {
                             var squares = GetAllTimeLineMarkedSquares();
+                            _squaresDeletedThisTurn = squares.Count;
                             squareListProcessed = true;
                             Debug.Log("Squares being Deleted : " + squares.Count);
-                            this.OnDeletion?.Invoke(new GameEventInfo { SquaresDeleted = squares });
+                            this.OnDeletion?.Invoke(new GameEventInfo { SquaresDeleted = squares,Board = (int[,])Board.Clone()});
                         }
                         DeleteCell(xx, yy);
                     }
@@ -373,11 +378,11 @@ namespace GameLogic
             {
                 for (var y = 0; y < Height - 1; y++)
                 {
-                    markedForDeletion[x, y] = false;
+                    _markedForDeletion[x, y] = false;
                 }
             }
 
-            markedSquares.Clear();
+            _markedSquares.Clear();
 
             for (var x = 0; x < Width - 1; x++)
             {
@@ -385,12 +390,12 @@ namespace GameLogic
                 {
                     if (!IsInFreeFall(x, y) && CheckIfSquare(x, y))
                     {
-                        markedForDeletion[x, y] = true;
-                        markedForDeletion[x, y + 1] = true;
-                        markedForDeletion[x + 1, y] = true;
-                        markedForDeletion[x + 1, y + 1] = true;
+                        _markedForDeletion[x, y] = true;
+                        _markedForDeletion[x, y + 1] = true;
+                        _markedForDeletion[x + 1, y] = true;
+                        _markedForDeletion[x + 1, y + 1] = true;
 
-                        markedSquares.Add(new Vector2Int(x, y + 1).ToString(), board[x, y+1]);
+                        _markedSquares.Add(new Vector2Int(x, y + 1).ToString(), _board[x, y+1]);
                     }
                 }
             }
@@ -416,7 +421,7 @@ namespace GameLogic
             visited.Add(key, value);
 
 
-            if (!markedSquares.ContainsKey(key))
+            if (!_markedSquares.ContainsKey(key))
             {
                 return new List<Vector2Int>();
             }
@@ -438,7 +443,7 @@ namespace GameLogic
 
 
             //we should have a key here
-            if (markedSquares[key] == value)
+            if (_markedSquares[key] == value)
             {
 
                 var squares = new List<Vector2Int> { coords }
@@ -470,7 +475,7 @@ namespace GameLogic
             {
                 if (CheckIfSquare(x, y) && timeLineMarked[x,y])
                 {
-                    squares.Add(new Square(x, y, this.board[x, y]));
+                    squares.Add(new Square(x, y, this._board[x, y]));
                 }
             });
 
@@ -494,8 +499,8 @@ namespace GameLogic
             }
 
 
-            bool checkColor1 = board[x, y] == 1 && board[x, y + 1] == 1 && board[x + 1, y] == 1 && board[x + 1, y + 1] == 1;
-            bool checkColor2 = board[x, y] == 2 && board[x, y + 1] == 2 && board[x + 1, y] == 2 && board[x + 1, y + 1] == 2;
+            bool checkColor1 = _board[x, y] == 1 && _board[x, y + 1] == 1 && _board[x + 1, y] == 1 && _board[x + 1, y + 1] == 1;
+            bool checkColor2 = _board[x, y] == 2 && _board[x, y + 1] == 2 && _board[x + 1, y] == 2 && _board[x + 1, y + 1] == 2;
 
             return checkColor1 || checkColor2;
 

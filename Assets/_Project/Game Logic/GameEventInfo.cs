@@ -9,7 +9,8 @@ namespace Game_Logic
 {
     public class GameEventInfo
     {
-
+        public int[,] Board { get; set; }
+        public int SquaresDeletedThisTurn { get; set; }
         public List<Square> SquaresDeleted { get; set; }
         //These are used for the Next Blocks Preview.
         public List<MoveableBlock> PreviousUpcomingBlocks { get; set; }
