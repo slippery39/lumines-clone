@@ -95,6 +95,7 @@ public class GameBoardController : MonoBehaviour
 
         scoreBoard.CurrentTime = gameController.CurrentTime;
         scoreBoard.BlocksErased = gameController.erasedBlocksCount;
+        scoreBoard.Score = gameController.score;
     }
 
     private void SetTimeLinePosition()

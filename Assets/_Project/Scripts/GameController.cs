@@ -10,19 +10,21 @@ public class GameController : MonoBehaviour
     public Game luminesGame;
     // Start is called before the first frame update
 
+    private float _currentTime = 0.0f;
+    public float CurrentTime { get { return _currentTime; } }
 
-    private float currentTime = 0.0f;
+    private float _moveDownTime = 1.0f;
+    private float _nextMoveDownTime = 1.0f;
 
-    public float CurrentTime { get { return currentTime; } }
-
-    private float moveDownTime = 1.0f;
-    private float nextMoveDownTime = 1.0f;
-
-    private float nextGravityTime = 1.05f;
+    private float _nextGravityTime = 1.05f;
 
     private ThrottledInput customInputHandler;
 
     public int erasedBlocksCount;
+    public int score = 0;
+
+
+    private Scorer scorer = new Scorer();
   
 
     private void Awake()
@@ -47,7 +49,7 @@ public class GameController : MonoBehaviour
         customInputHandler = GetComponent<ThrottledInput>();
         customInputHandler.AddHandler(KeyCode.LeftArrow, luminesGame.MoveLeft);
         customInputHandler.AddHandler(KeyCode.RightArrow, luminesGame.MoveRight);
-        customInputHandler.AddHandler(KeyCode.DownArrow, luminesGame.MoveDown);
+        customInputHandler.AddHandler(KeyCode.DownArrow, luminesGame.SoftDrop);
         customInputHandler.AddHandler(KeyCode.Q, ()=> { luminesGame.CurrentBlock.RotateLeft(); });
         customInputHandler.AddHandler(KeyCode.W, ()=> { luminesGame.CurrentBlock.RotateRight(); });        
     }
@@ -57,6 +59,11 @@ public class GameController : MonoBehaviour
         //To prevent players from accidently placing too many blocks in a row from holding down the down key
         luminesGame.OnBlockPlaced += (info) => customInputHandler.ResetThrottleDelayTime(KeyCode.DownArrow);
         luminesGame.OnDeletion += (info) => erasedBlocksCount += info.SquaresDeleted.Count;
+
+        luminesGame.OnDeletion += (info) => score+=scorer.OnBlockDeleted(info);
+        luminesGame.OnTimeLineEnd += (info) => score+=scorer.OnTimeLineEnd(info);
+        luminesGame.OnSoftDrop += (info) => score+=scorer.OnSoftDrop(info);
+        
     }
 
     private void GameLoop()
@@ -65,19 +72,19 @@ public class GameController : MonoBehaviour
         luminesGame.MarkDeletions();
 
         //Automatic Current Block Movement
-        currentTime += Time.deltaTime;
+        _currentTime += Time.deltaTime;
 
-        if (currentTime > nextMoveDownTime)
+        if (_currentTime > _nextMoveDownTime)
         {
-            luminesGame.MoveDown();
-            nextMoveDownTime += moveDownTime;
+            luminesGame.Gravity();
+            _nextMoveDownTime += _moveDownTime;
         }
 
         //Gravity Tick - frame count is temporary.
-        if (currentTime > nextGravityTime)
+        if (_currentTime > _nextGravityTime)
         {
             luminesGame.BoardGravity();
-            nextGravityTime += 0.05f;
+            _nextGravityTime += 0.05f;
         }
     }
 }

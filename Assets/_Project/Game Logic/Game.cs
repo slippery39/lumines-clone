@@ -30,18 +30,15 @@ namespace GameLogic
         private Queue<MoveableBlock> nextBlocks = new Queue<MoveableBlock>();
         public Queue<MoveableBlock> UpcomingBlocks { get { return nextBlocks; } }
 
-
         public bool[,] timeLineMarked;
 
-
-
         private int bufferedHeight = 3; //height at the top of the game grid where the movable blocks will spawn.
-
 
         public event Action<GameEventInfo> OnBlockPlaced;
         public event Action<GameEventInfo> OnNewBlock;
         public event Action<GameEventInfo> OnDeletion;
-
+        public event Action<GameEventInfo> OnSoftDrop;
+        public event Action<GameEventInfo> OnTimeLineEnd;
 
         private float _timeLinePosition = 0.0f;
         public float TimeLinePosition { get { return _timeLinePosition; } }
@@ -84,6 +81,12 @@ namespace GameLogic
             //check to see if we passed a grid boundary.
             int currentGridPos = Mathf.FloorToInt(_timeLinePosition * Width);
             _timeLinePosition += normalizedAmt;
+
+            if (_timeLinePosition > 1)
+            {
+                OnTimeLineEnd?.Invoke( new GameEventInfo() );
+            }
+
             _timeLinePosition = Mathf.Repeat(_timeLinePosition, 1);
 
             int nextGridPos = Mathf.FloorToInt(_timeLinePosition * Width);            
@@ -148,7 +151,21 @@ namespace GameLogic
             currentBlock.X = Math.Min(Width - 2, currentBlock.X + 1);
         }
 
-        public void MoveDown()
+        public void Gravity()
+        {
+            MoveDown();
+        }
+
+        public void SoftDrop()
+        {
+            MoveDown();            
+            OnSoftDrop?.Invoke( new GameEventInfo() );
+        }
+
+        //Client code will either use Gravity() or SoftDrop().
+        //Gravity is for the automatic nove down
+        //Soft Drop is for when the user presses a key or whatever to manually move the block down.
+        private void MoveDown()
         {
             //Check to see if it would collide with any blocks.
 
@@ -443,23 +460,6 @@ namespace GameLogic
             }
 
             //recursive function, keep checking until there is no other coords visited.
-        }
-
-        private List<Square> GetAllSquares()
-        {
-            //we need to get he value.
-            var squares = new List<Square>();
-
-            VisitGrid((x, y) =>
-            {
-               if (CheckIfSquare(x, y))
-                {
-                    squares.Add(new Square(x, y, this.board[x, y]));
-                }
-            });
-
-
-            return squares;
         }
 
         private List<Square> GetAllTimeLineMarkedSquares()

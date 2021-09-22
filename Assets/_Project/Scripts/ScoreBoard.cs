@@ -11,12 +11,19 @@ public class ScoreBoard : MonoBehaviour
     public TMP_Text erasedLabel;
 
     [SerializeField]
-    private float currentTime=0;
-    public float CurrentTime { get { return currentTime; } set { currentTime = value; } }
+    private float _currentTime=0;
+    public float CurrentTime { get { return _currentTime; } set { _currentTime = value; } }
 
     [SerializeField]
-    private int blocksErased;
-    public int BlocksErased { get { return blocksErased; } set{ blocksErased = value; } }
+    private int _blocksErased;
+    public int BlocksErased { get { return _blocksErased; } set{ _blocksErased = value; } }
+
+    public int Score { get => _score; set => _score = value; }
+    [SerializeField]
+    private int _score;
+ 
+
+
 
 
 
@@ -26,8 +33,9 @@ public class ScoreBoard : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        timeLabel.SetText(FormatTime(currentTime));
-        erasedLabel.SetText(blocksErased.ToString());
+        timeLabel.SetText(FormatTime(_currentTime));
+        erasedLabel.SetText(_blocksErased.ToString());
+        scoreLabel.SetText(_score.ToString());
     }
 
     
