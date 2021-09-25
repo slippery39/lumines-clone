@@ -37,10 +37,10 @@ public class ScoreBoard : MonoBehaviour
 
     private void Awake()
     {
-        this.EnsureInitialized(timeLabel,"Time Label");
-        this.EnsureInitialized(scoreLabel,"Score Label");
-        this.EnsureInitialized(erasedLabel,"Erased Label");
-        this.EnsureInitialized(scoreAddedLabel,"Score Added Label");
+        this.EnsureInitialized(timeLabel);
+        this.EnsureInitialized(scoreLabel);
+        this.EnsureInitialized(erasedLabel);
+        this.EnsureInitialized(scoreAddedLabel);
 
         initialScoreAddedPosition = scoreAddedLabel.transform.position;
     }

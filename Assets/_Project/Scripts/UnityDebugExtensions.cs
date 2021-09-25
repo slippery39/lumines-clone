@@ -5,14 +5,14 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 
-    public static class UnityDebugExtensions
+public static class UnityDebugExtensions
+{
+    public static void EnsureInitialized<T>(this T t, MonoBehaviour item) where T: Component
     {
-        public static void EnsureInitialized(this MonoBehaviour source,MonoBehaviour obj,string objName)
+        if (t == null)
         {
-            if (obj == null)
-            {
-                throw new Exception($"{objName} has not been initialized in {source}");
-            }
+            throw new Exception($"{typeof(T).Name} has not been initialized in {item.name}");
         }
     }
+}
 
