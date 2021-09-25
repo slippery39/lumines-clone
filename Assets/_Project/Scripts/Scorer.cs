@@ -1,4 +1,5 @@
 ﻿using Game_Logic;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -8,9 +9,19 @@ public class Scorer
 {
 
     private int _scoreMultiplier = 1;
+
+    public event Action<int> OnScoreAdded;
     public Scorer()
     {
 
+    }
+
+    private void EmitScoreAdded(int score)
+    {
+        if (score == 0)
+            return;
+
+        OnScoreAdded?.Invoke(score);
     }
 
     public int OnTimeLineEnd(GameEventInfo gameState)
@@ -20,18 +31,20 @@ public class Scorer
 
         Dictionary<int, int> scoreMap = new Dictionary<int, int>();
 
+        int score = 0;
+
         if (gameState.SquaresDeletedThisTurn <= 3)
         {
-            int score = _scoreMultiplier * gameState.SquaresDeletedThisTurn * 40;
+            score = _scoreMultiplier * gameState.SquaresDeletedThisTurn * 40;
             _scoreMultiplier = 1;
-
-            Debug.Log("Score to be added is " + score);
-            return score;      
         }
-
-        _scoreMultiplier *= 2;
-
-        return _scoreMultiplier * gameState.SquaresDeletedThisTurn * 160;
+        else
+        {
+            _scoreMultiplier *= 2;
+            score = _scoreMultiplier * gameState.SquaresDeletedThisTurn * 160;           
+        }
+        EmitScoreAdded(score);
+        return score;
     }
 
     public int OnBlockDeleted(GameEventInfo gameState)
@@ -58,12 +71,13 @@ public class Scorer
         // Single Color Bonus
         if (colorCount[1] == 0 && colorCount[2] > 0 || colorCount[2] == 0 && colorCount[1]>0)
         {
-
+            EmitScoreAdded(singleColorBonus);
             return singleColorBonus;
         }
         //All Deleted Bonus
         if (colorCount[1] == 0 && colorCount[2]== 0)
         {
+            EmitScoreAdded(allDeletedBonus);
             return allDeletedBonus;
         }
 

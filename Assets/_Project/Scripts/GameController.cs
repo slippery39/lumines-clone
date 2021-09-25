@@ -1,4 +1,5 @@
 using GameLogic;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -44,6 +45,11 @@ public class GameController : MonoBehaviour
         GameLoop();
     }
 
+    public void OnScoreAdded(Action<int> handler)
+    {
+        scorer.OnScoreAdded += handler;
+    }
+
     private void InitializeInputHandlers()
     {
         customInputHandler = GetComponent<ThrottledInput>();
@@ -54,6 +60,8 @@ public class GameController : MonoBehaviour
         customInputHandler.AddHandler(KeyCode.W, ()=> { luminesGame.CurrentBlock.RotateRight(); });        
     }
 
+    
+
     private void InitializeGameEventHandlers()
     {
         //To prevent players from accidently placing too many blocks in a row from holding down the down key
@@ -62,10 +70,8 @@ public class GameController : MonoBehaviour
 
         luminesGame.OnDeletion += (info) => score+=scorer.OnBlockDeleted(info);
         luminesGame.OnTimeLineEnd += (info) => score+=scorer.OnTimeLineEnd(info);
-        luminesGame.OnSoftDrop += (info) => score+=scorer.OnSoftDrop(info);
-        
+        luminesGame.OnSoftDrop += (info) => score+=scorer.OnSoftDrop(info);        
     }
-
     private void GameLoop()
     {
         //Our Loop Is Here

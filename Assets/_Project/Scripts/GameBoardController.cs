@@ -32,7 +32,7 @@ public class GameBoardController : MonoBehaviour
 
     private void Awake()
     {
-       
+
     }
 
     void Start()
@@ -80,11 +80,15 @@ public class GameBoardController : MonoBehaviour
 
         upcomingBlocks.SetNextBlocks(gameController.luminesGame.UpcomingBlocks.ToList());
 
-        gameController.luminesGame.OnNewBlock+=((onNewBlockInfo) =>
-        {
-            upcomingBlocks.UpdateNextBlocks(onNewBlockInfo.UpcomingBlocks);
-        });
-        
+        gameController.luminesGame.OnNewBlock += ((onNewBlockInfo) =>
+          {
+              upcomingBlocks.UpdateNextBlocks(onNewBlockInfo.UpcomingBlocks);
+          });
+
+        gameController.OnScoreAdded((int amount) =>
+         {
+             scoreBoard.AnimateScore(amount);
+         });
     }
 
     // Update is called once per frame
@@ -100,14 +104,13 @@ public class GameBoardController : MonoBehaviour
 
     private void SetTimeLinePosition()
     {
-        timeLine.transform.localPosition = new Vector3(gameController.luminesGame.TimeLinePosition * gameController.luminesGame.Width,timeLine.transform.localPosition.y,timeLine.transform.localPosition.z);
+        timeLine.transform.localPosition = new Vector3(gameController.luminesGame.TimeLinePosition * gameController.luminesGame.Width, timeLine.transform.localPosition.y, timeLine.transform.localPosition.z);
     }
 
     private void SetBlockDropPreviewPosition()
     {
         dropPreview.transform.localPosition = new Vector3(gameController.luminesGame.CurrentBlock.X + 1, dropPreview.transform.localPosition.y, dropPreview.transform.localPosition.z);
     }
-
 
     public void SetSongPositionInBeats(float songPositionInBeats)
     {
