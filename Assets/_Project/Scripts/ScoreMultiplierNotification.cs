@@ -1,6 +1,7 @@
 using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class ScoreMultiplierNotification : MonoBehaviour
@@ -16,9 +17,13 @@ public class ScoreMultiplierNotification : MonoBehaviour
     private GameObject labels;
     [SerializeField]
     private GameObject arrows;
+
+    [SerializeField]
+    private TextMeshProUGUI multiplierLabel;
     void Start()
     {
         canvas.EnsureInitialized(this);
+        multiplierLabel.EnsureInitialized(this);
         canvas.GetComponent<CanvasGroup>().alpha = 0;
         labelsInitialPosition = labels.transform.position;
         arrowsInitialPosition = arrows.transform.position;
@@ -35,6 +40,11 @@ public class ScoreMultiplierNotification : MonoBehaviour
         }
     }
 
+    public void SetMultiplier(int multiplier)
+    {
+        multiplierLabel.SetText($"X{multiplier}");   
+    }
+
     private void ResetAnimation()
     {
         labels.transform.position = labelsInitialPosition;
@@ -42,7 +52,7 @@ public class ScoreMultiplierNotification : MonoBehaviour
         canvas.GetComponent<CanvasGroup>().alpha = 1;
     }
 
-    private void PlayAnimation()
+    public void PlayAnimation()
     {
         ResetAnimation();
         var sequence = DOTween.Sequence();

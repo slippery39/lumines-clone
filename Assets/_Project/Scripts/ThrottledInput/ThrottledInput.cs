@@ -64,6 +64,21 @@ public class ThrottledInput : MonoBehaviour
         });
     }
 
+    public void AddHandler(KeyCode keyCode, Action handler, float delay, float throttle)
+    {
+        if (keyInputs.ContainsKey(keyCode))
+        {
+            throw new Exception("Cannot add another handler to the CustomInput");
+        }
+        keyInputs.Add(keyCode, new ThrottledInputInfo
+        {
+            keyCode = keyCode,
+            handler = handler,
+            throttleDelay = delay,
+            throttleTime =  throttle
+        });
+    }
+
     public void ResetThrottleDelayTime(KeyCode keyCode)
     {
         if (!keyInputs.ContainsKey(keyCode))

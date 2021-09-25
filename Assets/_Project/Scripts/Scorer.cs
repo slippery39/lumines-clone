@@ -11,6 +11,7 @@ public class Scorer
     private int _scoreMultiplier = 1;
 
     public event Action<int> OnScoreAdded;
+    public event Action<int> OnScoreMultiplierIncrease;
     public Scorer()
     {
 
@@ -22,6 +23,11 @@ public class Scorer
             return;
 
         OnScoreAdded?.Invoke(score);
+    }
+
+    private void EmitScoreMultiplierIncrease(int multiplier)
+    {
+        OnScoreMultiplierIncrease?.Invoke(multiplier);
     }
 
     public int OnTimeLineEnd(GameEventInfo gameState)
@@ -41,6 +47,7 @@ public class Scorer
         else
         {
             _scoreMultiplier *= 2;
+            EmitScoreMultiplierIncrease(_scoreMultiplier);
             score = _scoreMultiplier * gameState.SquaresDeletedThisTurn * 160;           
         }
         EmitScoreAdded(score);

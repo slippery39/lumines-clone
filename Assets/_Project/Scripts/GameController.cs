@@ -50,12 +50,17 @@ public class GameController : MonoBehaviour
         scorer.OnScoreAdded += handler;
     }
 
+    public void OnScoreMultiplierIncrease(Action<int> handler)
+    {
+        scorer.OnScoreMultiplierIncrease += handler;
+    }
+
     private void InitializeInputHandlers()
     {
         customInputHandler = GetComponent<ThrottledInput>();
         customInputHandler.AddHandler(KeyCode.LeftArrow, luminesGame.MoveLeft);
         customInputHandler.AddHandler(KeyCode.RightArrow, luminesGame.MoveRight);
-        customInputHandler.AddHandler(KeyCode.DownArrow, luminesGame.SoftDrop);
+        customInputHandler.AddHandler(KeyCode.DownArrow, luminesGame.SoftDrop,0.1f,0.01f);
         customInputHandler.AddHandler(KeyCode.Q, ()=> { luminesGame.CurrentBlock.RotateLeft(); });
         customInputHandler.AddHandler(KeyCode.W, ()=> { luminesGame.CurrentBlock.RotateRight(); });        
     }

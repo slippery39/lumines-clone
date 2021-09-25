@@ -29,6 +29,9 @@ public class GameBoardController : MonoBehaviour
     [SerializeField]
     private Renderer gridRenderer;
 
+    [SerializeField]
+    private ScoreMultiplierNotification scoreMultiplierNotification;
+
 
     private void Awake()
     {
@@ -68,6 +71,8 @@ public class GameBoardController : MonoBehaviour
             throw new System.Exception("Please ensure the drop preview object is connected to the GameBoardController in the inspector");
         }
 
+        scoreMultiplierNotification.EnsureInitialized(this);
+
 
         gridRenderer = grid.GetComponent<Renderer>();
 
@@ -89,6 +94,16 @@ public class GameBoardController : MonoBehaviour
          {
              scoreBoard.AnimateScore(amount);
          });
+
+        gameController.OnScoreMultiplierIncrease( (int amount) =>
+        {
+            scoreMultiplierNotification.SetMultiplier(amount);
+            scoreMultiplierNotification.PlayAnimation();
+        });
+
+        
+
+
     }
 
     // Update is called once per frame
@@ -100,6 +115,8 @@ public class GameBoardController : MonoBehaviour
         scoreBoard.CurrentTime = gameController.CurrentTime;
         scoreBoard.BlocksErased = gameController.erasedBlocksCount;
         scoreBoard.Score = gameController.score;
+
+        
     }
 
     private void SetTimeLinePosition()

@@ -633,6 +633,7 @@ MonoBehaviour:
   canvas: {fileID: 691524337}
   labels: {fileID: 792096380}
   arrows: {fileID: 890054354}
+  multiplierLabel: {fileID: 1522020879}
 --- !u!1 &214095929
 GameObject:
   m_ObjectHideFlags: 0
@@ -5599,6 +5600,7 @@ MonoBehaviour:
   upcomingBlocks: {fileID: 1706974965}
   scoreBoard: {fileID: 1674644411}
   gridRenderer: {fileID: 0}
+  scoreMultiplierNotification: {fileID: 186427730}
 --- !u!1 &1416654240
 GameObject:
   m_ObjectHideFlags: 0
