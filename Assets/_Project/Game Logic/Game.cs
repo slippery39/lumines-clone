@@ -84,11 +84,11 @@ namespace GameLogic
             int currentGridPos = Mathf.FloorToInt(_timeLinePosition * Width);
             _timeLinePosition += normalizedAmt;
 
+            bool reachedEnd = false;
+
             if (_timeLinePosition > 1)
             {
-                Debug.Log("TimeLineEnd Invoked in the game");
-                OnTimeLineEnd?.Invoke( new GameEventInfo() { SquaresDeletedThisTurn = _squaresDeletedThisTurn } );
-                _squaresDeletedThisTurn = 0;
+                reachedEnd = true;
             }
 
             _timeLinePosition = Mathf.Repeat(_timeLinePosition, 1);
@@ -98,7 +98,14 @@ namespace GameLogic
             if ( (nextGridPos > currentGridPos) || (nextGridPos == 0 && currentGridPos!=0) )
             {
                 TimeLineCheckDeletions(nextGridPos);
-                MarkByTimeLine(nextGridPos);                
+                MarkByTimeLine(nextGridPos);   
+                
+                if (reachedEnd)
+                {
+                    Debug.Log("TimeLineEnd Invoked in the game");
+                    OnTimeLineEnd?.Invoke(new GameEventInfo() { SquaresDeletedThisTurn = _squaresDeletedThisTurn });
+                    _squaresDeletedThisTurn = 0;
+                }
             }
         }
 
