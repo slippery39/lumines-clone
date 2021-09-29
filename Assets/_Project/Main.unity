@@ -5595,7 +5595,7 @@ MonoBehaviour:
   gameController: {fileID: 2101313368}
   grid: {fileID: 7055448}
   cells: {fileID: 2131497813}
-  timeLine: {fileID: 1802197871}
+  timeLine: {fileID: 1802197872}
   dropPreview: {fileID: 1777390941}
   upcomingBlocks: {fileID: 1706974965}
   scoreBoard: {fileID: 1674644411}
@@ -7579,6 +7579,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1802197875}
+  - component: {fileID: 1802197872}
   m_Layer: 0
   m_Name: TimeLine
   m_TagString: Untagged
@@ -7586,6 +7587,20 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!114 &1802197872
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1802197871}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bc747041326e7c447a410dbe2ee7bf0e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _amountDeleted: 0
+  countText: {fileID: 218287692}
 --- !u!4 &1802197875
 Transform:
   m_ObjectHideFlags: 0

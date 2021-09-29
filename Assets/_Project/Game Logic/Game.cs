@@ -363,10 +363,10 @@ namespace GameLogic
                         if (!squareListProcessed)
                         {
                             var squares = GetAllTimeLineMarkedSquares();
-                            _squaresDeletedThisTurn = squares.Count;
+                            _squaresDeletedThisTurn += squares.Count;
                             squareListProcessed = true;
                             Debug.Log("Squares being Deleted : " + squares.Count);
-                            this.OnDeletion?.Invoke(new GameEventInfo { SquaresDeleted = squares,Board = (int[,])Board.Clone()});
+                            this.OnDeletion?.Invoke(new GameEventInfo {SquaresDeletedThisTurn = _squaresDeletedThisTurn, SquaresDeleted = squares,Board = (int[,])Board.Clone()});
                         }
                         DeleteCell(xx, yy);
                     }

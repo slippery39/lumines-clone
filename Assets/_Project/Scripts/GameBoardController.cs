@@ -14,7 +14,7 @@ public class GameBoardController : MonoBehaviour
     [SerializeField]
     private GameObject cells;
     [SerializeField]
-    private GameObject timeLine;
+    private TimeLine timeLine;
 
     [SerializeField]
     private GameObject dropPreview;
@@ -85,6 +85,7 @@ public class GameBoardController : MonoBehaviour
 
         upcomingBlocks.SetNextBlocks(gameController.luminesGame.UpcomingBlocks.ToList());
 
+
         gameController.luminesGame.OnNewBlock += ((onNewBlockInfo) =>
           {
               upcomingBlocks.UpdateNextBlocks(onNewBlockInfo.UpcomingBlocks);
@@ -99,6 +100,21 @@ public class GameBoardController : MonoBehaviour
         {
             scoreMultiplierNotification.SetMultiplier(amount);
             scoreMultiplierNotification.PlayAnimation();
+        });
+
+        
+        gameController.OnDeletion((info) =>
+        {
+            Debug.Log("OnDeletion triggered for the timeline");
+            Debug.Log(info.SquaresDeleted);
+            Debug.Log(info.SquaresDeletedThisTurn);
+            timeLine.AmountDeleted = info.SquaresDeletedThisTurn;
+        });
+
+        gameController.OnTimeLineEnd((info) =>
+        {
+            Debug.Log("OnTimeLineEnd triggered for the tiemline");
+            timeLine.AmountDeleted = 0;
         });
 
         

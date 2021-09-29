@@ -1,3 +1,4 @@
+using Game_Logic;
 using GameLogic;
 using System;
 using System.Collections;
@@ -49,10 +50,25 @@ public class GameController : MonoBehaviour
     {
         scorer.OnScoreAdded += handler;
     }
-
     public void OnScoreMultiplierIncrease(Action<int> handler)
     {
         scorer.OnScoreMultiplierIncrease += handler;
+    }
+
+    public void OnDeletion(Action<GameEventInfo> handler)
+    {
+
+        Debug.Log("On Deletion handler accepted");
+
+
+        luminesGame.OnDeletion += handler;
+    }
+
+    public void OnTimeLineEnd(Action<GameEventInfo> handler)
+    {
+        Debug.Log("OnTimeLineEnd handler accepted");
+
+        luminesGame.OnTimeLineEnd += handler;
     }
 
     private void InitializeInputHandlers()
@@ -64,8 +80,7 @@ public class GameController : MonoBehaviour
         customInputHandler.AddHandler(KeyCode.Q, ()=> { luminesGame.CurrentBlock.RotateLeft(); });
         customInputHandler.AddHandler(KeyCode.W, ()=> { luminesGame.CurrentBlock.RotateRight(); });        
     }
-
-    
+        
 
     private void InitializeGameEventHandlers()
     {
