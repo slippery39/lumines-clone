@@ -5,6 +5,8 @@ using UnityEngine;
 public class GameBlockPiece : MonoBehaviour
 {
 
+    public bool PartOfSquare { get; set; }
+
     [SerializeField]
     BlockTypes blockType = BlockTypes.Nothing;
 
@@ -40,7 +42,15 @@ public class GameBlockPiece : MonoBehaviour
     //I'm calling this in both Update() and LateUpdate() due to some visual errors that happen.
     private void UpdateStuff()
     {
-        this.transform.localScale = new Vector3(0.95f, 0.95f, 0.1f);
+
+        if (!PartOfSquare)
+        {
+            this.transform.localScale = new Vector3(0.95f, 0.95f, 0.1f);
+        }
+        else
+        {
+            this.transform.localScale = new Vector3(0.9f, 0.9f, 0.9f);
+        }
 
         if (blockType == BlockTypes.Nothing) //nothing
         {

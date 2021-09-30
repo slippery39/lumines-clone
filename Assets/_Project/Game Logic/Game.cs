@@ -225,6 +225,8 @@ namespace GameLogic
             _currentBlock = _upcomingBlocks.Dequeue();
             _upcomingBlocks.Enqueue(CreateMoveableBlock());
             info.UpcomingBlocks = this._upcomingBlocks.ToList();
+            //TODO - get a list of all squares.
+  
 
             OnBlockPlaced?.Invoke(info);
             OnNewBlock?.Invoke(info);
@@ -481,6 +483,22 @@ namespace GameLogic
             VisitGrid((x, y) =>
             {
                 if (CheckIfSquare(x, y) && timeLineMarked[x,y])
+                {
+                    squares.Add(new Square(x, y, this._board[x, y]));
+                }
+            });
+
+
+            return squares;
+        }
+
+        public List<Square> GetAllSquares()
+        {
+            var squares = new List<Square>();
+
+            VisitGrid((x, y) =>
+            {
+                if (CheckIfSquare(x, y))
                 {
                     squares.Add(new Square(x, y, this._board[x, y]));
                 }

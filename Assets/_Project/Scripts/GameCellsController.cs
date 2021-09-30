@@ -1,7 +1,8 @@
 using UnityEngine;
 
 using GameLogic;
-
+using System.Collections.Generic;
+using Game_Logic;
 
 public class GameCellsController : MonoBehaviour {
 
@@ -91,7 +92,7 @@ public class GameCellsController : MonoBehaviour {
         {
             for (int y = 0; y < height; y++)
             {
-
+                createdBlockPieces[x, y].PartOfSquare = false;
                 if (luminesGame.timeLineMarked[x, y] && luminesGame.Board[x,y]!=0)
                 {
                     createdBlockPieces[x, y].BlockType = BlockTypes.DeletionInProgress;
@@ -103,11 +104,47 @@ public class GameCellsController : MonoBehaviour {
                     Debug.LogError($"Error found with our game at {x},{y}");
                 }
                 createdBlockPieces[x, y].BlockType = luminesGame.Deletions[x, y] ? (BlockTypes)luminesGame.Board[x, y] + 2 : (BlockTypes)luminesGame.Board[x, y];
+                
             }
         }
-
+        UpdateSquares();
         UpdateCurrentBlock();
     }
+
+    private void UpdateSquares()
+    {
+        var squares = luminesGame.GetAllSquares();
+
+
+        Debug.Log("Squares Count: " + squares.Count);
+
+        squares.ForEach(square =>
+        {
+            var cells = SquareToCells(square);
+            cells.ForEach(cell =>
+            {
+                Debug.Log("Updating Cell " + cell.X + "," + cell.Y,createdBlockPieces[cell.X,cell.Y]);
+                createdBlockPieces[cell.X, cell.Y].PartOfSquare = true;
+                Debug.Log(createdBlockPieces[cell.X, cell.Y].transform.localScale);
+           });
+        });
+    }
+
+    private List<Cell> SquareToCells(Square square)
+    {
+        List<Cell> cells = new List<Cell>();
+
+
+        cells.Add(new Cell() { X = square.X, Y = square.Y });
+        cells.Add(new Cell() { X = square.X, Y = square.Y + 1 });
+        cells.Add(new Cell() { X = square.X + 1, Y = square.Y });
+        cells.Add(new Cell() { X = square.X + 1, Y = square.Y + 1 });
+
+        return cells;
+
+    }
+ 
+
 
     private void UpdateCurrentBlock()
     {
