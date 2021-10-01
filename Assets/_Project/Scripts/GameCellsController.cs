@@ -3,6 +3,7 @@ using UnityEngine;
 using GameLogic;
 using System.Collections.Generic;
 using Game_Logic;
+using System.Linq;
 
 public class GameCellsController : MonoBehaviour {
 
@@ -147,7 +148,10 @@ public class GameCellsController : MonoBehaviour {
         {
             for (int y = 0; y < height; y++)
             {
-                createdSquares[x, y].gameObject.SetActive(false);
+                if (squares.FirstOrDefault(square => { return square.X == x && square.Y == y; }) == null)
+                {
+                    createdSquares[x, y].gameObject.SetActive(false);
+                }
             }
         }
 
@@ -155,6 +159,7 @@ public class GameCellsController : MonoBehaviour {
         squares.ForEach(square =>
         {
             createdSquares[square.X, square.Y].gameObject.SetActive(true);
+            createdSquares[square.X, square.Y].Color = (BlockTypes)square.Color;
         });
     }
 

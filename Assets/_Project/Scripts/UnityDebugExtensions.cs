@@ -9,10 +9,14 @@ public static class UnityDebugExtensions
 {
     public static void EnsureInitialized<T>(this T t, MonoBehaviour item) where T: Component
     {
-        if (t == null)
+        if (item == null)
         {
             throw new Exception($"{typeof(T).Name} has not been initialized in {item.name}");
         }
     }
+
+ 
 }
+
+
 
