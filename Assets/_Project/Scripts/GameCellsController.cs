@@ -148,19 +148,19 @@ public class GameCellsController : MonoBehaviour {
         {
             for (int y = 0; y < height; y++)
             {
-                if (squares.FirstOrDefault(square => { return square.X == x && square.Y == y; }) == null)
+                var foundSquare = squares.FirstOrDefault(square => { return square.X == x && square.Y == y; });
+                if (foundSquare == null)
                 {
                     createdSquares[x, y].gameObject.SetActive(false);
+                }
+                else
+                {
+                    createdSquares[x,y].gameObject.SetActive(true);
+                    createdSquares[x,y].Color = (BlockTypes)foundSquare.Color;
                 }
             }
         }
 
-
-        squares.ForEach(square =>
-        {
-            createdSquares[square.X, square.Y].gameObject.SetActive(true);
-            createdSquares[square.X, square.Y].Color = (BlockTypes)square.Color;
-        });
     }
 
 
