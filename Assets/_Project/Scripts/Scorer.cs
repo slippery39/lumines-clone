@@ -10,6 +10,8 @@ public class Scorer
 
     private int _scoreMultiplier = 1;
 
+    private int _squaresNeededForBonus = 4;
+
     public event Action<int> OnScoreAdded;
     public event Action<int> OnScoreMultiplierIncrease;
     public Scorer()
@@ -33,13 +35,11 @@ public class Scorer
     public int OnTimeLineEnd(GameEventInfo gameState)
     {
 
-        Debug.Log("TimeLineEnd called in the scorer");
-
         Dictionary<int, int> scoreMap = new Dictionary<int, int>();
 
         int score = 0;
 
-        if (gameState.SquaresDeletedThisTurn <= 3)
+        if (gameState.SquaresDeletedThisTurn <= _squaresNeededForBonus-1)
         {
             score = _scoreMultiplier * gameState.SquaresDeletedThisTurn * 40;
             _scoreMultiplier = 1;

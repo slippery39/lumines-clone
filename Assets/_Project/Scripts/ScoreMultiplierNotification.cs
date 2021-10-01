@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class ScoreMultiplierNotification : MonoBehaviour
 {
@@ -17,6 +18,8 @@ public class ScoreMultiplierNotification : MonoBehaviour
     private GameObject labels;
     [SerializeField]
     private GameObject arrows;
+    [SerializeField]
+    private GameObject screenFlash;
 
     [SerializeField]
     private TextMeshProUGUI multiplierLabel;
@@ -32,8 +35,6 @@ public class ScoreMultiplierNotification : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
-
         if (Input.GetKeyDown(KeyCode.Z))
         {
             PlayAnimation();          
@@ -50,16 +51,26 @@ public class ScoreMultiplierNotification : MonoBehaviour
         labels.transform.position = labelsInitialPosition;
         arrows.transform.position = arrows.transform.position;
         canvas.GetComponent<CanvasGroup>().alpha = 1;
+        screenFlash.SetActive(true);
+        screenFlash.GetComponent<Image>().color = new Color(1, 1, 1, 0.5f);
     }
 
     public void PlayAnimation()
     {
         ResetAnimation();
         var sequence = DOTween.Sequence();
+
+
+        var color = screenFlash.GetComponent<Image>().color;
+
+
+        
         sequence.Append(arrows.transform.DOMoveX(-800f, 0.5f).SetEase(Ease.OutExpo));
+        sequence.Insert(0.1f,DOTween.To(() => color, x => { color = x; screenFlash.GetComponent<Image>().color = color; }, new Color(0, 0, 0, 0), 0.7f).SetEase(Ease.OutExpo));
         sequence.Insert(0.2f, labels.transform.DOMoveX(canvas.GetComponent<RectTransform>().rect.width * 0.65f, 0.5f).SetEase(Ease.OutExpo));
         sequence.OnComplete(() =>
         {
+            screenFlash.SetActive(false);
             StartCoroutine(FadeCoroutine());
         });
     }

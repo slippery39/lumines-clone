@@ -31,8 +31,6 @@ public class HighlightedSquare : MonoBehaviour
 
     void Update()
     {
-        Debug.Log("Is update firing?");
-        Debug.Log(gameColor);
         if (gameColor == BlockTypes.Color1)
         {
                
@@ -44,7 +42,6 @@ public class HighlightedSquare : MonoBehaviour
         }
         else
         {
-            Debug.Log("Is update firing?");
             throw new System.Exception("Invalid BlockType detected for a Highlighted Square");
         }
 
