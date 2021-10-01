@@ -16,6 +16,13 @@ public class GameCellsController : MonoBehaviour {
     [SerializeField]
     private GameBlock gameBlockPrefab;
 
+
+    [SerializeField]
+    private HighlightedSquare highlightedSquarePrefab;
+
+    [SerializeField]
+    private HighlightedSquare[,] createdSquares;
+
     [SerializeField]
     private GameBlock currentBlock;
 
@@ -23,20 +30,7 @@ public class GameCellsController : MonoBehaviour {
     private GameObject[,] createdCells;
 
     [SerializeField]
-    private Color gridLineColors = Color.gray;
-
-    [SerializeField]
     private Game luminesGame;
-
-
-
-
-
-    // Start is called before the first frame update
-    void Awake()
-    {
-  
-    }
 
     private void Update()
     {
@@ -58,8 +52,17 @@ public class GameCellsController : MonoBehaviour {
         {
             throw new System.Exception("The Lumines game is undefined in the grid, make sure it is programmed so that the grid is built after the game is created.");
         }
+        this.EnsureInitialized(highlightedSquarePrefab);
 
         this.luminesGame = luminesGame;
+
+        InstantiateCells();
+        InstantiateCurrentBlock();
+        InstantiateSquares();
+    }
+
+    private void InstantiateCells()
+    {
 
         int width = luminesGame.Width;
         int height = luminesGame.Height;
@@ -71,12 +74,15 @@ public class GameCellsController : MonoBehaviour {
         {
             for (int y = 0; y < height; y++)
             {
-                var cell = CreateCell(x, y, gridLineColors);
+                var cell = CreateCell(x, y);
                 createdCells[x, y] = cell;
                 createdBlockPieces[x, y] = CreateBlock(x, y, cell);
             }
         }
+    }
 
+    private void InstantiateCurrentBlock()
+    {
         //instantiate the game block 
         currentBlock = Instantiate(gameBlockPrefab);
         currentBlock.name = "Current Block";
@@ -92,7 +98,6 @@ public class GameCellsController : MonoBehaviour {
         {
             for (int y = 0; y < height; y++)
             {
-                createdBlockPieces[x, y].PartOfSquare = false;
                 if (luminesGame.timeLineMarked[x, y] && luminesGame.Board[x,y]!=0)
                 {
                     createdBlockPieces[x, y].BlockType = BlockTypes.DeletionInProgress;
@@ -111,39 +116,49 @@ public class GameCellsController : MonoBehaviour {
         UpdateCurrentBlock();
     }
 
-    private void UpdateSquares()
+
+    private void InstantiateSquares()
     {
+        int width = luminesGame.Width;
+        int height = luminesGame.Height;
+
+        createdSquares = new HighlightedSquare[width, height];
+
+        for (int x = 0; x < width; x++)
+        {
+            for (int y = 0; y < height; y++)
+            {
+                createdSquares[x, y] = Instantiate(highlightedSquarePrefab);
+                createdSquares[x, y].transform.SetParent(createdCells[x, y].transform);
+                createdSquares[x, y].transform.localPosition = new Vector3(1, 1, -0.01f + ( -0.001f * y + (-0.001f * x) ) );
+                createdSquares[x, y].gameObject.SetActive(false);
+            }
+        }
+    }
+
+    private void UpdateSquares() { 
+
         var squares = luminesGame.GetAllSquares();
 
+        int width = luminesGame.Width;
+        int height = luminesGame.Height;
 
-        Debug.Log("Squares Count: " + squares.Count);
+        for (int x = 0; x < width; x++)
+        {
+            for (int y = 0; y < height; y++)
+            {
+                createdSquares[x, y].gameObject.SetActive(false);
+            }
+        }
+
 
         squares.ForEach(square =>
         {
-            var cells = SquareToCells(square);
-            cells.ForEach(cell =>
-            {
-                Debug.Log("Updating Cell " + cell.X + "," + cell.Y,createdBlockPieces[cell.X,cell.Y]);
-                createdBlockPieces[cell.X, cell.Y].PartOfSquare = true;
-                Debug.Log(createdBlockPieces[cell.X, cell.Y].transform.localScale);
-           });
+            createdSquares[square.X, square.Y].gameObject.SetActive(true);
         });
     }
 
-    private List<Cell> SquareToCells(Square square)
-    {
-        List<Cell> cells = new List<Cell>();
 
-
-        cells.Add(new Cell() { X = square.X, Y = square.Y });
-        cells.Add(new Cell() { X = square.X, Y = square.Y + 1 });
-        cells.Add(new Cell() { X = square.X + 1, Y = square.Y });
-        cells.Add(new Cell() { X = square.X + 1, Y = square.Y + 1 });
-
-        return cells;
-
-    }
- 
 
 
     private void UpdateCurrentBlock()
@@ -163,7 +178,7 @@ public class GameCellsController : MonoBehaviour {
         return block.GetComponent<GameBlockPiece>();
     }
 
-    GameObject CreateCell(int x, int y, Color color)
+    GameObject CreateCell(int x, int y)
     {
         var cell = new GameObject();
         cell.name = $"Cell {x},{y}";
@@ -172,5 +187,7 @@ public class GameCellsController : MonoBehaviour {
         cell.transform.localPosition = new Vector3(x * cellSize, y * cellSize, 0);
         return cell;
     }
+
+
 
 }

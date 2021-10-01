@@ -102,7 +102,6 @@ namespace GameLogic
                 
                 if (reachedEnd)
                 {
-                    Debug.Log("TimeLineEnd Invoked in the game");
                     OnTimeLineEnd?.Invoke(new GameEventInfo() { SquaresDeletedThisTurn = _squaresDeletedThisTurn });
                     _squaresDeletedThisTurn = 0;
                 }
@@ -121,8 +120,7 @@ namespace GameLogic
                     if (_board[x, y - 1] == 0 && !timeLineMarked[x,y] )
                     {
                         _board[x, y - 1] = _board[x, y];
-                        _board[x, y] = 0;  
-                        
+                        _board[x, y] = 0;                  
                         
                         
                     }
@@ -518,7 +516,7 @@ namespace GameLogic
             {
                 return false;
             }
-            if (IsInFreeFall(x + 1, y) || IsInFreeFall(x + 1, y + 1))
+            if (IsInFreeFall(x,y) || IsInFreeFall(x + 1, y) || IsInFreeFall(x + 1, y + 1))
             {
                 return false;
             }

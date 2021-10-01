@@ -5,8 +5,6 @@ using UnityEngine;
 public class GameBlockPiece : MonoBehaviour
 {
 
-    public bool PartOfSquare { get; set; }
-
     [SerializeField]
     BlockTypes blockType = BlockTypes.Nothing;
 
@@ -42,15 +40,9 @@ public class GameBlockPiece : MonoBehaviour
     //I'm calling this in both Update() and LateUpdate() due to some visual errors that happen.
     private void UpdateStuff()
     {
-
-        if (!PartOfSquare)
-        {
-            this.transform.localScale = new Vector3(0.95f, 0.95f, 0.1f);
-        }
-        else
-        {
-            this.transform.localScale = new Vector3(0.9f, 0.9f, 0.9f);
-        }
+        //The ZScale is very important here, it needs to be small enough that our square blocks show above these when needed.
+        //TODO - this should not be going on here?
+            this.transform.localScale = new Vector3(0.9f, 0.9f, 0.01f);
 
         if (blockType == BlockTypes.Nothing) //nothing
         {
@@ -69,6 +61,8 @@ public class GameBlockPiece : MonoBehaviour
         {
             rendererComponent.material = material2;
         }
+        //Note that the marked Color blocks are technically are replaced by "Square" blocks now.
+        //i.e. they will show above this one.
         else if (blockType == BlockTypes.Color1Marked) //color 1 marked
         {
             rendererComponent.material.color = Color.cyan;
@@ -80,8 +74,8 @@ public class GameBlockPiece : MonoBehaviour
         //Marked for deletion
         else if (blockType == BlockTypes.DeletionInProgress) //DeletionInProgress
         {
-            //hack to make the scale normal
-            this.transform.localScale = new Vector3(1, 1, 0.1f);
+            //We want this to always appear above any square blocks so we specifically increase the scale to 0.2f to accomplish this.
+            this.transform.localScale = new Vector3(1, 1, 0.2f);
             rendererComponent.material = deletionMaterial;
         }
     }
@@ -91,6 +85,7 @@ public class GameBlockPiece : MonoBehaviour
         UpdateStuff();
     }
 
+    //This fixes some UI glitches that might occur mid frame.
     void LateUpdate()
     {
         UpdateStuff();
