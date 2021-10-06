@@ -9288,6 +9288,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   erasedBlocksCount: 0
   score: 0
+  scorer:
+    _scoreMultiplier: 1
+    _squaresNeededForBonus: 1
 --- !u!4 &2101313369
 Transform:
   m_ObjectHideFlags: 0

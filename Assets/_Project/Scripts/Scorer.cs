@@ -4,12 +4,13 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-//This class calculates the different scorign 
+//This class calculates the different scorings
+[Serializable]
 public class Scorer
 {
-
+    [SerializeField]
     private int _scoreMultiplier = 1;
-
+    [SerializeField]
     private int _squaresNeededForBonus = 4;
 
     public event Action<int> OnScoreAdded;

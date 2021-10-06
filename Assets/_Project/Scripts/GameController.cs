@@ -26,6 +26,7 @@ public class GameController : MonoBehaviour
     public int score = 0;
 
 
+    [SerializeField]
     private Scorer scorer = new Scorer();
   
 
