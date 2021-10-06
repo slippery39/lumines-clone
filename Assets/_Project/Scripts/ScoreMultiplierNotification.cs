@@ -23,13 +23,15 @@ public class ScoreMultiplierNotification : MonoBehaviour
 
     [SerializeField]
     private TextMeshProUGUI multiplierLabel;
+
     void Start()
     {
         canvas.EnsureInitialized(this);
         multiplierLabel.EnsureInitialized(this);
+
         canvas.GetComponent<CanvasGroup>().alpha = 0;
-        labelsInitialPosition = labels.transform.position;
-        arrowsInitialPosition = arrows.transform.position;
+        labelsInitialPosition = labels.GetComponent<RectTransform>().anchoredPosition;
+        arrowsInitialPosition = arrows.GetComponent<RectTransform>().anchoredPosition;
     }
 
     // Update is called once per frame
@@ -48,8 +50,8 @@ public class ScoreMultiplierNotification : MonoBehaviour
 
     private void ResetAnimation()
     {
-        labels.transform.position = labelsInitialPosition;
-        arrows.transform.position = arrows.transform.position;
+        labels.GetComponent<RectTransform>().anchoredPosition = labelsInitialPosition;
+        arrows.GetComponent<RectTransform>().anchoredPosition = arrowsInitialPosition;
         canvas.GetComponent<CanvasGroup>().alpha = 1;
         screenFlash.SetActive(true);
         screenFlash.GetComponent<Image>().color = new Color(1, 1, 1, 0.5f);
@@ -59,15 +61,11 @@ public class ScoreMultiplierNotification : MonoBehaviour
     {
         ResetAnimation();
         var sequence = DOTween.Sequence();
-
-
         var color = screenFlash.GetComponent<Image>().color;
-
-
         
-        sequence.Append(arrows.transform.DOMoveX(-800f, 0.5f).SetEase(Ease.OutExpo));
+        sequence.Append(arrows.GetComponent<RectTransform>().DOAnchorPosX(0, 0.5f).SetEase(Ease.OutExpo));
         sequence.Insert(0.1f,DOTween.To(() => color, x => { color = x; screenFlash.GetComponent<Image>().color = color; }, new Color(0, 0, 0, 0), 0.7f).SetEase(Ease.OutExpo));
-        sequence.Insert(0.2f, labels.transform.DOMoveX(canvas.GetComponent<RectTransform>().rect.width * 0.65f, 0.5f).SetEase(Ease.OutExpo));
+        sequence.Insert(0.2f, labels.GetComponent<RectTransform>().DOAnchorPosX(0, 0.5f).SetEase(Ease.OutExpo));
         sequence.OnComplete(() =>
         {
             screenFlash.SetActive(false);
