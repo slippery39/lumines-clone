@@ -9,6 +9,8 @@ using UnityEngine;
 public class Scorer
 {
     [SerializeField]
+    private int _maxScoreMultiplier = 16;
+    [SerializeField]
     private int _scoreMultiplier = 1;
     [SerializeField]
     private int _squaresNeededForBonus = 4;
@@ -48,6 +50,7 @@ public class Scorer
         else
         {
             _scoreMultiplier *= 2;
+            _scoreMultiplier = Math.Min(_maxScoreMultiplier, _scoreMultiplier);
             EmitScoreMultiplierIncrease(_scoreMultiplier);
             score = _scoreMultiplier * gameState.SquaresDeletedThisTurn * 160;           
         }
