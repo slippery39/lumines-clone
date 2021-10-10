@@ -13,7 +13,7 @@ public class GameCellsController : MonoBehaviour {
     [SerializeField]
     private GameBlockPiece blockPiecePrefab;
     [SerializeField]
-    private GameBlockPiece[,] createdBlockPieces;
+    private IGrid<GameBlockPiece> createdBlockPieces;
     [SerializeField]
     private GameBlock gameBlockPrefab;
 
@@ -22,7 +22,7 @@ public class GameCellsController : MonoBehaviour {
     private HighlightedSquare highlightedSquarePrefab;
 
     [SerializeField]
-    private HighlightedSquare[,] createdSquares;
+    private IGrid<HighlightedSquare> createdSquares;
 
     [SerializeField]
     private GameBlock currentBlock;
@@ -69,7 +69,7 @@ public class GameCellsController : MonoBehaviour {
         int height = luminesGame.Height;
 
         createdCells = new GameObject[width, height];
-        createdBlockPieces = new GameBlockPiece[width, height];
+        createdBlockPieces = new Grid<GameBlockPiece>(width, height, (x, y) => null);
 
         for (int x = 0; x < width; x++)
         {
@@ -95,20 +95,22 @@ public class GameCellsController : MonoBehaviour {
         int width = luminesGame.Width;
         int height = luminesGame.Height;
 
-        for (int x = 0; x < width; x++)
+
+       for (int x = 0; x < width; x++)
         {
             for (int y = 0; y < height; y++)
             {
-                if (luminesGame.timeLineMarked[x, y] && luminesGame.Board[x,y]!=0)
+                if (luminesGame.TimelineMarked[x, y] && luminesGame.Board[x,y]!=0)
                 {
                     createdBlockPieces[x, y].BlockType = BlockTypes.DeletionInProgress;
                     continue;
                 }
-                if (luminesGame.timeLineMarked[x,y] && luminesGame.Board[x, y] == 0)
+                if (luminesGame.TimelineMarked[x,y] && luminesGame.Board[x, y] == 0)
                 {
 
                     Debug.LogError($"Error found with our game at {x},{y}");
                 }
+                //The +2 represents a "marked block"
                 createdBlockPieces[x, y].BlockType = luminesGame.Deletions[x, y] ? (BlockTypes)luminesGame.Board[x, y] + 2 : (BlockTypes)luminesGame.Board[x, y];
                 
             }
@@ -123,18 +125,15 @@ public class GameCellsController : MonoBehaviour {
         int width = luminesGame.Width;
         int height = luminesGame.Height;
 
-        createdSquares = new HighlightedSquare[width, height];
+        createdSquares = new Grid<HighlightedSquare>(width, height, (x,y) => null);
 
-        for (int x = 0; x < width; x++)
+        createdSquares.ForEach((x, y, val) =>
         {
-            for (int y = 0; y < height; y++)
-            {
-                createdSquares[x, y] = Instantiate(highlightedSquarePrefab);
-                createdSquares[x, y].transform.SetParent(createdCells[x, y].transform);
-                createdSquares[x, y].transform.localPosition = new Vector3(1, 1, -0.01f + ( -0.001f * y + (-0.001f * x) ) );
-                createdSquares[x, y].gameObject.SetActive(false);
-            }
-        }
+            createdSquares[x, y] = Instantiate(highlightedSquarePrefab);
+            createdSquares[x, y].transform.SetParent(createdCells[x, y].transform);
+            createdSquares[x, y].transform.localPosition = new Vector3(1, 1, -0.01f + (-0.001f * y + (-0.001f * x)));
+            createdSquares[x, y].gameObject.SetActive(false);
+        });
     }
 
     private void UpdateSquares() { 

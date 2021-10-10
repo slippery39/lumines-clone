@@ -15,24 +15,27 @@ namespace GameLogic
     [System.Serializable]
     public class Game
     {
-        private int[,] _board;
-        public int[,] Board { get { return _board; } }
-        private bool[,] _markedForDeletion;
-        public bool[,] Deletions { get { return _markedForDeletion; } }
+
+        //We are experimenting with this IGrid interface internally for this class and if its good enough we will expand it and use it instead of a 2d Array externally as well.
+        private IGrid<int> _board;        
+        public int[,] Board { get => _board.To2dArray(); }
+        private IGrid<bool> _markedForDeletion;
+        public bool[,] Deletions { get => _markedForDeletion.To2dArray();  }
         public int Width { get { return _width; } }
         private int _width = 16;
         public int Height { get { return _height; } }
         private int _height = 10;
 
         private MoveableBlock _currentBlock;
-        public MoveableBlock CurrentBlock { get { return _currentBlock; } }
+        public MoveableBlock CurrentBlock { get =>  _currentBlock;  }
 
         private Queue<MoveableBlock> _upcomingBlocks = new Queue<MoveableBlock>();
-        public Queue<MoveableBlock> UpcomingBlocks { get { return _upcomingBlocks; } }
+        public Queue<MoveableBlock> UpcomingBlocks { get =>  _upcomingBlocks;  }
 
-        public bool[,] timeLineMarked;
+        private IGrid<bool> _timelineMarked;
+        public bool[,] TimelineMarked { get => _timelineMarked.To2dArray(); }
 
-        private int _bufferedHeight = 3; //height at the top of the game grid where the movable blocks will spawn.
+
 
         public event Action<GameEventInfo> OnBlockPlaced;
         public event Action<GameEventInfo> OnNewBlock;
@@ -41,28 +44,19 @@ namespace GameLogic
         public event Action<GameEventInfo> OnTimeLineEnd;
 
         private float _timeLinePosition = 0.0f;
-        public float TimeLinePosition { get { return _timeLinePosition; } }
+        public float TimeLinePosition { get =>  _timeLinePosition;  }
+
+
 
         private int _squaresDeletedThisTurn;
 
         private Dictionary<string, int> _markedSquares = new Dictionary<string, int>();
         public Game()
         {
-            _board = new int[_width, _height + _bufferedHeight];
-            _markedForDeletion = new bool[_width, _height];
-            timeLineMarked = new bool[_width, _height];
+            _board = new Grid<int>(_width, _height, (x, y) => { return 0; });
+            _markedForDeletion = new Grid<bool>(_width, _height, (x, y) => { return false; });
+            _timelineMarked = new Grid<bool>(_width, _height, (x, y) =>{ return false; });
 
-
-            //Below is temporary just for testing.
-            for (var i = 0; i < _width; i++)
-            {
-                for (var j = 0; j < _height; j++)
-                {
-                    _board[i, j] = 0;
-                    _markedForDeletion[i, j] = false;
-                    timeLineMarked[i, j] = false;
-                }
-            }
 
             _currentBlock = CreateMoveableBlock();
             //store a list of the next blocks
@@ -75,7 +69,6 @@ namespace GameLogic
         //Client code will control the timeline movement.
         public void MoveTimeLine(float normalizedAmt)
         {
-
             //move by the normalized amount
             //check to see if we would have passed a grid position
             //(i.e. TimeLineMark and TimeLineCheckDeletions2 will need to have a value inputted)
@@ -117,26 +110,20 @@ namespace GameLogic
                 for (var y = 1; y < Height; y++)
                 {
                     //if a block has been marked by the timeline already then it should be unmoveable
-                    if (_board[x, y - 1] == 0 && !timeLineMarked[x,y] )
+                    if (_board[x, y - 1] == 0 && !_timelineMarked[x,y] )
                     {
                         _board[x, y - 1] = _board[x, y];
-                        _board[x, y] = 0;                  
-                        
+                        _board[x, y] = 0;               
+                     
                         
                     }
                   }
             }
-            //TODO - Check for new squares formed.
         }
 
         public void MoveLeft()
         {
-            if (_currentBlock.X == 0)
-            {
-                return;
-            }
-
-            if (_board[CurrentBlock.X - 1, CurrentBlock.Y] > 0 || _board[CurrentBlock.X - 1, CurrentBlock.Y - 1] > 0)
+            if (_currentBlock.WillCollideLeft(_board))
             {
                 return;
             }
@@ -147,12 +134,7 @@ namespace GameLogic
         public void MoveRight()
         {
 
-            if (_currentBlock.X == Width - 2)
-            {
-                return;
-            }
-
-            if (_board[CurrentBlock.X + 2, CurrentBlock.Y] > 0 || _board[CurrentBlock.X + 2, CurrentBlock.Y - 1] > 0)
+            if (_currentBlock.WillCollideRight(_board))
             {
                 return;
             }
@@ -177,23 +159,12 @@ namespace GameLogic
         private void MoveDown()
         {
             //Check to see if it would collide with any blocks.
-
-            if (_currentBlock.Y - 2 < 0)
+            if (_currentBlock.WillCollideBelow(_board))
             {
                 SetToBoard();
                 return;
             }
-
-            //Need to have a check in here in case it goes past the board.
-            if (_board[_currentBlock.X, _currentBlock.Y - 2] > 0 || _board[_currentBlock.X + 1, _currentBlock.Y - 2] > 0) //TODO - what does this mean?
-            {
-                SetToBoard();
-                return;
-                //TODO - collision detected, block should be baked into the board and gravity should start being applied.
-            }
-
             _currentBlock.Y--;
-
         }
 
         private void SetToBoard()
@@ -202,12 +173,14 @@ namespace GameLogic
              * //order is top left, top right, bottom left, bottom right
              */
 
+            //Game is over, need to return here or else we will get array out of bounds errors.
             if (CurrentBlock.Y >= Height)
             {
                 Debug.LogWarning("GAME OVER");
                 return;
             }
-
+ 
+            //order is top left, top right, bottom left, bottom right
             _board[CurrentBlock.X, CurrentBlock.Y] = CurrentBlock.Data[0];
             _board[CurrentBlock.X + 1, CurrentBlock.Y] = CurrentBlock.Data[1];
             _board[CurrentBlock.X, CurrentBlock.Y - 1] = CurrentBlock.Data[2];
@@ -232,10 +205,10 @@ namespace GameLogic
 
         private MoveableBlock CreateMoveableBlock()
         {
-
+            int startingHeightAboveGrid = 3;
             var block = MoveableBlock.CreateRandom();
             block.X = (int)Math.Floor(_width / 2.0);
-            block.Y = Height + _bufferedHeight - 1;
+            block.Y = Height + startingHeightAboveGrid - 1;
 
             return block;
 
@@ -256,7 +229,7 @@ namespace GameLogic
                 return false;
             }
 
-            if (timeLineMarked[x, y])
+            if (_timelineMarked[x, y])
             {
                 return false;
             }
@@ -265,7 +238,7 @@ namespace GameLogic
             {
                 for (var yy = y; yy >= 0; yy--)
                 {
-                    if (timeLineMarked[x, yy])
+                    if (_timelineMarked[x, yy])
                     {
                         continue;
                     }
@@ -284,7 +257,7 @@ namespace GameLogic
             {
                 if (_markedForDeletion[x, y])
                 {
-                    timeLineMarked[x, y] = true;
+                    _timelineMarked[x, y] = true;
                 }
             }
         }
@@ -303,7 +276,7 @@ namespace GameLogic
             return amount;
         }
 
-        private void VisitGrid(Action<int,int> func)
+        private void ForEachCell(Action<int,int> func)
         {
             for (var x = 0;x< Width; x++)
             {
@@ -316,9 +289,9 @@ namespace GameLogic
 
         private void DeleteCell(int x, int y)
         {
-            _board[x, y] = 0;
-            _markedForDeletion[x, y] = false;
-            timeLineMarked[x, y] = false;
+            _board.Delete(x, y);
+            _markedForDeletion.Delete(x, y);
+            _timelineMarked.Delete(x, y);
         }
 
         public void TimeLineCheckDeletions(int x)
@@ -351,13 +324,13 @@ namespace GameLogic
                 //Delete all marked cells. Note that this currently runs even if there is nothing marked by the time line.
                 //Perhaps have an early exit for that case.
                 bool squareListProcessed = false;
-                VisitGrid((xx, yy) =>
+                ForEachCell((xx, yy) =>
                 {
 
                     
 
                     //not sure if we need this xx<=x.
-                    if (xx<= x && timeLineMarked[xx,yy])
+                    if (xx<= x && _timelineMarked[xx,yy])
                     {
                         //We only want this to run once or else the amount of squares will change b
                         if (!squareListProcessed)
@@ -380,15 +353,7 @@ namespace GameLogic
         {
             //Remove all blocks that are "squares"
             //A block can be a part of multiple squares
-
-            for (var x = 0; x < Width - 1; x++)
-            {
-                for (var y = 0; y < Height - 1; y++)
-                {
-                    _markedForDeletion[x, y] = false;
-                }
-            }
-
+            _markedForDeletion.ClearAll();
             _markedSquares.Clear();
 
             for (var x = 0; x < Width - 1; x++)
@@ -478,9 +443,9 @@ namespace GameLogic
         {
             var squares = new List<Square>();
 
-            VisitGrid((x, y) =>
+            ForEachCell((x, y) =>
             {
-                if (CheckIfSquare(x, y) && timeLineMarked[x,y])
+                if (CheckIfSquare(x, y) && _timelineMarked[x,y])
                 {
                     squares.Add(new Square(x, y, this._board[x, y]));
                 }
@@ -494,7 +459,7 @@ namespace GameLogic
         {
             var squares = new List<Square>();
 
-            VisitGrid((x, y) =>
+            ForEachCell((x, y) =>
             {
                 if (CheckIfSquare(x, y))
                 {
