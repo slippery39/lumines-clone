@@ -105,15 +105,11 @@ public class GameBoardController : MonoBehaviour
         
         gameController.OnDeletion((info) =>
         {
-            Debug.Log("OnDeletion triggered for the timeline");
-            Debug.Log(info.SquaresDeleted);
-            Debug.Log(info.SquaresDeletedThisTurn);
             timeLine.AmountDeleted = info.SquaresDeletedThisTurn;
         });
 
         gameController.OnTimeLineEnd((info) =>
         {
-            Debug.Log("OnTimeLineEnd triggered for the tiemline");
             timeLine.AmountDeleted = 0;
         });
 
@@ -125,6 +121,7 @@ public class GameBoardController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        SetSongPositionInBeats(Conductor.Instance.SongPositionInBeats);
         SetTimeLinePosition();
         SetBlockDropPreviewPosition();
 
@@ -145,7 +142,7 @@ public class GameBoardController : MonoBehaviour
         dropPreview.transform.localPosition = new Vector3(gameController.luminesGame.CurrentBlock.X + 1, dropPreview.transform.localPosition.y, dropPreview.transform.localPosition.z);
     }
 
-    public void SetSongPositionInBeats(float songPositionInBeats)
+    private void SetSongPositionInBeats(float songPositionInBeats)
     {
         if (gridRenderer == null)
         {

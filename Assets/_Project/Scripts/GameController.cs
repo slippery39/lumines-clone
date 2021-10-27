@@ -44,6 +44,7 @@ public class GameController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        luminesGame.MoveTimeLine(Conductor.Instance.DeltaBeats / 8);
         GameLoop();
     }
 
@@ -58,17 +59,11 @@ public class GameController : MonoBehaviour
 
     public void OnDeletion(Action<GameEventInfo> handler)
     {
-
-        Debug.Log("On Deletion handler accepted");
-
-
         luminesGame.OnDeletion += handler;
     }
 
     public void OnTimeLineEnd(Action<GameEventInfo> handler)
     {
-        Debug.Log("OnTimeLineEnd handler accepted");
-
         luminesGame.OnTimeLineEnd += handler;
     }
 
