@@ -8,14 +8,14 @@ TagManager:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Stencil Mask
   - Water
   - UI
-  - 
-  - 
-  - 
-  - 
-  - 
+  - Stencil Objects
+  - ReverseStencilObjects
+  - ReverseStencilMask
+  - Stencil Objects Transparent
+  - Reverse Stencil Objects Transparent
   - 
   - 
   - 
