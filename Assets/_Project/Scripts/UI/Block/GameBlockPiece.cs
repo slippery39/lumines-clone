@@ -9,10 +9,12 @@ public class GameBlockPiece : MonoBehaviour
     BlockTypes blockType = BlockTypes.Nothing;
 
     [SerializeField]
-    Material material1;
+    private Material material1;
+    public Material Material1 { get => material1; set => material1 = value; }
 
     [SerializeField]
-    Material material2;
+    private Material material2;
+    public Material Material2 { get => material2; set => material2 = value; }
 
     [SerializeField]
     Material deletionMaterial;

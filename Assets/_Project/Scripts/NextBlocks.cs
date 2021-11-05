@@ -77,6 +77,24 @@ public class NextBlocks : MonoBehaviour
     }
 
 
+    public void SetBlockPiece(GameBlockPiece piece)
+    {
+            instantiatedBlocks
+                .ForEach((block) =>
+                {
+                    var gamePieces = GetComponentsInChildren<GameBlockPiece>().ToList();
+                    gamePieces.ForEach((gamePiece) =>
+                    {
+
+                        gamePiece.Material1 = piece.Material1;
+                        gamePiece.Material2 = piece.Material2;
+                    });
+                });
+        
+
+    }
+
+
 
     public void SetNextBlocks(List<MoveableBlock> nextBlocks)
     {

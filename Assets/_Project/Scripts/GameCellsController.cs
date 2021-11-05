@@ -12,8 +12,12 @@ public class GameCellsController : MonoBehaviour {
 
     [SerializeField]
     private GameBlockPiece blockPiecePrefab;
+    public GameBlockPiece BlockPiecePrefab { get => blockPiecePrefab; set => blockPiecePrefab = value; }
     [SerializeField]
     private IGrid<GameBlockPiece> createdBlockPieces;
+    public IGrid<GameBlockPiece> CreatedBlockPieces { get => createdBlockPieces; set => createdBlockPieces = value; }
+
+   
     [SerializeField]
     private GameBlock gameBlockPrefab;
 
@@ -32,6 +36,7 @@ public class GameCellsController : MonoBehaviour {
 
     [SerializeField]
     private Game luminesGame;
+
 
     private void Update()
     {
@@ -89,6 +94,20 @@ public class GameCellsController : MonoBehaviour {
         currentBlock.name = "Current Block";
         currentBlock.transform.parent = this.transform;
     }
+
+    public void SetCurrentBlockPieces(GameBlockPiece piece)
+    {
+        currentBlock
+            .GetComponentsInChildren<GameBlockPiece>()
+            .ToList()
+            .ForEach((gamePiece) =>
+            {
+                gamePiece.Material1 = piece.Material1;
+                gamePiece.Material2 = piece.Material2;
+            });
+    }
+
+    
 
     private void UpdateBoard()
     {
