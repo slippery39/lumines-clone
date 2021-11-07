@@ -137,10 +137,11 @@ public class GameUI : MonoBehaviour
 
         SetBackground(skin.Background);
         SetBlockPiece(skin.BlockPiece);
+        SetHighlightedBlockPiece(skin.HighlightedSquare);
         /*
-         * Set the Background
-         * Set the Block Piece
-         * Set the Highlighted Block Piece
+         * Set the Background [DONE]
+         * Set the Block Piece [DONE]
+         * Set the Highlighted Block Piece [PROGRESS]
          * Set the Music?? (But Music is Controlled by the Conductor??)
          * Set the BPM?? (Again this is controlled by the Conductor).
          */
@@ -154,25 +155,13 @@ public class GameUI : MonoBehaviour
     }
     private void SetBlockPiece(GameBlockPiece blockPiece)
     {
-        //Setting the BlockPiece on the Cells Object
-        cells.BlockPiecePrefab.Material1 = blockPiece.Material1;
-        cells.BlockPiecePrefab.Material2 = blockPiece.Material2;
-        cells.CreatedBlockPieces.ForEach((x, y, block) =>
-        {
-            if (block == null) { return; }
-            block.Material1 = blockPiece.Material1;
-            block.Material2 = blockPiece.Material2;
-        });
-
-        //Set the Block PIeces of the CUrrent Block.
-        cells.SetCurrentBlockPieces(blockPiece);
-        //Set the Block Piece of the Upcoming Blocks;
-        upcomingBlocks.SetBlockPiece(blockPiece);
-       //Need to set the BlockPiece on the UpcomingBlocks object and the CurrentBlock
+        var thingsThatUseBlocks = GetComponentsInChildren<IUsesBlocks>();
+        thingsThatUseBlocks.ToList().ForEach(thing => thing.SetBlock(blockPiece));
     }
-    private void SetHighlightedBlockPiece()
+    private void SetHighlightedBlockPiece(HighlightedSquare highlightedSquareInfo)
     {
-
+        var thingsThatHaveHighlightedSquares = GetComponentsInChildren<IUsesHighlightedSquares>();
+        thingsThatHaveHighlightedSquares.ToList().ForEach(thing => thing.SetHighlightedSquare(highlightedSquareInfo));
     }
     /*TODO - Figure out how we should set the Music and BPM?*/
 

@@ -8,6 +8,8 @@ public class HighlightedSquare : MonoBehaviour
     [SerializeField]
     private BlockTypes gameColor = BlockTypes.Color1;
     public BlockTypes Color { get => gameColor; set => gameColor = value; }
+    public Color Color1 { get => color1; set => color1 = value; }
+    public Color Color2 { get => color2; set => color2 = value; }
 
     [SerializeField]
     //Color for the first color type

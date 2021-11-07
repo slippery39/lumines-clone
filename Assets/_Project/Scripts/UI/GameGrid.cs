@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GameGrid : MonoBehaviour
+public class GameGrid : MonoBehaviour, ISyncToConductor
 {
     // Start is called before the first frame update
     [SerializeField]
@@ -32,5 +32,11 @@ public class GameGrid : MonoBehaviour
         }
         //testing the BPM setting on our material;
         _gridRenderer.material.SetFloat("_SongPositionInBeats", Conductor.Instance.SongPositionInBeats);
+    }
+
+    //This is not in use right now, but perhaps we should use this to make it easier for us to 
+    public void ConductorUpdate(ConductorInfo info)
+    {
+        GridFlashEffect();
     }
 }
