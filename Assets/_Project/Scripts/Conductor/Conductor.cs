@@ -59,16 +59,16 @@ public class Conductor : MonoBehaviour
     [SerializeField]
     TextMesh debugText;
 
-    public float SongBpm { get => songBpm; set => songBpm = value; }
-    public float SecPerBeat { get => secPerBeat; set => secPerBeat = value; }
-    public float BeatsPerSecond { get => beatsPerSecond; set => beatsPerSecond = value; }
-    public float SongPosition { get => songPosition; set => songPosition = value; }
-    public float SongPositionInBeats { get => songPositionInBeats; set => songPositionInBeats = value; }
-    public float DspSongTime { get => dspSongTime; set => dspSongTime = value; }
-    public float BeatPulse { get => beatPulse; set => beatPulse = value; }
-    public float BeatPulseABS { get => beatPulseABS; set => beatPulseABS = value; }
-    public float DeltaBeats { get => deltaBeats; set => deltaBeats = value; }
-    public int CurrentBeatIn4x4Time { get => currentBeatIn4x4Time; set => currentBeatIn4x4Time = value; }
+    public float SongBpm { get => songBpm; set => SetBPM(value); }
+    public float SecPerBeat { get => secPerBeat; }
+    public float BeatsPerSecond { get => beatsPerSecond;}
+    public float SongPosition { get => songPosition;}
+    public float SongPositionInBeats { get => songPositionInBeats; }
+    public float DspSongTime { get => dspSongTime; }
+    public float BeatPulse { get => beatPulse;}
+    public float BeatPulseABS { get => beatPulseABS;}
+    public float DeltaBeats { get => deltaBeats; }
+    public int CurrentBeatIn4x4Time { get => currentBeatIn4x4Time;}
 
     private void Awake()
     {
@@ -81,20 +81,17 @@ public class Conductor : MonoBehaviour
 
     void Start()
     {
-
+        /*
         if (songBpm == 0)
         {
             throw new Exception("Song BMP has not been set in the conductor. Nothing will move. Reccomend setting to something between 60 and 180");
         }
+        */
 
         //Load the AudioSource attached to the Conductor GameObject
         musicSource = GetComponent<AudioSource>();
 
-        //Calculate the number of seconds in each beat
-        secPerBeat = 60f / songBpm;
 
-        //Calculate the number of beats per second
-        beatsPerSecond = songBpm / 60f;
 
         //Record the time when the music starts
         dspSongTime = (float)AudioSettings.dspTime;     
@@ -111,7 +108,15 @@ public class Conductor : MonoBehaviour
         DebugInfo();
     }
 
-    void DebugInfo()
+    public void SetFromSkin(Skin skin)
+    {
+        musicSource.Stop();
+        SetBPM(skin.BPM);
+        musicSource.clip = skin.Music.clip;
+        musicSource.Play();
+    }
+
+    private void DebugInfo()
     {
         debugText.text =
            "Beats Per Minute :" + songBpm.ToString() + Environment.NewLine +
@@ -121,6 +126,16 @@ public class Conductor : MonoBehaviour
            "Current DSP Song Time : " + dspSongTime + Environment.NewLine +
            "Current Song Position : " + songPosition.ToString() + Environment.NewLine +
            "Song Position In Beats : " + songPositionInBeats.ToString() + Environment.NewLine;
+    }
+
+    private void SetBPM(float newBPM)
+    {
+        songBpm = newBPM;
+        //Calculate the number of seconds in each beat
+        secPerBeat = 60f / songBpm;
+
+        //Calculate the number of beats per second
+        beatsPerSecond = songBpm / 60f;
     }
 
 

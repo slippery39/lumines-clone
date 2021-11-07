@@ -138,6 +138,7 @@ public class GameUI : MonoBehaviour
         SetBackground(skin.Background);
         SetBlockPiece(skin.BlockPiece);
         SetHighlightedBlockPiece(skin.HighlightedSquare);
+        Conductor.Instance.SetFromSkin(skin);
         /*
          * Set the Background [DONE]
          * Set the Block Piece [DONE]
