@@ -10,7 +10,7 @@ public class ProtoypeTransition : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        time = Conductor.Instance.SongPosition; //We need to get the timeline position.
+        time = (Conductor.Instance.loopPositionInBeats /8); //We need to get the timeline position.
         transitionMaterial.SetFloat("_Position", Mathf.Repeat(time, 1));
     }
 }

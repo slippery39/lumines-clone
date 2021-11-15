@@ -70,6 +70,15 @@ public class Conductor : MonoBehaviour
     public float DeltaBeats { get => deltaBeats; }
     public int CurrentBeatIn4x4Time { get => currentBeatIn4x4Time;}
 
+    //the number of beats in each loop
+    public float beatsPerLoop = 8;
+
+    //the total number of loops completed since the looping clip first started
+    public int completedLoops = 0;
+
+    //The current position of the song within the loop in beats.
+    public float loopPositionInBeats;
+
     private void Awake()
     {
         if (Instance != null)
@@ -105,6 +114,14 @@ public class Conductor : MonoBehaviour
     void Update()
     {
         UpdateBeatInfo();
+
+        //calculate the loop position
+        if (songPositionInBeats >= (completedLoops + 1) * beatsPerLoop)
+            completedLoops++;
+        loopPositionInBeats = songPositionInBeats - completedLoops * beatsPerLoop;
+
+
+
         DebugInfo();
     }
 
