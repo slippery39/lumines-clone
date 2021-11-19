@@ -276,7 +276,7 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 0}
+  m_audioClip: {fileID: 8300000, guid: 4b94e214802287b4196deaee45ac23e6, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 0.04
   m_Pitch: 1
@@ -2145,7 +2145,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 31d4737459ae9de439af68ad4810fa60, type: 2}
+  - {fileID: 2100000, guid: 2157e69739586184091d9731968be829, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -11485,6 +11485,9 @@ MonoBehaviour:
   songBpm: 0
   musicSource: {fileID: 846129856}
   debugText: {fileID: 1778745644}
+  beatsPerLoop: 8
+  completedLoops: 0
+  loopPositionInBeats: 0
 --- !u!4 &846129858
 Transform:
   m_ObjectHideFlags: 0
@@ -17635,7 +17638,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 2a5507336e876d843bf9547ddd8e1ede, type: 2}
+  - {fileID: 2100000, guid: b22f5179ebb3eff4eb5d628740d039e5, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
