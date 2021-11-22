@@ -21,8 +21,11 @@ public class GameBlockPiece : MonoBehaviour
     public BlockTypes BlockType
     {
         get { return blockType; }
-        set { blockType = value; }
+        set { blockType = value; UpdateStuff(); }
     }
+
+    private static Vector3 defaultScaling = new Vector3(0.9f, 0.9f, 0.01f);
+    private static Vector3 deletionScaling = new Vector3(1, 1, 0.2f);
 
     private Renderer rendererComponent;
     private MeshRenderer meshRenderer;
@@ -36,6 +39,7 @@ public class GameBlockPiece : MonoBehaviour
 
         rendererComponent = this.GetComponent<Renderer>();
         meshRenderer = this.GetComponent<MeshRenderer>();
+        UpdateStuff();
     }
 
 
@@ -44,7 +48,7 @@ public class GameBlockPiece : MonoBehaviour
     {
         //The ZScale is very important here, it needs to be small enough that our square blocks show above these when needed.
         //TODO - this should not be going on here?
-            this.transform.localScale = new Vector3(0.9f, 0.9f, 0.01f);
+        this.transform.localScale = defaultScaling;
 
         if (blockType == BlockTypes.Nothing) //nothing
         {
@@ -77,21 +81,18 @@ public class GameBlockPiece : MonoBehaviour
         else if (blockType == BlockTypes.DeletionInProgress) //DeletionInProgress
         {
             //We want this to always appear above any square blocks so we specifically increase the scale to 0.2f to accomplish this.
-            this.transform.localScale = new Vector3(1, 1, 0.2f);
+            this.transform.localScale = deletionScaling;
             rendererComponent.material = deletionMaterial;
         }
     }
 
-    void Update()
-    {
-        UpdateStuff();
-    }
-
     //This fixes some UI glitches that might occur mid frame.
+    /*
     void LateUpdate()
     {
         UpdateStuff();
     }
+    */
 
 }
 

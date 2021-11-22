@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Active: 1
   settings:
-    IsEnabled: 1
+    IsEnabled: 0
     WhenToInsert: 1000
     MaterialToBlit: {fileID: 2100000, guid: a7213a35aa764f249b201e6089702854, type: 2}
 --- !u!114 &-2677120435599333121

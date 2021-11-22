@@ -10,6 +10,10 @@ public class GameUI : MonoBehaviour
     [SerializeField]
     private GameController gameController;
 
+    [Header("Misc")]
+    [SerializeField]
+    private bool willSetConductor = false;
+
     [Header("Skin")]
     [SerializeField]
     private Skin skin;
@@ -31,11 +35,13 @@ public class GameUI : MonoBehaviour
     private GameObject dropPreview;
 
     [SerializeField]
+    private GameObject _beatNumbers;
+
+    private GameObject _scoreBoard;
+
+    [SerializeField]
     private NextBlocks upcomingBlocks;
     // Start is called before the first frame update
-    [Header("Scoring")]
-    [SerializeField]
-    private ScoreBoard scoreBoard;
     [SerializeField]
     private ScoreMultiplierNotification scoreMultiplierNotification;
 
@@ -47,6 +53,7 @@ public class GameUI : MonoBehaviour
 
     void Start()
     {
+
         if (gameController == null)
         {
             throw new System.Exception("Please ensure you have connected the game to the GameBoardController in the inspector");
@@ -94,13 +101,18 @@ public class GameUI : MonoBehaviour
 
         gameController.OnScoreAdded((int amount) =>
          {
-             scoreBoard.AnimateScore(amount);
+             foreach(var score in GetComponentsInChildren<IUsesScore>())
+             {
+                 score.OnScoreAdded(amount);
+             }
          });
 
         gameController.OnScoreMultiplierIncrease( (int amount) =>
         {
-            scoreMultiplierNotification.SetMultiplier(amount);
-            scoreMultiplierNotification.PlayAnimation();
+            foreach (var score in GetComponentsInChildren<IUsesScoreMultiplier>())
+            {
+                score.SetMultiplier(amount);
+            }
         });
 
         
@@ -125,11 +137,12 @@ public class GameUI : MonoBehaviour
         SetTimeLinePosition();
         SetBlockDropPreviewPosition();
 
-        scoreBoard.CurrentTime = gameController.CurrentTime;
-        scoreBoard.BlocksErased = gameController.erasedBlocksCount;
-        scoreBoard.Score = gameController.score;
-
-        
+        foreach(var score in GetComponentsInChildren<IUsesScore>())
+        {
+            score.CurrentTime = gameController.CurrentTime;
+            score.BlocksErased = gameController.erasedBlocksCount;
+            score.Score = gameController.score;
+        }
     }
 
     public void SetSkin(Skin skin)
@@ -138,7 +151,12 @@ public class GameUI : MonoBehaviour
         SetBackground(skin.Background);
         SetBlockPiece(skin.BlockPiece);
         SetHighlightedBlockPiece(skin.HighlightedSquare);
-        Conductor.Instance.SetFromSkin(skin);
+        SetBeatNumbers(skin.BeatNumbers);
+        SetScoreBoard(skin.ScoreBoard);
+
+        //Hacky solution so that any duplicate UI's do not accidently set the conductor timings.
+        if (willSetConductor) 
+            Conductor.Instance.SetFromSkin(skin);
         /*
          * Set the Background [DONE]
          * Set the Block Piece [DONE]
@@ -165,6 +183,20 @@ public class GameUI : MonoBehaviour
         thingsThatHaveHighlightedSquares.ToList().ForEach(thing => thing.SetHighlightedSquare(highlightedSquareInfo));
     }
     /*TODO - Figure out how we should set the Music and BPM?*/
+    private void SetBeatNumbers(GameObject beatNumbers)
+    {
+        Destroy(_beatNumbers.gameObject);
+        _beatNumbers = Instantiate(beatNumbers);
+        _beatNumbers.transform.SetParent(this.transform);
+    }
+
+    private void SetScoreBoard(GameObject scoreBoard)
+    {
+        if (_scoreBoard!=null)
+        Destroy(_scoreBoard.gameObject);
+        _scoreBoard = Instantiate(scoreBoard);
+        _scoreBoard.transform.SetParent(this.transform);
+    }
 
     private void SetTimeLinePosition()
     {

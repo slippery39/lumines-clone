@@ -18,6 +18,10 @@ public class Skin : MonoBehaviour
     private GameObject _background;
     [SerializeField]
     private HighlightedSquare _highlightedSquare;
+    [SerializeField]
+    private GameObject _beatNumbers;
+    [SerializeField]
+    private GameObject _scoreBoard;
 
     public AudioSource Music { get { return GetComponent<AudioSource>(); } }
     public float BPM { get { return _bpm; } }
@@ -25,7 +29,8 @@ public class Skin : MonoBehaviour
 
     public GameObject Background { get { return _background; } }
     public HighlightedSquare HighlightedSquare { get { return _highlightedSquare; } }
-   
+    public GameObject BeatNumbers { get => _beatNumbers; set => _beatNumbers = value; }
+    public GameObject ScoreBoard { get => _scoreBoard; set => _scoreBoard = value; }
 }
 
 

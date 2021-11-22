@@ -508,7 +508,7 @@
     "m_Guid": {
         "m_GuidSerialized": "11e92577-bdc2-4bf2-a7bb-abbae2f8a7ef"
     },
-    "m_Name": "FirstImage",
+    "m_Name": "ImageFrom",
     "m_DefaultReferenceName": "Texture2D_0b1c2329818f4322818eb565aab40f70",
     "m_OverrideReferenceName": "",
     "m_GeneratePropertyBlock": true,
@@ -815,7 +815,7 @@
     "m_CustomColors": {
         "m_SerializableColors": []
     },
-    "m_ComparisonType": 4
+    "m_ComparisonType": 5
 }
 
 {
@@ -1235,7 +1235,7 @@
     "m_Type": "UnityEditor.ShaderGraph.Texture2DMaterialSlot",
     "m_ObjectId": "45c0c71ebecd4cdc8c9177127fa44cd1",
     "m_Id": 0,
-    "m_DisplayName": "SecondImage",
+    "m_DisplayName": "ImageTo",
     "m_SlotType": 1,
     "m_Hidden": false,
     "m_ShaderOutputName": "Out",
@@ -1298,7 +1298,7 @@
     "m_Guid": {
         "m_GuidSerialized": "e87303b0-9776-4ee4-8f42-c3150a18b6f2"
     },
-    "m_Name": "SecondImage",
+    "m_Name": "ImageTo",
     "m_DefaultReferenceName": "Texture2D_4701958a043d47c28dd36d88bd8c8c7b",
     "m_OverrideReferenceName": "",
     "m_GeneratePropertyBlock": true,
@@ -3175,7 +3175,7 @@
     "m_Type": "UnityEditor.ShaderGraph.Texture2DMaterialSlot",
     "m_ObjectId": "f06e0a6e9b1b4bf29d034cc1af511b43",
     "m_Id": 0,
-    "m_DisplayName": "FirstImage",
+    "m_DisplayName": "ImageFrom",
     "m_SlotType": 1,
     "m_Hidden": false,
     "m_ShaderOutputName": "Out",

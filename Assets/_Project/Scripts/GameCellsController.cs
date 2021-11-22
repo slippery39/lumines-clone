@@ -165,6 +165,8 @@ public class GameCellsController : MonoBehaviour, IUsesBlocks, IUsesHighlightedS
         });
     }
 
+    //TODO - Only run this when square info has been updated.
+    //Maybe the luminesGame can run an event when squares have changed?
     private void UpdateSquares()
     {
 
@@ -172,6 +174,10 @@ public class GameCellsController : MonoBehaviour, IUsesBlocks, IUsesHighlightedS
 
         int width = luminesGame.Width;
         int height = luminesGame.Height;
+
+
+        //Performance Concerns
+        //Perhaps we should be able to get a list of eve
 
         for (int x = 0; x < width; x++)
         {
@@ -184,7 +190,10 @@ public class GameCellsController : MonoBehaviour, IUsesBlocks, IUsesHighlightedS
                 }
                 else
                 {
-                    createdSquares[x, y].gameObject.SetActive(true);
+                    if (createdSquares[x, y].gameObject.activeSelf == false)
+                    {
+                        createdSquares[x, y].gameObject.SetActive(true);
+                    }
                     createdSquares[x, y].Color = (BlockTypes)foundSquare.Color;
                 }
             }
