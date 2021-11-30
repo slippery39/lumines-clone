@@ -27,5 +27,8 @@ using System.Threading.Tasks;
     public float BeatPulseABS { get; set; }
     
     public int CurrentBeatIn4x4Time { get; set; }
+
+    public int CurrentLoopIndex{ get; set; }
+ 
 }
 

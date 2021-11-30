@@ -16304,7 +16304,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   transitionMaterial: {fileID: 2100000, guid: a7213a35aa764f249b201e6089702854, type: 2}
   time: 0
+  IsEnabled: 0
   rendererData: {fileID: 11400000, guid: bd2beb465ea47ca4aa2e47a596b955b5, type: 2}
+  featureName: NewMyBlitFeature
+  transitioning: 0
+  newCamera: {fileID: 486569034}
+  oldCamera: {fileID: 1141939745}
+  duplicateUI: {fileID: 2098731991}
 --- !u!1 &964609181
 GameObject:
   m_ObjectHideFlags: 0

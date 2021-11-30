@@ -105,8 +105,12 @@ public class ScoreBoard : MonoBehaviour, IUsesScore
 
     private void AnimateScore(int amount)
     {
-        scoreAddedLabel.SetText($"+ {amount.ToString()}");
-        StartCoroutine(FadeCoroutine());
+
+        if (this.isActiveAndEnabled)
+        {
+            scoreAddedLabel.SetText($"+ {amount.ToString()}");
+            StartCoroutine(FadeCoroutine());
+        }
     }
     #endregion
 

@@ -71,9 +71,12 @@ public class NextBlocks : MonoBehaviour, IUsesBlocks
             throw new System.Exception("Next Blocks should always have at least 3 blocks upcoming");
         }
 
-        extraBlock.SetColors(nextBlocks[2].Data);
-        nextBlocksTemp = nextBlocks.ToList();
-        StartCoroutine("ScrollUpAnimation");
+        if (isActiveAndEnabled)
+        {
+            extraBlock.SetColors(nextBlocks[2].Data);
+            nextBlocksTemp = nextBlocks.ToList();
+            StartCoroutine("ScrollUpAnimation");
+        }
     }
 
     public void SetBlock(GameBlockPiece piece)

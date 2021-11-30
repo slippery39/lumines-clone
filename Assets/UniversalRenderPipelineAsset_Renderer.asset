@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c1ced6fce81e55b4bad32b490ad4e55c, type: 3}
   m_Name: NewMyBlitFeature
   m_EditorClassIdentifier: 
-  m_Active: 1
+  m_Active: 0
   settings:
-    IsEnabled: 0
+    IsEnabled: 1
     WhenToInsert: 1000
     MaterialToBlit: {fileID: 2100000, guid: a7213a35aa764f249b201e6089702854, type: 2}
 --- !u!114 &-2677120435599333121

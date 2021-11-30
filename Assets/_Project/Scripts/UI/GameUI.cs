@@ -193,9 +193,14 @@ public class GameUI : MonoBehaviour
     private void SetScoreBoard(GameObject scoreBoard)
     {
         if (_scoreBoard!=null)
-        Destroy(_scoreBoard.gameObject);
+        Destroy(_scoreBoard.gameObject);        
         _scoreBoard = Instantiate(scoreBoard);
+        var previousPosition = _scoreBoard.transform.localPosition;   
+
+
+
         _scoreBoard.transform.SetParent(this.transform);
+        _scoreBoard.transform.localPosition = previousPosition;
     }
 
     private void SetTimeLinePosition()

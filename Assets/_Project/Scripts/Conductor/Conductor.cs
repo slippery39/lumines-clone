@@ -54,7 +54,8 @@ public class Conductor : MonoBehaviour
     public AudioSource musicSource;
 
 
-    public event Action<ConductorInfo> OnBeat;  
+    public event Action<ConductorInfo> OnBeat;
+    public event Action<ConductorInfo> OnLoopBegin;
 
     [SerializeField]
     TextMesh debugText;
@@ -69,6 +70,8 @@ public class Conductor : MonoBehaviour
     public float BeatPulseABS { get => beatPulseABS;}
     public float DeltaBeats { get => deltaBeats; }
     public int CurrentBeatIn4x4Time { get => currentBeatIn4x4Time;}
+
+    public float TimeLinePosition { get => loopPositionInBeats / 8; }
 
     //the number of beats in each loop
     public float beatsPerLoop = 8;
@@ -117,7 +120,11 @@ public class Conductor : MonoBehaviour
 
         //calculate the loop position
         if (songPositionInBeats >= (completedLoops + 1) * beatsPerLoop)
+        {            
             completedLoops++;
+            this.OnLoopBegin?.Invoke(CreateBeatInfo());
+        }
+
         loopPositionInBeats = songPositionInBeats - completedLoops * beatsPerLoop;
 
 
@@ -171,19 +178,25 @@ public class Conductor : MonoBehaviour
 
         if (Math.Floor(songPositionInBeats) > Math.Floor(previousSongPositionInBeats))
         {
-            OnBeat?.Invoke(new ConductorInfo()
-            {
-                SongBPM = songBpm,
-                SecondsPerBeat = secPerBeat,
-                BeatsPerSecond = beatsPerSecond,
-                SongPosition = songPosition,
-                SongPositionInBeats = songPositionInBeats,
-                DSPSongTime = dspSongTime,
-                BeatPulse = beatPulse,
-                BeatPulseABS = beatPulseABS,
-                CurrentBeatIn4x4Time = currentBeatIn4x4Time
-            });
+            OnBeat?.Invoke(CreateBeatInfo());
         }
+    }
+
+    private ConductorInfo CreateBeatInfo()
+    {
+        return new ConductorInfo()
+        {
+            SongBPM = songBpm,
+            SecondsPerBeat = secPerBeat,
+            BeatsPerSecond = beatsPerSecond,
+            SongPosition = songPosition,
+            SongPositionInBeats = songPositionInBeats,
+            DSPSongTime = dspSongTime,
+            BeatPulse = beatPulse,
+            BeatPulseABS = beatPulseABS,
+            CurrentBeatIn4x4Time = currentBeatIn4x4Time,
+            CurrentLoopIndex = completedLoops,
+        };
     }
 
    

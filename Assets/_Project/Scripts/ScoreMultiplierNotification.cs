@@ -60,8 +60,11 @@ public class ScoreMultiplierNotification : MonoBehaviour, IUsesScoreMultiplier
         sequence.Insert(0.2f, labels.GetComponent<RectTransform>().DOAnchorPosX(0, 0.5f).SetEase(Ease.OutExpo));
         sequence.OnComplete(() =>
         {
-            screenFlash.SetActive(false);
-            StartCoroutine(FadeCoroutine());
+            if (this.isActiveAndEnabled)
+            {
+                screenFlash.SetActive(false);
+                StartCoroutine(FadeCoroutine());
+            }
         });
     }
 
