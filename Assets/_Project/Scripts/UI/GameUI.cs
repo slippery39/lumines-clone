@@ -197,8 +197,6 @@ public class GameUI : MonoBehaviour
         _scoreBoard = Instantiate(scoreBoard);
         var previousPosition = _scoreBoard.transform.localPosition;   
 
-
-
         _scoreBoard.transform.SetParent(this.transform);
         _scoreBoard.transform.localPosition = previousPosition;
     }
