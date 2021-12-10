@@ -13,9 +13,6 @@ public class SkinTransitionController : MonoBehaviour
 
 
     [SerializeField]
-    private Boolean IsEnabled;
-
-    [SerializeField]
     private ForwardRendererData rendererData;
     [SerializeField]
     private string featureName;
@@ -23,32 +20,67 @@ public class SkinTransitionController : MonoBehaviour
     [SerializeField]
     private bool transitioning;
 
-    [SerializeField] Camera newCamera;
-    [SerializeField] Camera oldCamera;
+    [SerializeField] private Camera newCamera;
+    [SerializeField] private Camera oldCamera;
 
-    [SerializeField] GameUI duplicateUI;
+    [SerializeField] GameUI gameUI;
 
-    // Update is called once per frame
-    void Update()
+    [SerializeField] private GameUI duplicateUI;
+
+    [SerializeField] private Skin nextSkin;
+
+
+    private void Start()
     {
-        
-        time = (Conductor.Instance.TimeLinePosition); //We need to get the timeline position.
+        DefaultSetup();
 
-        if (ShouldStartTransition())
+
+        Conductor.Instance.OnLoopBegin += (ConductorInfo info) =>
         {
-            StartTransition();
-        }
-        if (transitioning)
-        {
-            if (ShouldEndTransition())
+            Debug.Log("");
+            Debug.Log("--------------");
+            Debug.Log("new loop has begun!");
+            Debug.Log("transitioning");
+            Debug.Log(transitioning);
+            Debug.Log("song position");
+            Debug.Log(info.SongPositionInSeconds);
+
+            if (transitioning)
             {
-                ResetTransition();
+                Debug.Log("ending transition");
                 EndTransition();
             }
             else
             {
-                UpdateTransition();
+                if (info.SongPositionInSeconds >= 1)
+                {
+                    Debug.Log("starting transition");
+                    StartTransition();
+                }
             }
+        };
+
+
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+
+        time = Conductor.Instance.TimeLinePosition; //We need to get the timeline position.
+
+
+        if (transitioning)
+        {
+            UpdateTransition();
+        }
+    }
+
+    private void DefaultSetup()
+    {
+        if (TryGetFeature(out var feature))
+        {
+            feature.SetActive(false);
         }
     }
 
@@ -60,12 +92,6 @@ public class SkinTransitionController : MonoBehaviour
 
     }
 
-    private bool ShouldStartTransition() => transitioning == false && Input.GetKeyDown(KeyCode.C);
-
-
-    //Temporary Hack to make it close to the value. We can't just say <=1 because the TimeLinePosition might not ever get to exactly 1 (due to overflow).
-    //Ideally we would be able to ask the Conductor if the timeline has just finished a loop in which case we would end the transition.
-    private bool ShouldEndTransition() => Conductor.Instance.TimeLinePosition>=0.98;
 
     private void StartTransition()
     {
@@ -98,11 +124,19 @@ public class SkinTransitionController : MonoBehaviour
 
     private void EndTransition()
     {
+        transitioning = false;
         if (TryGetFeature(out var feature))
         {
+
+
             feature.SetActive(false);
             rendererData.SetDirty();
-            transitioning = false;
+           
+
+            var blitFeature = feature as MyBlitFeature;
+            var material = blitFeature.Material;
+            material.SetFloat("_Position", 0);
+
 
             //Disable the camera's with the render textures
             oldCamera.gameObject.SetActive(false);
@@ -110,23 +144,19 @@ public class SkinTransitionController : MonoBehaviour
             //Disable the Duplicate UI for the new skin
             duplicateUI.gameObject.SetActive(false);
 
-        }
-    }
 
-    private void ResetTransition()
-    {
-        if (TryGetFeature(out var feature))
-        {
-            feature.SetActive(false);            
-            rendererData.SetDirty();
-            var blitFeature = feature as MyBlitFeature;
-            var material = blitFeature.Material;
-            material.SetFloat("_Position", 0);
-            time = 0;
-            transitioning = false;
+            //Update the skin to the new skin.
 
 
-            
+            var newNextSkin = Skins.All().Where(s => s.Name != nextSkin.Name).FirstOrDefault();
+
+
+            gameUI.SetSkin(nextSkin);
+            nextSkin = newNextSkin;
+
+            duplicateUI.SetSkin(newNextSkin);
+
+
         }
     }
 }

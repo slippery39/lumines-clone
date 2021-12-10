@@ -460,6 +460,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 52a041d129ff74440ab27e4f15269548, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  name: JayJen - Cold Wind
   _bpm: 80
   _blockPiece: {fileID: 148023327}
   _background: {fileID: 320621673}
@@ -14918,12 +14919,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 96f20cc5c5be1394b971945491f708aa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  songBpm: 0
+  info:
+    _songBpm: 0
+    _secPerBeat: 0
+    _beatsPerSecond: 0
+    _songPositionInSeconds: 0
+    _songPositionInBeats: 0
+    _dspSongTime: 0
+    _beatPulse: 0
+    _beatPulseABS: 0
+    _currentBeatIn4x4Time: 0
+    _completedLoops: 0
   musicSource: {fileID: 846129856}
-  debugText: {fileID: 1778745644}
   beatsPerLoop: 8
-  completedLoops: 0
-  loopPositionInBeats: 0
 --- !u!4 &846129858
 Transform:
   m_ObjectHideFlags: 0
@@ -15720,6 +15728,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 52a041d129ff74440ab27e4f15269548, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  name: Irfan Dunst - Forbes
   _bpm: 123.97
   _blockPiece: {fileID: 1545895608}
   _background: {fileID: 1554023631}
@@ -16306,7 +16315,6 @@ GameObject:
   - component: {fileID: 963194227}
   - component: {fileID: 963194226}
   - component: {fileID: 963194229}
-  - component: {fileID: 963194230}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: Untagged
@@ -16411,27 +16419,6 @@ MonoBehaviour:
   m_RequiresDepthTexture: 0
   m_RequiresColorTexture: 0
   m_Version: 2
---- !u!114 &963194230
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 963194225}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 97b085fc52fbd144ca28298266905023, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  transitionMaterial: {fileID: 2100000, guid: a7213a35aa764f249b201e6089702854, type: 2}
-  time: 0
-  IsEnabled: 0
-  rendererData: {fileID: 11400000, guid: bd2beb465ea47ca4aa2e47a596b955b5, type: 2}
-  featureName: NewMyBlitFeature
-  transitioning: 0
-  newCamera: {fileID: 486569034}
-  oldCamera: {fileID: 1141939745}
-  duplicateUI: {fileID: 2098731991}
 --- !u!1 &964609181
 GameObject:
   m_ObjectHideFlags: 0
@@ -20619,6 +20606,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1399434024}
   - component: {fileID: 1399434025}
+  - component: {fileID: 1399434026}
   m_Layer: 0
   m_Name: Game UI
   m_TagString: Untagged
@@ -20673,6 +20661,28 @@ MonoBehaviour:
   _beatNumbers: {fileID: 1832705449}
   upcomingBlocks: {fileID: 1706974965}
   scoreMultiplierNotification: {fileID: 186427730}
+--- !u!114 &1399434026
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1399434023}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 97b085fc52fbd144ca28298266905023, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  transitionMaterial: {fileID: 2100000, guid: a7213a35aa764f249b201e6089702854, type: 2}
+  time: 0
+  rendererData: {fileID: 11400000, guid: bd2beb465ea47ca4aa2e47a596b955b5, type: 2}
+  featureName: NewMyBlitFeature
+  transitioning: 0
+  newCamera: {fileID: 486569034}
+  oldCamera: {fileID: 1141939745}
+  gameUI: {fileID: 1399434025}
+  duplicateUI: {fileID: 2098731991}
+  nextSkin: {fileID: 16038722}
 --- !u!1 &1416654240
 GameObject:
   m_ObjectHideFlags: 0
@@ -32751,6 +32761,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1958212891}
+  - component: {fileID: 1958212892}
   m_Layer: 0
   m_Name: Skins
   m_TagString: Untagged
@@ -32774,6 +32785,19 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1958212892
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1958212890}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6b8efb18d44d82946a8995a61044df8c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  skins: []
 --- !u!1 &1959954247
 GameObject:
   m_ObjectHideFlags: 0

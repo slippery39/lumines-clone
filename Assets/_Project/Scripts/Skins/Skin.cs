@@ -11,6 +11,9 @@ public class Skin : MonoBehaviour
 {
 
     [SerializeField]
+    private string name;
+
+    [SerializeField]
     private float _bpm;
     [SerializeField]
     private GameBlockPiece _blockPiece;
@@ -31,6 +34,7 @@ public class Skin : MonoBehaviour
     public HighlightedSquare HighlightedSquare { get { return _highlightedSquare; } }
     public GameObject BeatNumbers { get => _beatNumbers; set => _beatNumbers = value; }
     public GameObject ScoreBoard { get => _scoreBoard; set => _scoreBoard = value; }
+    public string Name { get => name; set => name = value; }
 }
 
 

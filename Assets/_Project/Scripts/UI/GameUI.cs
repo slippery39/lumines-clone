@@ -187,7 +187,10 @@ public class GameUI : MonoBehaviour
     {
         Destroy(_beatNumbers.gameObject);
         _beatNumbers = Instantiate(beatNumbers);
+
+        var previousPosition = _beatNumbers.transform.localPosition;
         _beatNumbers.transform.SetParent(this.transform);
+        _beatNumbers.transform.localPosition = previousPosition;
     }
 
     private void SetScoreBoard(GameObject scoreBoard)

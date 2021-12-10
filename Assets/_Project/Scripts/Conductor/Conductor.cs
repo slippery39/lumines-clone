@@ -6,49 +6,14 @@ using UnityEngine;
 
 //Making the Conductor a Singleton, as it is used by almost all of our UI elements. It is unlikely I will need to change it from a Singleton for this project since it is just a 
 //small project.
-public class Conductor : MonoBehaviour
+public class Conductor : MonoBehaviour, IConductorInfo
 {
 
 
     public static Conductor Instance;
 
-    private ConductorInfo previousFrameInfo;
-    private ConductorInfo currentFrameInfo;
-
-    //Song beats per minute
-    //This is determined by the song you're trying to sync up to
     [SerializeField]
-    private float songBpm;
-
-    //The number of seconds for each song beat
-    private float secPerBeat;
-
-    //The numer of beats for each second
-    private float beatsPerSecond;
-
-
-    /*These fields here, i want to be able to compare the previous frame position to this frames position*/
-
-    //Current song position, in seconds
-    private float songPosition;
-
-    //Current song position, in beats
-    private float songPositionInBeats;
-
-    //How many seconds have passed since the song started
-    private float dspSongTime;
-
-    //The Beat as expressed as a pulse.
-    private float beatPulse;
-
-    private float beatPulseABS;
-
-    //The amount of beats that have passed since the last update (fractional);
-    private float deltaBeats;
-
-    private int currentBeatIn4x4Time;
-
-    /** done */
+    private ConductorInfo info = new ConductorInfo();
 
     //an AudioSource attached to this GameObject that will play the music.
     public AudioSource musicSource;
@@ -56,32 +21,36 @@ public class Conductor : MonoBehaviour
 
     public event Action<ConductorInfo> OnBeat;
     public event Action<ConductorInfo> OnLoopBegin;
+    public event Action<ConductorInfo> OnLoopEnd;
 
-    [SerializeField]
-    TextMesh debugText;
-
-    public float SongBpm { get => songBpm; set => SetBPM(value); }
-    public float SecPerBeat { get => secPerBeat; }
-    public float BeatsPerSecond { get => beatsPerSecond;}
-    public float SongPosition { get => songPosition;}
-    public float SongPositionInBeats { get => songPositionInBeats; }
-    public float DspSongTime { get => dspSongTime; }
-    public float BeatPulse { get => beatPulse;}
-    public float BeatPulseABS { get => beatPulseABS;}
+    #region don't touch these variables for now
+    //The amount of beats that have passed since the last update (fractional);
+    private float deltaBeats;
     public float DeltaBeats { get => deltaBeats; }
-    public int CurrentBeatIn4x4Time { get => currentBeatIn4x4Time;}
-
-    public float TimeLinePosition { get => loopPositionInBeats / 8; }
 
     //the number of beats in each loop
     public float beatsPerLoop = 8;
 
-    //the total number of loops completed since the looping clip first started
-    public int completedLoops = 0;
 
+    //TODO check references of this.
     //The current position of the song within the loop in beats.
-    public float loopPositionInBeats;
+    private float loopPositionInBeats;
 
+    public float TimeLinePosition { get => loopPositionInBeats / 8; }
+    #endregion
+
+    public float SongBPM { get => info.SongBPM; set => info.SongBPM = value; }
+    public float SecondsPerBeat { get => info.SecondsPerBeat; set => info.SecondsPerBeat = value; }
+    public float BeatsPerSecond { get => info.BeatsPerSecond; set=>info.BeatsPerSecond = value; }
+    public float SongPositionInSeconds { get => info.SongPositionInSeconds; set => info.SongPositionInSeconds = value; }
+    public float SongPositionInBeats { get => info.SongPositionInBeats; set => info.SongPositionInBeats = value; }
+    public float DSPSongTime { get => info.DSPSongTime; set => info.DSPSongTime = value; }
+    public float BeatPulse { get => info.BeatPulse; set => info.BeatPulse = value; }
+    public float BeatPulseABS { get => info.BeatPulseABS; set => info.BeatPulseABS = value; }
+    public int CurrentBeatIn4x4Time { get => info.CurrentBeatIn4x4Time; set => info.CurrentBeatIn4x4Time = value; }
+    public int CompletedLoops { get => info.CompletedLoops; set => info.CompletedLoops = value; }
+
+  
     private void Awake()
     {
         if (Instance != null)
@@ -93,23 +62,12 @@ public class Conductor : MonoBehaviour
 
     void Start()
     {
-        /*
-        if (songBpm == 0)
-        {
-            throw new Exception("Song BMP has not been set in the conductor. Nothing will move. Reccomend setting to something between 60 and 180");
-        }
-        */
-
         //Load the AudioSource attached to the Conductor GameObject
         musicSource = GetComponent<AudioSource>();
-
-
-
         //Record the time when the music starts
-        dspSongTime = (float)AudioSettings.dspTime;     
-
+        DSPSongTime = (float)AudioSettings.dspTime;  
         //Start the music
-        musicSource.Play();       
+        musicSource.Play();    
 
     }
 
@@ -119,64 +77,38 @@ public class Conductor : MonoBehaviour
         UpdateBeatInfo();
 
         //calculate the loop position
-        if (songPositionInBeats >= (completedLoops + 1) * beatsPerLoop)
-        {            
-            completedLoops++;
+        if (SongPositionInBeats >= (CompletedLoops + 1) * beatsPerLoop)
+        {
+            CompletedLoops++;
             this.OnLoopBegin?.Invoke(CreateBeatInfo());
         }
 
-        loopPositionInBeats = songPositionInBeats - completedLoops * beatsPerLoop;
-
-
-
-        DebugInfo();
+        loopPositionInBeats = SongPositionInBeats - CompletedLoops * beatsPerLoop;
     }
 
     public void SetFromSkin(Skin skin)
     {
         musicSource.Stop();
-        SetBPM(skin.BPM);
+        SongBPM = skin.BPM;
         musicSource.clip = skin.Music.clip;
         musicSource.Play();
+        CompletedLoops = 0;
+        DSPSongTime = (float)AudioSettings.dspTime;
     }
-
-    private void DebugInfo()
-    {
-        debugText.text =
-           "Beats Per Minute :" + songBpm.ToString() + Environment.NewLine +
-           "Beats Per Second : " + beatsPerSecond.ToString() + Environment.NewLine +
-           "Seconds Per Beat : " + secPerBeat.ToString() + Environment.NewLine +
-           "Current Song Time : " + musicSource.time.ToString() + Environment.NewLine +
-           "Current DSP Song Time : " + dspSongTime + Environment.NewLine +
-           "Current Song Position : " + songPosition.ToString() + Environment.NewLine +
-           "Song Position In Beats : " + songPositionInBeats.ToString() + Environment.NewLine;
-    }
-
-    private void SetBPM(float newBPM)
-    {
-        songBpm = newBPM;
-        //Calculate the number of seconds in each beat
-        secPerBeat = 60f / songBpm;
-
-        //Calculate the number of beats per second
-        beatsPerSecond = songBpm / 60f;
-    }
-
-
 
     private void UpdateBeatInfo()
     {
         //determine how many seconds since the song started
-        var previousSongPositionInBeats = songPositionInBeats;
+        var previousSongPositionInBeats = SongPositionInBeats;
 
-        songPosition = (float)(AudioSettings.dspTime - dspSongTime);
+        SongPositionInSeconds = (float)(AudioSettings.dspTime - DSPSongTime);
 
         //determine how many beats since the song started
-        songPositionInBeats = songPosition / secPerBeat;
-        deltaBeats = songPositionInBeats - previousSongPositionInBeats;
-        currentBeatIn4x4Time = Convert.ToInt32(Math.Floor(songPositionInBeats) % 4);
+        SongPositionInBeats = SongPositionInSeconds / SecondsPerBeat;
+        deltaBeats = SongPositionInBeats - previousSongPositionInBeats;
+        CurrentBeatIn4x4Time = Convert.ToInt32(Math.Floor(SongPositionInBeats) % 4);
 
-        if (Math.Floor(songPositionInBeats) > Math.Floor(previousSongPositionInBeats))
+        if (Math.Floor(SongPositionInBeats) > Math.Floor(previousSongPositionInBeats))
         {
             OnBeat?.Invoke(CreateBeatInfo());
         }
@@ -184,19 +116,7 @@ public class Conductor : MonoBehaviour
 
     private ConductorInfo CreateBeatInfo()
     {
-        return new ConductorInfo()
-        {
-            SongBPM = songBpm,
-            SecondsPerBeat = secPerBeat,
-            BeatsPerSecond = beatsPerSecond,
-            SongPosition = songPosition,
-            SongPositionInBeats = songPositionInBeats,
-            DSPSongTime = dspSongTime,
-            BeatPulse = beatPulse,
-            BeatPulseABS = beatPulseABS,
-            CurrentBeatIn4x4Time = currentBeatIn4x4Time,
-            CurrentLoopIndex = completedLoops,
-        };
+        return info.Clone();
     }
 
    
