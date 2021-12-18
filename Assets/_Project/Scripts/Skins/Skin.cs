@@ -25,6 +25,8 @@ public class Skin : MonoBehaviour
     private GameObject _beatNumbers;
     [SerializeField]
     private GameObject _scoreBoard;
+    [SerializeField]
+    private GameObject _grid;
 
     public AudioSource Music { get { return GetComponent<AudioSource>(); } }
     public float BPM { get { return _bpm; } }
@@ -35,6 +37,7 @@ public class Skin : MonoBehaviour
     public GameObject BeatNumbers { get => _beatNumbers; set => _beatNumbers = value; }
     public GameObject ScoreBoard { get => _scoreBoard; set => _scoreBoard = value; }
     public string Name { get => name; set => name = value; }
+    public GameObject Grid { get => _grid; set => _grid = value; }
 }
 
 

@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: GridMaterial
+  m_Name: ForbesGridMaterial
   m_Shader: {fileID: 4800000, guid: 1c59dbb4cd9e0e3499931166514aec3f, type: 3}
   m_ShaderKeywords: 
   m_LightmapFlags: 4

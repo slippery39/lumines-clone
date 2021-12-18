@@ -37,24 +37,14 @@ public class SkinTransitionController : MonoBehaviour
 
         Conductor.Instance.OnLoopBegin += (ConductorInfo info) =>
         {
-            Debug.Log("");
-            Debug.Log("--------------");
-            Debug.Log("new loop has begun!");
-            Debug.Log("transitioning");
-            Debug.Log(transitioning);
-            Debug.Log("song position");
-            Debug.Log(info.SongPositionInSeconds);
-
             if (transitioning)
             {
-                Debug.Log("ending transition");
                 EndTransition();
             }
             else
             {
                 if (info.SongPositionInSeconds >= 1)
                 {
-                    Debug.Log("starting transition");
                     StartTransition();
                 }
             }
@@ -141,8 +131,7 @@ public class SkinTransitionController : MonoBehaviour
             //Disable the camera's with the render textures
             oldCamera.gameObject.SetActive(false);
             newCamera.gameObject.SetActive(false);
-            //Disable the Duplicate UI for the new skin
-            duplicateUI.gameObject.SetActive(false);
+ 
 
 
             //Update the skin to the new skin.
@@ -151,10 +140,15 @@ public class SkinTransitionController : MonoBehaviour
             var newNextSkin = Skins.All().Where(s => s.Name != nextSkin.Name).FirstOrDefault();
 
 
+            //Calls to set skin come from here
             gameUI.SetSkin(nextSkin);
             nextSkin = newNextSkin;
 
+            //and here.
             duplicateUI.SetSkin(newNextSkin);
+            //Maybe we hae to do this?
+            //Disable the Duplicate UI for the new skin
+            duplicateUI.gameObject.SetActive(false);
 
 
         }

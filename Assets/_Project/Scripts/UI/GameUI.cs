@@ -23,7 +23,7 @@ public class GameUI : MonoBehaviour
     private GameCellsController cells;
 
     [SerializeField]
-    private GameObject grid;
+    private GameObject _grid;
 
     [SerializeField]
     private TimeLine timeLine;
@@ -62,7 +62,7 @@ public class GameUI : MonoBehaviour
         {
             throw new System.Exception("the lumines game has not been created yet");
         }
-        if (grid == null)
+        if (_grid == null)
         {
             throw new System.Exception("Please ensure you have connected the grid to the GameBoardController in the inspector");
         }
@@ -153,6 +153,7 @@ public class GameUI : MonoBehaviour
         SetHighlightedBlockPiece(skin.HighlightedSquare);
         SetBeatNumbers(skin.BeatNumbers);
         SetScoreBoard(skin.ScoreBoard);
+        SetGrid(skin.Grid);
 
         //Hacky solution so that any duplicate UI's do not accidently set the conductor timings.
         if (willSetConductor) 
@@ -175,6 +176,9 @@ public class GameUI : MonoBehaviour
     private void SetBlockPiece(GameBlockPiece blockPiece)
     {
         var thingsThatUseBlocks = GetComponentsInChildren<IUsesBlocks>();
+
+        Debug.Log("amount of things that use block pieces");
+        Debug.Log(thingsThatUseBlocks.Length);
         thingsThatUseBlocks.ToList().ForEach(thing => thing.SetBlock(blockPiece));
     }
     private void SetHighlightedBlockPiece(HighlightedSquare highlightedSquareInfo)
@@ -187,10 +191,7 @@ public class GameUI : MonoBehaviour
     {
         Destroy(_beatNumbers.gameObject);
         _beatNumbers = Instantiate(beatNumbers);
-
-        var previousPosition = _beatNumbers.transform.localPosition;
-        _beatNumbers.transform.SetParent(this.transform);
-        _beatNumbers.transform.localPosition = previousPosition;
+        SetParentButKeepLocalPosition(_beatNumbers);
     }
 
     private void SetScoreBoard(GameObject scoreBoard)
@@ -198,10 +199,18 @@ public class GameUI : MonoBehaviour
         if (_scoreBoard!=null)
         Destroy(_scoreBoard.gameObject);        
         _scoreBoard = Instantiate(scoreBoard);
-        var previousPosition = _scoreBoard.transform.localPosition;   
+        SetParentButKeepLocalPosition(_scoreBoard);
+    }
 
-        _scoreBoard.transform.SetParent(this.transform);
-        _scoreBoard.transform.localPosition = previousPosition;
+    private void SetGrid(GameObject grid)
+    {
+        if (_grid != null)
+        {
+            Destroy(_grid.gameObject);
+        }
+
+        _grid = Instantiate(grid);
+        SetParentButKeepLocalPosition(_grid);
     }
 
     private void SetTimeLinePosition()
@@ -212,6 +221,13 @@ public class GameUI : MonoBehaviour
     private void SetBlockDropPreviewPosition()
     {
         dropPreview.transform.localPosition = new Vector3(gameController.luminesGame.CurrentBlock.X + 1, dropPreview.transform.localPosition.y, dropPreview.transform.localPosition.z);
+    }
+
+    private void SetParentButKeepLocalPosition(GameObject obj)
+    {
+        var previousPosition = obj.transform.localPosition;
+        obj.transform.SetParent(this.transform);
+        obj.transform.localPosition = previousPosition;
     }
 
 
