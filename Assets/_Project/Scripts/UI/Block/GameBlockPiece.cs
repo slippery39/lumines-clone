@@ -10,11 +10,11 @@ public class GameBlockPiece : MonoBehaviour
 
     [SerializeField]
     private Material material1;
-    public Material Material1 { get => material1; set => material1 = value; }
+    public Material Material1 { get => material1; set { material1 = value; UpdateStuff(); } }
 
     [SerializeField]
     private Material material2;
-    public Material Material2 { get => material2; set => material2 = value; }
+    public Material Material2 { get => material2; set { material2 = value; UpdateStuff(); } }
 
     [SerializeField]
     Material deletionMaterial;

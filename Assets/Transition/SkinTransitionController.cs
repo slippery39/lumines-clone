@@ -148,7 +148,7 @@ public class SkinTransitionController : MonoBehaviour
             duplicateUI.SetSkin(newNextSkin);
             //Maybe we hae to do this?
             //Disable the Duplicate UI for the new skin
-            duplicateUI.gameObject.SetActive(false);
+            //duplicateUI.gameObject.SetActive(false);
 
 
         }

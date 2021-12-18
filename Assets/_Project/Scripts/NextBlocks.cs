@@ -89,7 +89,7 @@ public class NextBlocks : MonoBehaviour, IUsesBlocks
             {
 
                 gamePiece.Material1 = piece.Material1;
-                gamePiece.Material2 = piece.Material2;
+                gamePiece.Material2 = piece.Material2;               
             });
         });
     }
