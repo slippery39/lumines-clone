@@ -5,7 +5,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class ScoreMultiplierNotification : MonoBehaviour
+public class ScoreMultiplierNotification : MonoBehaviour, IUsesScoreMultiplier
 {
     // Start is called before the first frame update
 
@@ -34,18 +34,10 @@ public class ScoreMultiplierNotification : MonoBehaviour
         arrowsInitialPosition = arrows.GetComponent<RectTransform>().anchoredPosition;
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Z))
-        {
-            PlayAnimation();          
-        }
-    }
-
     public void SetMultiplier(int multiplier)
     {
-        multiplierLabel.SetText($"X{multiplier}");   
+        multiplierLabel.SetText($"X{multiplier}");
+        PlayAnimation();
     }
 
     private void ResetAnimation()
@@ -57,7 +49,7 @@ public class ScoreMultiplierNotification : MonoBehaviour
         screenFlash.GetComponent<Image>().color = new Color(1, 1, 1, 0.5f);
     }
 
-    public void PlayAnimation()
+    private void PlayAnimation()
     {
         ResetAnimation();
         var sequence = DOTween.Sequence();
@@ -68,12 +60,15 @@ public class ScoreMultiplierNotification : MonoBehaviour
         sequence.Insert(0.2f, labels.GetComponent<RectTransform>().DOAnchorPosX(0, 0.5f).SetEase(Ease.OutExpo));
         sequence.OnComplete(() =>
         {
-            screenFlash.SetActive(false);
-            StartCoroutine(FadeCoroutine());
+            if (this.isActiveAndEnabled)
+            {
+                screenFlash.SetActive(false);
+                StartCoroutine(FadeCoroutine());
+            }
         });
     }
 
-    IEnumerator FadeCoroutine()
+    private IEnumerator FadeCoroutine()
     {
         for (float alpha = 1f; alpha >= 0; alpha -= 0.1f)
         {

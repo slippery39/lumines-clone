@@ -8,6 +8,8 @@ public class HighlightedSquare : MonoBehaviour
     [SerializeField]
     private BlockTypes gameColor = BlockTypes.Color1;
     public BlockTypes Color { get => gameColor; set => gameColor = value; }
+    public Color Color1 { get => color1; set => color1 = value; }
+    public Color Color2 { get => color2; set => color2 = value; }
 
     [SerializeField]
     //Color for the first color type
@@ -16,18 +18,9 @@ public class HighlightedSquare : MonoBehaviour
     [SerializeField]
     //Color to show for the second color type.
     private Color color2;
-
-    [SerializeField]
-    Renderer render;
     
     [SerializeField]
     private GameObject square;
-
-    void Start()
-    {
-
-        render = square.GetComponent<Renderer>();
-    }
 
     void Update()
     {

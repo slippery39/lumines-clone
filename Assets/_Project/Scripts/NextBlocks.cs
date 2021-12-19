@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class NextBlocks : MonoBehaviour
+public class NextBlocks : MonoBehaviour, IUsesBlocks
 {
     // Start is called before the first frame update
 
@@ -38,7 +38,7 @@ public class NextBlocks : MonoBehaviour
     }
 
     void Update()
-    {        
+    {
         if (Input.GetKeyDown(KeyCode.F))
         {
             StartCoroutine("ScrollUpAnimation");
@@ -53,7 +53,7 @@ public class NextBlocks : MonoBehaviour
     IEnumerator ScrollUpAnimation()
     {
         var animSeq = DOTween.Sequence();
-        animSeq.Append(blocksContainer.transform.DOMove(blocksContainer.transform.position + new Vector3(0, distanceBetweenBlocks, 0),0.1f));
+        animSeq.Append(blocksContainer.transform.DOMove(blocksContainer.transform.position + new Vector3(0, distanceBetweenBlocks, 0), 0.1f));
         yield return animSeq.WaitForCompletion();
         ResetContainerPosition();
         SetNextBlocks(nextBlocksTemp);
@@ -66,14 +66,32 @@ public class NextBlocks : MonoBehaviour
         //Don't update right away. 
         //Set the extra block to the last of the next blocks.
 
-        if (nextBlocks.Count<3)
+        if (nextBlocks.Count < 3)
         {
             throw new System.Exception("Next Blocks should always have at least 3 blocks upcoming");
         }
 
-        extraBlock.SetColors(nextBlocks[2].Data);
-        nextBlocksTemp = nextBlocks.ToList();
-        StartCoroutine("ScrollUpAnimation");
+        if (isActiveAndEnabled)
+        {
+            extraBlock.SetColors(nextBlocks[2].Data);
+            nextBlocksTemp = nextBlocks.ToList();
+            StartCoroutine("ScrollUpAnimation");
+        }
+    }
+
+    public void SetBlock(GameBlockPiece piece)
+    {
+        instantiatedBlocks
+        .ForEach((block) =>
+        {
+            var gamePieces = GetComponentsInChildren<GameBlockPiece>().ToList();
+            gamePieces.ForEach((gamePiece) =>
+            {
+
+                gamePiece.Material1 = piece.Material1;
+                gamePiece.Material2 = piece.Material2;               
+            });
+        });
     }
 
 
@@ -93,7 +111,5 @@ public class NextBlocks : MonoBehaviour
         blocksContainer.transform.position = initialContainerPosition;
     }
 
-
-  
 
 }
