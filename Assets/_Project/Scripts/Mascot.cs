@@ -28,7 +28,6 @@ public class Mascot : MonoBehaviour
 
         float scaleValue = (pulseValue * 0.5f) + 2;
         transform.localScale = new Vector3(scaleValue,scaleValue,scaleValue);
-
         transform.eulerAngles = new Vector3(0, 0 , signedPulse * 25);
     }
 
