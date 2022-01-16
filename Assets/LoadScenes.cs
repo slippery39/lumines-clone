@@ -12,6 +12,7 @@ public class LoadScenes : MonoBehaviour
     public void Start()
     {
         startGameButton.onClick.AddListener(LoadGame);
+        quitGameButton.onClick.AddListener(QuitGame);
     }
 
     public void LoadGame()
