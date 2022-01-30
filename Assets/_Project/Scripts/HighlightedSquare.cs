@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class HighlightedSquare : MonoBehaviour
+public class HighlightedSquare : MonoBehaviour, ILuminesGameUpdateable
 {
 
     [SerializeField]
@@ -22,7 +22,7 @@ public class HighlightedSquare : MonoBehaviour
     [SerializeField]
     private GameObject square;
 
-    void Update()
+    public void LuminesGameUpdate()
     {
         if (gameColor == BlockTypes.Color1)
         {

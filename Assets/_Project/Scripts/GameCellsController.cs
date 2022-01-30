@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using Game_Logic;
 using System.Linq;
 
-public class GameCellsController : MonoBehaviour, IUsesBlocks, IUsesHighlightedSquares
+public class GameCellsController : MonoBehaviour, IUsesBlocks, IUsesHighlightedSquares,ILuminesGameUpdateable
 {
 
     [SerializeField]
@@ -39,7 +39,7 @@ public class GameCellsController : MonoBehaviour, IUsesBlocks, IUsesHighlightedS
     private Game luminesGame;
 
 
-    private void Update()
+    public void LuminesGameUpdate()
     {
         UpdateBoard();
     }

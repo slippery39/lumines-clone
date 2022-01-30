@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 
-public class GameUI : MonoBehaviour
+public class GameUI : MonoBehaviour, ILuminesGameUpdateable
 {
 
     [Header("Game State")]
     [SerializeField]
-    private GameController gameController;
+    private LuminesGameController gameController;
 
     [Header("Misc")]
     [SerializeField]
@@ -132,7 +132,7 @@ public class GameUI : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    public void LuminesGameUpdate()
     {
         SetTimeLinePosition();
         SetBlockDropPreviewPosition();

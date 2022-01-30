@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(ThrottledInput))]
-public class GameController : MonoBehaviour
+public class LuminesGameController : MonoBehaviour, ILuminesGameUpdateable
 {
 
     public Game luminesGame;
@@ -25,15 +25,8 @@ public class GameController : MonoBehaviour
     public int erasedBlocksCount;
     public int score = 0;
 
-
     [SerializeField]
     private Scorer scorer = new Scorer();
-  
-
-    private void Awake()
-    {
-        luminesGame = new Game();
-    }
 
     void Start()
     {
@@ -42,10 +35,10 @@ public class GameController : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    public void LuminesGameUpdate()
     {
         luminesGame.MoveTimeLine(Conductor.Instance.DeltaBeats / 8);
-        GameLoop();
+        GameLoop();       
     }
 
     public void OnScoreAdded(Action<int> handler)

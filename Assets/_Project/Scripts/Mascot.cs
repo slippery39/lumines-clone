@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Mascot : MonoBehaviour
+public class Mascot : MonoBehaviour, ILuminesGameUpdateable
 {
     [SerializeField]
     private ParticleSystem _particleSystem;
@@ -18,7 +18,7 @@ public class Mascot : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    public void LuminesGameUpdate()
     {
         
         float signedPulse = Mathf.Cos(Conductor.Instance.SongPositionInBeats * Mathf.PI) % Mathf.PI; //what is this?
