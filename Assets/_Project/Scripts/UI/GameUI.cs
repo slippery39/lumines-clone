@@ -176,9 +176,6 @@ public class GameUI : MonoBehaviour, ILuminesGameUpdateable
     private void SetBlockPiece(GameBlockPiece blockPiece)
     {
         var thingsThatUseBlocks = GetComponentsInChildren<IUsesBlocks>();
-
-        Debug.Log("amount of things that use block pieces");
-        Debug.Log(thingsThatUseBlocks.Length);
         thingsThatUseBlocks.ToList().ForEach(thing => thing.SetBlock(blockPiece));
     }
     private void SetHighlightedBlockPiece(HighlightedSquare highlightedSquareInfo)
