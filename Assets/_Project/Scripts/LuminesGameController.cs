@@ -60,6 +60,11 @@ public class LuminesGameController : MonoBehaviour, ILuminesGameUpdateable
         luminesGame.OnTimeLineEnd += handler;
     }
 
+    public void OnGameOver(Action handler)
+    {
+        luminesGame.OnGameOver += handler;
+    }
+
     private void InitializeInputHandlers()
     {
         customInputHandler = GetComponent<ThrottledInput>();

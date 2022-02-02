@@ -35,18 +35,17 @@ namespace GameLogic
         private IGrid<bool> _timelineMarked;
         public bool[,] TimelineMarked { get => _timelineMarked.To2dArray(); }
 
-
-
         public event Action<GameEventInfo> OnBlockPlaced;
         public event Action<GameEventInfo> OnNewBlock;
         public event Action<GameEventInfo> OnDeletion;
         public event Action<GameEventInfo> OnSoftDrop;
         public event Action<GameEventInfo> OnTimeLineEnd;
+        public event Action OnGameOver;
+
+        private bool gameIsOver = false;
 
         private float _timeLinePosition = 0.0f;
         public float TimeLinePosition { get =>  _timeLinePosition;  }
-
-
 
         private int _squaresDeletedThisTurn;
 
@@ -104,6 +103,7 @@ namespace GameLogic
 
         public void BoardGravity()
         {
+            if (gameIsOver) return;
             //more all blocks down one unit.
             for (var x = 0; x < Width; x++)
             {
@@ -123,6 +123,7 @@ namespace GameLogic
 
         public void MoveLeft()
         {
+            if (gameIsOver) return;
             if (_currentBlock.WillCollideLeft(_board))
             {
                 return;
@@ -133,7 +134,7 @@ namespace GameLogic
 
         public void MoveRight()
         {
-
+            if (gameIsOver) return;
             if (_currentBlock.WillCollideRight(_board))
             {
                 return;
@@ -144,11 +145,13 @@ namespace GameLogic
 
         public void Gravity()
         {
+            if (gameIsOver) return;
             MoveDown();
         }
 
         public void SoftDrop()
         {
+            if (gameIsOver) return;
             MoveDown();            
             OnSoftDrop?.Invoke( new GameEventInfo() );
         }
@@ -158,6 +161,7 @@ namespace GameLogic
         //Soft Drop is for when the user presses a key or whatever to manually move the block down.
         private void MoveDown()
         {
+            if (gameIsOver) return;
             //Check to see if it would collide with any blocks.
             if (_currentBlock.WillCollideBelow(_board))
             {
@@ -176,7 +180,8 @@ namespace GameLogic
             //Game is over, need to return here or else we will get array out of bounds errors.
             if (CurrentBlock.Y >= Height)
             {
-                Debug.LogWarning("GAME OVER");
+                gameIsOver = true;
+                OnGameOver?.Invoke();
                 return;
             }
  

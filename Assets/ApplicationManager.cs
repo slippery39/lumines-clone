@@ -11,7 +11,10 @@ public class ApplicationManager : MonoBehaviour
     //The parent game object that contains all the things corresponding to a lumines game.
     [SerializeField]
     private GameObject luminesGameParent;
-    
+
+    [SerializeField]
+    private LuminesGameController luminesGameController;
+
     //our conductor object has special time considerations that we need to take into account when pausing / resuming.
     [SerializeField]
     private Conductor conductor;
@@ -25,15 +28,29 @@ public class ApplicationManager : MonoBehaviour
     [SerializeField]
     PauseMenu pauseMenu;
 
+    [SerializeField]
+    GameOverScreen gameOverScreen;
+
 
     private void Start()
     {
+
+        luminesGameController.OnGameOver(() =>
+        {
+            ShowGameOverScreen();
+        });
+
         pauseMenu.ResumeButton.onClick.AddListener(() =>
         {
             ResumeGame();
         });
 
         pauseMenu.ExitButton.onClick.AddListener(() =>
+        {
+            BackToMainMenu();
+        });
+
+        gameOverScreen.BackToMainMenuButton.onClick.AddListener(() =>
         {
             BackToMainMenu();
         });
@@ -82,6 +99,15 @@ public class ApplicationManager : MonoBehaviour
         AudioListener.pause = false;
         gameInputs.enabled = true;
         pauseMenu.gameObject.SetActive(false);
+    }
+
+    void ShowGameOverScreen()
+    {
+        _isPaused = true;
+        Time.timeScale = 0;
+        AudioListener.pause = true;
+        gameInputs.enabled = false;
+        gameOverScreen.gameObject.SetActive(true);
     }
 
     private void ResetStatics()
