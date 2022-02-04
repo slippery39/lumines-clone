@@ -11,7 +11,6 @@ public class SkinTransitionController : MonoBehaviour
     public Material transitionMaterial;
     public float time = 0;
 
-
     [SerializeField]
     private ForwardRendererData rendererData;
     [SerializeField]
@@ -43,7 +42,7 @@ public class SkinTransitionController : MonoBehaviour
             }
             else
             {
-                if (info.SongPositionInSeconds >= 1)
+                if (info.SongPositionInSeconds >=90)
                 {
                     StartTransition();
                 }
