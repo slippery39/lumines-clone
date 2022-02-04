@@ -27,7 +27,7 @@ public class GlowingText : MonoBehaviour
 
     private void Update()
     {
-        textHighlightMaterial.SetFloat(ShaderUtilities.ID_GlowPower, Mathf.Abs(Mathf.Sin(Time.fixedUnscaledTime * Mathf.PI)));
+        textHighlightMaterial.SetFloat(ShaderUtilities.ID_GlowPower, Mathf.Abs(Mathf.Sin(Time.unscaledTime * Mathf.PI)));
         text.UpdateMeshPadding();
     }
 

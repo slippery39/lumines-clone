@@ -29,7 +29,7 @@ public class GlowingTextOnMouse : MonoBehaviour, IPointerEnterHandler, IPointerE
     {
         if (isInText)
         {
-            textHighlightMaterial.SetFloat(ShaderUtilities.ID_GlowPower, Mathf.Abs(Mathf.Sin(Time.fixedUnscaledTime * (Mathf.PI*2))));
+            textHighlightMaterial.SetFloat(ShaderUtilities.ID_GlowPower, Mathf.Abs(Mathf.Sin(Time.unscaledTime * (Mathf.PI*2))));
             text.UpdateMeshPadding();
         }
     }

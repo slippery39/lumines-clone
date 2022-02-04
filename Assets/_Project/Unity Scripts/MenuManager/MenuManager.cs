@@ -4,7 +4,7 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class ApplicationManager : MonoBehaviour
+public class MenuManager : MonoBehaviour
 {
     [SerializeField]
     private bool _isPaused = false;
