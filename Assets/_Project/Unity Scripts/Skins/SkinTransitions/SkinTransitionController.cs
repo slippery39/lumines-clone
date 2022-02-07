@@ -12,6 +12,9 @@ public class SkinTransitionController : MonoBehaviour
     public float time = 0;
 
     [SerializeField]
+    private int timeToNextSkin = 90;
+
+    [SerializeField]
     private ForwardRendererData rendererData;
     [SerializeField]
     private string featureName;
@@ -42,7 +45,7 @@ public class SkinTransitionController : MonoBehaviour
             }
             else
             {
-                if (info.SongPositionInSeconds >=90)
+                if (info.SongPositionInSeconds >=timeToNextSkin)
                 {
                     StartTransition();
                 }
@@ -130,13 +133,17 @@ public class SkinTransitionController : MonoBehaviour
             //Disable the camera's with the render textures
             oldCamera.gameObject.SetActive(false);
             newCamera.gameObject.SetActive(false);
- 
+
 
 
             //Update the skin to the new skin.
+            //Go to the next skin
+            var newNextSkin = Skins.GetNext(nextSkin.Name);
 
+            Debug.Log("new skin in transition controller");
 
-            var newNextSkin = Skins.All().Where(s => s.Name != nextSkin.Name).FirstOrDefault();
+            Debug.Log(newNextSkin.Name);
+            
 
 
             //Calls to set skin come from here
