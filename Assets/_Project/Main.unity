@@ -23756,7 +23756,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   transitionMaterial: {fileID: 2100000, guid: a7213a35aa764f249b201e6089702854, type: 2}
   time: 0
-  timeToNextSkin: 10
+  timeToNextSkin: 100
   rendererData: {fileID: 11400000, guid: bd2beb465ea47ca4aa2e47a596b955b5, type: 2}
   featureName: NewMyBlitFeature
   transitioning: 0
