@@ -8,11 +8,21 @@ public class LoadScenes : MonoBehaviour
 {
     public Button startGameButton;
     public Button quitGameButton;
+    public Button howToPlayButton;
+    public Button backToMainMenuButton;
+
+    [SerializeField]
+    private GameObject mainMenu;
+
+    [SerializeField]
+    private GameObject howToPlay;
 
     public void Start()
     {
         startGameButton.onClick.AddListener(LoadGame);
         quitGameButton.onClick.AddListener(QuitGame);
+        backToMainMenuButton.onClick.AddListener(ShowMainMenu);
+        howToPlayButton.onClick.AddListener(ShowHowToPlay);
     }
 
     public void LoadGame()
@@ -23,5 +33,17 @@ public class LoadScenes : MonoBehaviour
     public void QuitGame()
     {
         Application.Quit();
+    }
+
+    public void ShowMainMenu()
+    {
+        mainMenu.SetActive(true);
+        howToPlay.SetActive(false);
+    }
+
+    public void ShowHowToPlay()
+    {
+        mainMenu.SetActive(false);
+        howToPlay.SetActive(true);
     }
 }
