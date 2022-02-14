@@ -12,6 +12,9 @@ public class SkinTransitionController : MonoBehaviour
     public float time = 0;
 
     [SerializeField]
+    private bool enableTransitions = false;
+
+    [SerializeField]
     private int timeToNextSkin = 90;
 
     [SerializeField]
@@ -47,7 +50,14 @@ public class SkinTransitionController : MonoBehaviour
             {
                 if (info.SongPositionInSeconds >=timeToNextSkin)
                 {
-                    StartTransition();
+                    if (enableTransitions)
+                    {
+                        StartTransition();
+                    }
+                    else
+                    {
+                        SetNewSkin();
+                    }
                 }
             }
         };
@@ -112,6 +122,12 @@ public class SkinTransitionController : MonoBehaviour
             //What is the normalized timeline position;
             material.SetFloat("_Position", time);
         }
+    }
+
+    private void SetNewSkin()
+    {
+        gameUI.SetSkin(nextSkin);
+        nextSkin = Skins.GetNext(nextSkin.Name);
     }
 
     private void EndTransition()
